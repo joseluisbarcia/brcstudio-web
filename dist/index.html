@@ -7,16 +7,20 @@
 <meta name="theme-color" content="#151515">
 <script>
 (() => {
-  // Reset explicit reloads before the browser restores scroll or follows a fragment.
+  // Home-screen bookmarks may include a fragment and load as a fresh navigation.
   const navigation = performance.getEntriesByType('navigation')[0];
-  if (navigation?.type !== 'reload') return;
+  const standalone = navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches;
+  if (navigation?.type === 'back_forward' && !standalone) return;
   history.scrollRestoration = 'manual';
-  if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
-  const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  resetScroll();
+  const resetStart = () => {
+    if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+  resetStart();
   window.addEventListener('pageshow', event => {
-    if (!event.persisted) resetScroll();
-  }, { once: true });
+    if (!event.persisted || standalone) resetStart();
+  });
 })();
 </script>
 <link rel="canonical" href="https://brcstudio.joseluisbarcia.chatgpt.site/">
