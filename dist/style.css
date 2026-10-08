@@ -5,3 +5,4 @@
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
 
 .whatsapp-button{align-self:flex-start}.contact-phone:hover{text-decoration:underline}
+.north .screen{background:#000}
