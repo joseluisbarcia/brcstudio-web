@@ -5,6 +5,20 @@
 <title>BRC Studio — Diseño digital, desarrollo web e IA</title>
 <meta name="description" content="Estudio independiente en Madrid. Diseño web, productos digitales e inteligencia artificial. Diseño con intención. Tecnología que funciona.">
 <meta name="theme-color" content="#151515">
+<script>
+(() => {
+  // Reset explicit reloads before the browser restores scroll or follows a fragment.
+  const navigation = performance.getEntriesByType('navigation')[0];
+  if (navigation?.type !== 'reload') return;
+  history.scrollRestoration = 'manual';
+  if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
+  const resetScroll = () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  resetScroll();
+  window.addEventListener('pageshow', event => {
+    if (!event.persisted) resetScroll();
+  }, { once: true });
+})();
+</script>
 <link rel="canonical" href="https://brcstudio.joseluisbarcia.chatgpt.site/">
 <meta property="og:url" content="https://brcstudio.joseluisbarcia.chatgpt.site/">
 <meta property="og:image" content="https://brcstudio.joseluisbarcia.chatgpt.site/media/og.png">
