@@ -93,7 +93,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  if(!section||!film||!title||!still)return;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
  const clamp=n=>Math.max(0,Math.min(1,n));
- let scheduled=false,hasFrame=false,playing=false;
+ let scheduled=false,hasFrame=false,playing=false,fallbackTried=false;
  film.muted=true;
  film.defaultMuted=true;
  film.loop=true;
@@ -103,7 +103,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  function showFrame(){hasFrame=true;film.classList.add('silk-ready')}
  film.addEventListener('playing',showFrame);
  film.addEventListener('loadeddata',()=>{if(film.readyState>=2)showFrame()});
- film.addEventListener('error',()=>{film.classList.remove('silk-ready');hasFrame=false});
+ film.addEventListener('error',()=>{film.classList.remove('silk-ready');hasFrame=false;playing=false;if(!fallbackTried&&film.dataset.fallbackSrc){fallbackTried=true;film.src=film.dataset.fallbackSrc;film.load();start();}});
  async function start(){
   if(reduce.matches||playing)return;
   try{await film.play();playing=true;}catch{playing=false;}
