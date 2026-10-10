@@ -29,6 +29,20 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
  const toggle = video.parentElement.querySelector('.video-toggle');
  const name = video.closest('.project').querySelector('h3').textContent;
  let visible = false, userPaused = false;
+ // Keep an independent poster above Safari's video surface until a frame is presented.
+ let framePending = false;
+ function revealFrame(){
+  if(video.readyState >= 2 && !video.paused)video.parentElement.classList.add('video-ready');
+ }
+ function awaitFirstFrame(){
+  if(video.parentElement.classList.contains('video-ready') || framePending)return;
+  framePending = true;
+  if('requestVideoFrameCallback' in video){
+   video.requestVideoFrameCallback(()=>{framePending=false;revealFrame();});
+  }else{
+   requestAnimationFrame(()=>requestAnimationFrame(()=>{framePending=false;revealFrame();}));
+  }
+ }
  const autoplayAllowed = () => !reduced.matches && !connection?.saveData;
  function syncButton(){
   toggle.textContent = video.paused ? 'Reproducir' : 'Pausar';
@@ -46,7 +60,8 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
  observer.observe(video);
  toggle.addEventListener('click',()=>{if(video.paused){userPaused=false;play();}else{userPaused=true;video.pause();}});
  video.addEventListener('play',syncButton);video.addEventListener('pause',syncButton);
- video.addEventListener('error',()=>{toggle.textContent='Reintentar';video.removeAttribute('src');});
+ video.addEventListener('playing',awaitFirstFrame);
+ video.addEventListener('error',()=>{video.parentElement.classList.remove('video-ready');toggle.textContent='Reintentar';video.removeAttribute('src');});
  return {video,resume(){if(visible&&!userPaused&&autoplayAllowed())play();}};
 });
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));

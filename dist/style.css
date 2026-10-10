@@ -6,5 +6,6 @@
 
 .whatsapp-button{align-self:flex-start}.contact-phone:hover{text-decoration:underline}
 .north .screen{background:#000}
+.video-phone .screen .video-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:inherit;background:inherit;pointer-events:none;opacity:1;transition:opacity .16s ease;z-index:1}.video-phone .screen.video-ready .video-cover{opacity:0}.video-phone .video-toggle{z-index:3}
 
 .scroll-phone .screen{background:#f3f3f4;padding-top:22px;padding-bottom:30px}.north .scroll-phone .screen{background:#000}.reformas .scroll-phone .screen{background:#f0efe7}.scroll-phone .screen video{object-fit:contain}.scroll-phone .video-toggle{bottom:4px;min-height:26px;padding:4px 13px;font-size:10px}
