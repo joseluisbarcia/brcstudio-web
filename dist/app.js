@@ -86,6 +86,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
 
 
 // Scroll-controlled chrome sculpture: no WebGL, no video, no extra dependencies.
+// Branch preview build: keep production isolated from this experimental animation.
 (() => {
  const section=document.querySelector('#chrome-transition');
  if(!section)return;
