@@ -1,4 +1,5 @@
 // BRC Studio / Gravity Silk — isolated, scroll-driven WebGL experiment.
+// Branch preview build trigger: 2026-10-11; never merge without visual approval.
 const section=document.querySelector('#gravity-silk');
 if(section){
 const canvas=section.querySelector('canvas');
