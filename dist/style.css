@@ -63,3 +63,6 @@
 /* Unified pure-black site surfaces; keep project mockup interiors untouched. */
 html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#000!important}
 .hero-silk,.silk-sticky,.silk-image{background-color:#000}
+
+/* Native video must remain visible; poster shows until first frame. */
+.hero-silk .silk-film,.hero-silk .silk-film.silk-ready{opacity:1!important;display:block!important;visibility:visible!important}
