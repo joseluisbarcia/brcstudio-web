@@ -89,7 +89,8 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  const section=document.querySelector('#silk-transition');
  const film=document.querySelector('#silk-film');
  const title=document.querySelector('#hero-title');
- if(!section||!film||!title)return;
+ const overlay=section?.querySelector('.hero-overlay');
+ if(!section||!film||!title||!overlay)return;
  let queued=false;
  const clamp=n=>Math.max(0,Math.min(1,n));
  function play(){film.muted=true;film.play().catch(()=>{});}
@@ -104,8 +105,8 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   const rect=section.getBoundingClientRect();
   const distance=Math.max(1,section.offsetHeight-innerHeight);
   const p=clamp(-rect.top/distance);
-  title.style.transform='translate3d(0,'+(-Math.round(p*Math.min(innerHeight*.55,500)))+'px,0)';
-  title.style.opacity=String(clamp((.96-p)/.10));
+  overlay.style.transform='translate3d(0,'+(-Math.round(p*Math.min(innerHeight*.55,500)))+'px,0)';
+  overlay.style.opacity=String(clamp((.96-p)/.10));
  }
  function schedule(){if(!queued){queued=true;requestAnimationFrame(render)}}
  addEventListener('scroll',schedule,{passive:true});
