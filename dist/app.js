@@ -120,7 +120,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   const p=clamp(-rect.top/range);
   // Title stays on the silk until the final portion, then rises and fades.
   const lift=Math.round(p*Math.min(innerHeight*.55,500));
-  title.style.transform='translate3d(0,calc(-50% - '+lift+'px),0)';
+  title.style.transform='translate3d(0,'+(-lift)+'px,0)';
   title.style.opacity=String(clamp((.96-p)/.10));
   still.style.transform='translate3d('+(-p*6)+'%,'+(-p*8)+'%,0) scale('+(1+p*.22)+')';
   still.style.filter='brightness('+(1-p*.15)+')';
@@ -134,6 +134,6 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  function schedule(){if(!queued){queued=true;requestAnimationFrame(update)}}
  addEventListener('scroll',schedule,{passive:true});
  addEventListener('resize',schedule,{passive:true});
- reduce.addEventListener('change',()=>{if(reduce.matches){film.pause();title.style.transform='translate3d(0,-50%,0)';title.style.opacity='1';}else{load();schedule()}});
+ reduce.addEventListener('change',()=>{if(reduce.matches){film.pause();title.style.transform='translate3d(0,0,0)';title.style.opacity='1';}else{load();schedule()}});
  update();
 })();
