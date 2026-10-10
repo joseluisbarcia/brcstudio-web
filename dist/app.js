@@ -11,7 +11,7 @@ function update(){
  active = slides.reduce((best, slide, index) => Math.abs(slide.getBoundingClientRect().left-origin) < Math.abs(slides[best].getBoundingClientRect().left-origin) ? index : best, 0);
  dots.forEach((dot,index)=>dot.setAttribute('aria-current',String(index===active)));
  prev.disabled = active === 0; next.disabled = active === slides.length-1;
- document.querySelector('#position').textContent = `0${active+1} / 04`;
+ document.querySelector('#position').textContent = `${String(active+1).padStart(2,'0')} / ${String(slides.length).padStart(2,'0')}`;
 }
 function go(index){
  index = Math.max(0, Math.min(slides.length-1,index));
