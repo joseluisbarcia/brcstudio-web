@@ -83,3 +83,47 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 });
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
+
+/* Silk sequence: scroll-linked, reversible, silent; never starts autoplay. */
+(() => {
+ const section=document.querySelector('#silk-transition');
+ const film=document.querySelector('#silk-film');
+ const caption=section?.querySelector('.silk-caption');
+ if(!section||!film||!caption)return;
+ const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ const dataSaver=navigator.connection?.saveData;
+ let duration=5.184,position=0,lastSeek=-1,loaded=false,queued=false;
+ const clamp=n=>Math.max(0,Math.min(1,n));
+ function load(){
+  if(loaded||reduce.matches||dataSaver)return;
+  loaded=true;film.src=film.dataset.src;film.muted=true;film.load();
+ }
+ const observer=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting)load();
+ },{rootMargin:'75% 0px'});
+ observer.observe(section);
+ film.addEventListener('loadedmetadata',()=>{duration=film.duration||duration;film.pause();render();});
+ film.addEventListener('loadeddata',()=>{film.classList.add('silk-ready');render();});
+ film.addEventListener('play',()=>film.pause());
+ film.addEventListener('error',()=>film.classList.remove('silk-ready'));
+ function render(){
+  queued=false;
+  if(reduce.matches)return;
+  const bounds=section.getBoundingClientRect();
+  const distance=Math.max(1,section.offsetHeight-innerHeight);
+  const target=clamp(-bounds.top/distance);
+  position=target;
+  // Keep the headline visible until the final 8% of the transition.
+  caption.style.opacity=String(clamp((.98-position)/.08));
+  caption.style.transform='translate3d(0,calc(-50% - '+Math.round(position*Math.min(innerHeight*.55,500))+'px),0)';
+  const time=Math.min(Math.max(0,duration-.05),position*duration);
+  if(film.readyState>=1&&Math.abs(time-lastSeek)>.035){
+   try{film.currentTime=time;lastSeek=time;}catch{}
+  }
+ }
+ function schedule(){if(!queued){queued=true;requestAnimationFrame(render)}}
+ addEventListener('scroll',schedule,{passive:true});
+ addEventListener('resize',schedule,{passive:true});
+ reduce.addEventListener('change',()=>{if(reduce.matches){film.pause();caption.style.opacity='1';caption.style.transform='translate3d(0,-50%,0)';}else{schedule();}});
+ schedule();
+})();
