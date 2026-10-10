@@ -84,54 +84,31 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
 
-/* v6: reliable cinematic playback on iOS; scroll controls title, not video seeking. */
+/* v7: native inline video playback; JS only animates title on scroll. */
 (() => {
  const section=document.querySelector('#silk-transition');
  const film=document.querySelector('#silk-film');
  const title=document.querySelector('#hero-title');
- const still=section?.querySelector('.silk-image');
- if(!section||!film||!title||!still)return;
- const reduce=matchMedia('(prefers-reduced-motion: reduce)');
+ if(!section||!film||!title)return;
+ let queued=false;
  const clamp=n=>Math.max(0,Math.min(1,n));
- let scheduled=false,hasFrame=false,playing=false,fallbackTried=false;
- film.muted=true;
- film.defaultMuted=true;
- film.loop=true;
- film.playsInline=true;
- film.src=film.dataset.src;
- film.preload='auto';
- function showFrame(){hasFrame=true;film.classList.add('silk-ready')}
- film.addEventListener('playing',showFrame);
- film.addEventListener('loadeddata',()=>{if(film.readyState>=2)showFrame()});
- film.addEventListener('error',()=>{film.classList.remove('silk-ready');hasFrame=false;playing=false;if(!fallbackTried&&film.dataset.fallbackSrc){fallbackTried=true;film.src=film.dataset.fallbackSrc;film.load();start();}});
- async function start(){
-  if(reduce.matches||playing)return;
-  try{await film.play();playing=true;}catch{playing=false;}
- }
- function stop(){if(!film.paused)film.pause();playing=false}
- const observer=new IntersectionObserver(entries=>{
-  if(entries[0].isIntersecting&&!document.hidden)start();
-  else stop();
- },{threshold:0.01});
- observer.observe(section);
- // A real user gesture can unlock playback on restrictive iOS contexts.
- addEventListener('touchstart',()=>{if(section.getBoundingClientRect().bottom>0)start()},{once:true,passive:true});
- addEventListener('pointerdown',()=>{if(section.getBoundingClientRect().bottom>0)start()},{once:true,passive:true});
- document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else if(section.getBoundingClientRect().bottom>0)start()});
+ function play(){film.muted=true;film.play().catch(()=>{});}
+ // Safari autoplay can need a user gesture in embedded browsers.
+ document.addEventListener('touchstart',play,{once:true,passive:true});
+ document.addEventListener('pointerdown',play,{once:true,passive:true});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});
+ film.addEventListener('canplay',play,{once:true});
+ play();
  function render(){
-  scheduled=false;
-  if(reduce.matches)return;
+  queued=false;
   const rect=section.getBoundingClientRect();
   const distance=Math.max(1,section.offsetHeight-innerHeight);
   const p=clamp(-rect.top/distance);
-  const lift=Math.round(p*Math.min(innerHeight*.55,500));
-  title.style.transform='translate3d(0,'+(-lift)+'px,0)';
+  title.style.transform='translate3d(0,'+(-Math.round(p*Math.min(innerHeight*.55,500)))+'px,0)';
   title.style.opacity=String(clamp((.96-p)/.10));
-  still.style.transform='translate3d('+(-p*5)+'%,'+(-p*7)+'%,0) scale('+(1+p*.2)+')';
  }
- function schedule(){if(!scheduled){scheduled=true;requestAnimationFrame(render)}}
+ function schedule(){if(!queued){queued=true;requestAnimationFrame(render)}}
  addEventListener('scroll',schedule,{passive:true});
  addEventListener('resize',schedule,{passive:true});
- reduce.addEventListener('change',()=>{if(reduce.matches){stop();film.classList.remove('silk-ready');title.style.opacity='1';title.style.transform='none';}else{start();schedule()}});
- start();render();
+ render();
 })();
