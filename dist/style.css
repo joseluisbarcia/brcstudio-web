@@ -6,3 +6,5 @@
 
 .whatsapp-button{align-self:flex-start}.contact-phone:hover{text-decoration:underline}
 .north .screen{background:#000}
+
+.scroll-phone .screen{background:#f3f3f4;padding-top:22px;padding-bottom:30px}.north .scroll-phone .screen{background:#000}.reformas .scroll-phone .screen{background:#f0efe7}.scroll-phone .screen video{object-fit:contain}.scroll-phone .video-toggle{bottom:4px;min-height:26px;padding:4px 13px;font-size:10px}

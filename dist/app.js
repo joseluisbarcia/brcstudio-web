@@ -23,13 +23,31 @@ dots.forEach((dot,index)=>dot.addEventListener('click',()=>go(index)));
 rail.addEventListener('keydown',event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();go(active+(event.key==='ArrowRight'?1:-1));}});
 let queued=false;rail.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(()=>{update();queued=false;});}},{passive:true});
 window.addEventListener('resize',update);update();
-const video = document.querySelector('#onyra');const toggle = document.querySelector('#video-toggle');
-let visible = false;let userPaused = false;
-function loadVideo(){if(!video.getAttribute('src')){video.src=video.dataset.src;video.load();}}
-function syncButton(){toggle.textContent=video.paused?'Reproducir':'Pausar';toggle.setAttribute('aria-label',`${video.paused?'Reproducir':'Pausar'} vídeo Onyra`);}
-async function play(){loadVideo();try{await video.play();if(!visible||document.hidden)video.pause();}catch{syncButton();}}
-const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting&&entries[0].intersectionRatio>=.55;if(visible){loadVideo();if(!reduced.matches&&!userPaused&&!document.hidden)play();}else video.pause();},{threshold:[0,.55]});observer.observe(video);
-toggle.addEventListener('click',()=>{if(video.paused){userPaused=false;play();}else{userPaused=true;video.pause();}});
-video.addEventListener('play',syncButton);video.addEventListener('pause',syncButton);video.addEventListener('error',()=>{toggle.textContent='Reintentar';});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)video.pause();else if(visible&&!userPaused&&!reduced.matches)play();});
-reduced.addEventListener('change',()=>{if(reduced.matches)video.pause();});
+// Video bytes are requested only when the phone is actually visible.
+const connection = navigator.connection;
+const players = [...document.querySelectorAll('video[data-src]')].map(video => {
+ const toggle = video.parentElement.querySelector('.video-toggle');
+ const name = video.closest('.project').querySelector('h3').textContent;
+ let visible = false, userPaused = false;
+ const autoplayAllowed = () => !reduced.matches && !connection?.saveData;
+ function syncButton(){
+  toggle.textContent = video.paused ? 'Reproducir' : 'Pausar';
+  toggle.setAttribute('aria-label', `${video.paused ? 'Reproducir' : 'Pausar'} vídeo ${name}`);
+ }
+ async function play(){
+  if(!video.getAttribute('src')){video.src=video.dataset.src;video.load();}
+  try{await video.play();if(!visible||document.hidden)video.pause();}catch{syncButton();}
+ }
+ const observer = new IntersectionObserver(entries => {
+  visible = entries[0].isIntersecting && entries[0].intersectionRatio >= .55;
+  if(visible && autoplayAllowed() && !userPaused && !document.hidden)play();
+  else if(!visible)video.pause();
+ },{threshold:[0,.55]});
+ observer.observe(video);
+ toggle.addEventListener('click',()=>{if(video.paused){userPaused=false;play();}else{userPaused=true;video.pause();}});
+ video.addEventListener('play',syncButton);video.addEventListener('pause',syncButton);
+ video.addEventListener('error',()=>{toggle.textContent='Reintentar';video.removeAttribute('src');});
+ return {video,resume(){if(visible&&!userPaused&&autoplayAllowed())play();}};
+});
+document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
+reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
