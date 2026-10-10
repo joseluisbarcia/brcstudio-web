@@ -84,61 +84,56 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
 
-/* Reversible silk scroll, iOS video priming, no duplicate hero. */
+/* v4: single silk hero, scroll driven with mobile fallback. */
 (() => {
  const section=document.querySelector('#silk-transition');
  const film=document.querySelector('#silk-film');
- const heroTitle=document.querySelector('#hero-title');
- const still=section.querySelector('.silk-image');
- if(!section||!film)return;
+ const title=document.querySelector('#hero-title');
+ const still=section?.querySelector('.silk-image');
+ if(!section||!film||!title||!still)return;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
- const saver=navigator.connection?.saveData;
- let duration=5.184,loaded=false,primed=false,queued=false,seek=-1;
- const clamp=x=>Math.max(0,Math.min(1,x));
- async function prime(){
-  if(primed||reduce.matches||saver)return;
-  primed=true;
-  if(!loaded){loaded=true;film.src=film.dataset.src;film.load();}
-  try {
-   film.muted=true;
-   await film.play();
-   film.pause();
-   film.classList.add('silk-ready');
-   update();
-  }catch{ /* poster remains visible if Safari blocks playback */ }
+ let duration=5.184,loaded=false,frameReady=false,queued=false,previous=-1,primed=false;
+ const clamp=n=>Math.max(0,Math.min(1,n));
+ function load(){
+  if(loaded||reduce.matches)return;
+  loaded=true;film.src=film.dataset.src;film.muted=true;film.load();
  }
+ // Load early; Safari needs metadata and decoded frames before seeks can render.
+ load();
+ async function prime(){
+  if(primed||reduce.matches)return;
+  primed=true;
+  try{await film.play();film.pause();}catch{}
+  update();
+ }
+ addEventListener('touchstart',prime,{once:true,passive:true});
+ addEventListener('pointerdown',prime,{once:true,passive:true});
  film.addEventListener('loadedmetadata',()=>{duration=film.duration||duration;update()});
- film.addEventListener('loadeddata',()=>{film.classList.add('silk-ready');update()});
- film.addEventListener('error',()=>film.classList.remove('silk-ready'));
- const io=new IntersectionObserver(es=>{
-  if(es[0].isIntersecting){if(!loaded&&!saver&&!reduce.matches){loaded=true;film.src=film.dataset.src;film.load();}}
- },{rootMargin:'120% 0px'});
- io.observe(section);
- // iOS may require a gesture before the first frame can be sought.
- addEventListener('touchstart',prime,{passive:true,once:true});
- addEventListener('pointerdown',prime,{passive:true,once:true});
+ film.addEventListener('loadeddata',()=>{frameReady=true;update()});
+ film.addEventListener('seeked',()=>{if(film.readyState>=2)frameReady=true;update()});
+ film.addEventListener('error',()=>{frameReady=false;film.style.opacity='0'});
  function update(){
   queued=false;
   if(reduce.matches)return;
   const rect=section.getBoundingClientRect();
-  const distance=Math.max(1,section.offsetHeight-innerHeight);
-  const p=clamp(-rect.top/distance);
-  const t=Math.max(0,Math.min(duration-.05,p*duration));
-  // Visible motion even when Safari cannot seek the source MP4.
-  if(still){still.style.transform='translate3d('+(-p*6)+'%, '+(-p*8)+'%, 0) scale('+(1+p*.27)+')';still.style.filter='brightness('+(1-p*.18)+')';}
-  if(film.readyState>=1&&Math.abs(t-seek)>.035){
-   try{film.currentTime=t;seek=t;}catch{}
+  const range=Math.max(1,section.offsetHeight-innerHeight);
+  const p=clamp(-rect.top/range);
+  // Title stays on the silk until the final portion, then rises and fades.
+  const lift=Math.round(p*Math.min(innerHeight*.55,500));
+  title.style.transform='translate3d(0,calc(-50% - '+lift+'px),0)';
+  title.style.opacity=String(clamp((.96-p)/.10));
+  still.style.transform='translate3d('+(-p*6)+'%,'+(-p*8)+'%,0) scale('+(1+p*.22)+')';
+  still.style.filter='brightness('+(1-p*.15)+')';
+  const t=Math.min(duration-.04,p*duration);
+  if(film.readyState>=1&&Math.abs(t-previous)>.04){
+   try{film.currentTime=t;previous=t}catch{}
   }
-  // The original hero moves away naturally, without a second copy.
-  if(heroTitle){
-   const hero=heroTitle.closest('.hero').getBoundingClientRect();
-   const fraction=clamp(-hero.top/Math.max(1,hero.height));
-   heroTitle.style.transform='translate3d(0,'+(-fraction*65)+'px,0)';
-  }
+  // Keep the poster underneath the video so a blank Safari frame never shows.
+  film.style.opacity=frameReady?'1':'0';
  }
  function schedule(){if(!queued){queued=true;requestAnimationFrame(update)}}
  addEventListener('scroll',schedule,{passive:true});
  addEventListener('resize',schedule,{passive:true});
- reduce.addEventListener('change',()=>{if(reduce.matches){film.pause();if(heroTitle)heroTitle.style.transform='';}else schedule()});
- schedule();
+ reduce.addEventListener('change',()=>{if(reduce.matches){film.pause();title.style.transform='translate3d(0,-50%,0)';title.style.opacity='1';}else{load();schedule()}});
+ update();
 })();
