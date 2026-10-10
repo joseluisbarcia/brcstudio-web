@@ -42,3 +42,20 @@
  .studio-intro .hero-bottom{padding-bottom:38px}
 }
 @media(prefers-reduced-motion:reduce){.hero-silk{height:100svh;min-height:0}.hero-silk .silk-sticky{height:100svh;position:relative}.hero-silk .silk-hero-title{will-change:auto}}
+
+/* v5: restore original hero composition on the silk background */
+.hero-silk .hero-overlay{position:absolute;z-index:4;inset:0;display:flex;flex-direction:column;justify-content:center;padding-top:110px;padding-bottom:32px;pointer-events:none}
+.hero-silk .hero-overlay a,.hero-silk .hero-overlay button{pointer-events:auto}
+.hero-silk .hero-overlay .hero-label{justify-content:flex-start;gap:0}
+.hero-silk .hero-overlay h1{position:static;top:auto;left:auto;right:auto;margin:52px 0 46px;transform:none;will-change:transform,opacity;text-shadow:0 2px 30px #0008}
+.hero-silk .hero-overlay .hero-bottom{padding-bottom:55px}
+.hero-silk .hero-overlay .hero-rule{margin-top:0}
+.hero-silk .hero-overlay .hero-bottom p{color:#e0ded9}
+.hero-silk .hero-overlay .hero-rule{color:#c5c3bf;border-color:#7779}
+@media(max-width:800px){
+ .hero-silk .hero-overlay{padding-top:90px;padding-bottom:28px}
+ .hero-silk .hero-overlay h1{font-size:clamp(60px,12.6vw,100px);margin:40px 0 30px}
+ .hero-silk .hero-overlay .hero-bottom{padding-bottom:38px}
+ .hero-silk .hero-overlay .hero-label span{display:inline}
+}
+@media(max-width:380px){.hero-silk .hero-overlay h1{font-size:60px}}
