@@ -97,6 +97,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  // Deterministic placement avoids visual jumps between visits.
  let seed=1976;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
  const frag=document.createDocumentFragment();
+ const particles=[];
  for(let i=0;i<count;i++){
   const p=document.createElement('i');p.className='chrome-particle';
   const size=1.4+random()*(mobile?4:6);
@@ -106,6 +107,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   p.style.setProperty('--opacity',(.25+random()*.7).toFixed(2));
   p.style.setProperty('--dx',((random()-.5)*130).toFixed(0)+'px');
   p.style.setProperty('--dy',((random()-.5)*170).toFixed(0)+'px');
+  particles.push({el:p,dx:parseFloat(p.style.getPropertyValue('--dx')),dy:parseFloat(p.style.getPropertyValue('--dy'))});
   frag.appendChild(p);
  }
  field.appendChild(frag);
@@ -119,6 +121,13 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   const range=Math.max(1,rect.height-window.innerHeight*.5);
   const progress=Math.max(0,Math.min(1,(window.innerHeight*.65-rect.top)/range));
   section.style.setProperty('--chrome-progress',progress.toFixed(3));
+  section.style.setProperty('--chrome-y',((progress-.5)*-38).toFixed(1)+'px');
+  section.style.setProperty('--chrome-scale',(.88+progress*.17).toFixed(3));
+  section.style.setProperty('--chrome-angle',((progress-.5)*-12).toFixed(2)+'deg');
+  section.style.setProperty('--chrome-turn',((progress-.5)*20).toFixed(2)+'deg');
+  section.style.setProperty('--chrome-skew',((progress-.5)*-3).toFixed(2)+'deg');
+  section.style.setProperty('--chrome-line-opacity',(progress*.7).toFixed(2));
+  for(const p of particles){p.el.style.setProperty('--px',((progress-.5)*p.dx).toFixed(1)+'px');p.el.style.setProperty('--py',((progress-.5)*p.dy).toFixed(1)+'px');}
  }
  function requestUpdate(){if(!scheduled){scheduled=true;requestAnimationFrame(update);}}
  window.addEventListener('scroll',requestUpdate,{passive:true});
