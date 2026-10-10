@@ -83,3 +83,45 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 });
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
+
+
+// Scroll-controlled chrome sculpture: no WebGL, no video, no extra dependencies.
+(() => {
+ const section=document.querySelector('#chrome-transition');
+ if(!section)return;
+ const field=section.querySelector('.chrome-particles');
+ const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+ const lowData=navigator.connection?.saveData;
+ const mobile=window.matchMedia('(max-width: 800px)').matches;
+ const count=motion.matches||lowData?0:mobile?32:65;
+ // Deterministic placement avoids visual jumps between visits.
+ let seed=1976;const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+ const frag=document.createDocumentFragment();
+ for(let i=0;i<count;i++){
+  const p=document.createElement('i');p.className='chrome-particle';
+  const size=1.4+random()*(mobile?4:6);
+  p.style.setProperty('--size',size+'px');
+  p.style.setProperty('--x',(10+random()*80)+'%');
+  p.style.setProperty('--y',(8+random()*82)+'%');
+  p.style.setProperty('--opacity',(.25+random()*.7).toFixed(2));
+  p.style.setProperty('--dx',((random()-.5)*130).toFixed(0)+'px');
+  p.style.setProperty('--dy',((random()-.5)*170).toFixed(0)+'px');
+  frag.appendChild(p);
+ }
+ field.appendChild(frag);
+ if(motion.matches)return;
+ let visible=false,scheduled=false;
+ const observer=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)requestUpdate();},{rootMargin:'120px'});
+ observer.observe(section);
+ function update(){
+  scheduled=false;if(!visible||document.hidden)return;
+  const rect=section.getBoundingClientRect();
+  const range=Math.max(1,rect.height-window.innerHeight*.5);
+  const progress=Math.max(0,Math.min(1,(window.innerHeight*.65-rect.top)/range));
+  section.style.setProperty('--chrome-progress',progress.toFixed(3));
+ }
+ function requestUpdate(){if(!scheduled){scheduled=true;requestAnimationFrame(update);}}
+ window.addEventListener('scroll',requestUpdate,{passive:true});
+ window.addEventListener('resize',requestUpdate,{passive:true});
+ document.addEventListener('visibilitychange',requestUpdate);
+})();
