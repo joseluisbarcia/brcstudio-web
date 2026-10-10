@@ -89,6 +89,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  const section=document.querySelector('#silk-transition');
  const film=document.querySelector('#silk-film');
  const heroTitle=document.querySelector('#hero-title');
+ const still=section.querySelector('.silk-image');
  if(!section||!film)return;
  const reduce=matchMedia('(prefers-reduced-motion: reduce)');
  const saver=navigator.connection?.saveData;
@@ -123,6 +124,8 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   const distance=Math.max(1,section.offsetHeight-innerHeight);
   const p=clamp(-rect.top/distance);
   const t=Math.max(0,Math.min(duration-.05,p*duration));
+  // Visible motion even when Safari cannot seek the source MP4.
+  if(still){still.style.transform='translate3d('+(-p*6)+'%, '+(-p*8)+'%, 0) scale('+(1+p*.27)+')';still.style.filter='brightness('+(1-p*.18)+')';}
   if(film.readyState>=1&&Math.abs(t-seek)>.035){
    try{film.currentTime=t;seek=t;}catch{}
   }
