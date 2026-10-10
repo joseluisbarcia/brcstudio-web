@@ -28,6 +28,14 @@ const connection = navigator.connection;
 const players = [...document.querySelectorAll('video[data-src]')].map(video => {
  const toggle = video.parentElement.querySelector('.video-toggle');
  const name = video.closest('.project').querySelector('h3').textContent;
+ const trimStart = ['psymorph', 'reformas'].includes(video.id) ? 1 : 0;
+ let startReady = false;
+ function skipIntro(){
+  if(!trimStart || startReady || video.readyState < 1)return;
+  video.currentTime = trimStart;
+  startReady = true;
+ }
+ video.addEventListener('loadedmetadata', skipIntro);
  let visible = false, userPaused = false;
  // Keep an independent poster above Safari's video surface until a frame is presented.
  let framePending = false;
@@ -50,6 +58,9 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
  }
  async function play(){
   if(!video.getAttribute('src')){video.src=video.dataset.src;video.load();}
+  if(trimStart && !startReady){
+   try{if(video.readyState < 1)await new Promise((resolve,reject)=>{video.addEventListener('loadedmetadata',resolve,{once:true});video.addEventListener('error',reject,{once:true});});skipIntro();}catch{syncButton();return;}
+  }
   try{await video.play();if(!visible||document.hidden)video.pause();}catch{syncButton();}
  }
  const observer = new IntersectionObserver(entries => {
@@ -60,8 +71,14 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
  observer.observe(video);
  toggle.addEventListener('click',()=>{if(video.paused){userPaused=false;play();}else{userPaused=true;video.pause();}});
  video.addEventListener('play',syncButton);video.addEventListener('pause',syncButton);
+ video.addEventListener('timeupdate',()=>{
+  if(trimStart && video.duration && video.currentTime >= video.duration - 0.08){
+   video.currentTime = trimStart;
+  }
+ });
+ video.addEventListener('seeked',()=>{if(trimStart && video.currentTime < trimStart)video.currentTime = trimStart;});
  video.addEventListener('playing',awaitFirstFrame);
- video.addEventListener('error',()=>{video.parentElement.classList.remove('video-ready');toggle.textContent='Reintentar';video.removeAttribute('src');});
+ video.addEventListener('error',()=>{video.parentElement.classList.remove('video-ready');toggle.textContent='Reintentar';video.removeAttribute('src');startReady=false;});
  return {video,resume(){if(visible&&!userPaused&&autoplayAllowed())play();}};
 });
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
