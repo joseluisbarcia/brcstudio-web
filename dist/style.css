@@ -9,3 +9,17 @@
 .video-phone .screen .video-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:inherit;background:inherit;pointer-events:none;opacity:1;transition:opacity .16s ease;z-index:1}.video-phone .screen.video-ready .video-cover{opacity:0}.video-phone .video-toggle{z-index:3}
 
 .scroll-phone .screen{background:#f3f3f4;padding-top:22px;padding-bottom:30px}.north .scroll-phone .screen{background:#000}.reformas .scroll-phone .screen{background:#f0efe7}.scroll-phone .screen video{object-fit:contain}.scroll-phone .video-toggle{bottom:4px;min-height:26px;padding:4px 13px;font-size:10px}
+
+/* Approved silk transition: self-contained between existing hero and portfolio. */
+.silk-scroll{height:260svh;position:relative;background:#050505}
+.silk-sticky{height:100svh;position:sticky;top:0;overflow:hidden;isolation:isolate;background:#050505}
+.silk-image,.silk-film,.silk-shade{position:absolute;inset:0;width:100%;height:100%}
+.silk-image{background:#050505 url("https://cdn.openart.ai/openart-uploads/production/attachment-transfers/c0668c40bf2203f161b0e0b36e20533ef402cdf38ef8eed3b2aa5ee5725262fb.jpg") center center/cover no-repeat}
+.silk-film{object-fit:cover;object-position:center;pointer-events:none;opacity:0}
+.silk-film.silk-ready{opacity:1}
+.silk-shade{background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 70%),linear-gradient(0deg,rgba(0,0,0,.45),transparent 35%);pointer-events:none}
+.silk-caption{position:absolute;z-index:2;left:var(--pad);right:var(--pad);top:50%;transform:translate3d(0,-50%,0);will-change:transform,opacity;pointer-events:none}
+.silk-caption-top{font-size:clamp(11px,1.1vw,14px);letter-spacing:.17em;color:#d2d0cc;margin-bottom:30px}
+.silk-caption-title{font-size:clamp(60px,10.7vw,166px);font-weight:500;line-height:.99;letter-spacing:-.075em;color:#f4f2ed}
+@media(max-width:800px){.silk-caption-title{font-size:clamp(55px,12.6vw,100px)}.silk-shade{background:linear-gradient(0deg,rgba(0,0,0,.5),transparent 55%)}}
+@media(prefers-reduced-motion:reduce){.silk-scroll{height:75svh}.silk-sticky{height:75svh;position:relative}.silk-film{display:none}.silk-caption{will-change:auto}}
