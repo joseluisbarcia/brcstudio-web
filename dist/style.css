@@ -20,3 +20,25 @@
 .silk-shade{background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 70%),linear-gradient(0deg,rgba(0,0,0,.45),transparent 35%);pointer-events:none}
 @media(max-width:800px){.silk-shade{background:linear-gradient(0deg,rgba(0,0,0,.5),transparent 55%)}}
 @media(prefers-reduced-motion:reduce){.silk-scroll{height:75svh}.silk-sticky{height:75svh;position:relative}.silk-film{display:none}}
+
+/* v4: single animated hero, studio intro follows */
+.header{position:absolute;z-index:10;top:0;left:0;right:0;max-width:1600px}
+.hero-silk{height:205svh;min-height:900px}
+.hero-silk .silk-sticky{height:100svh}
+.hero-silk .silk-image{will-change:transform;transform-origin:center}
+.hero-silk .silk-film{object-position:center;will-change:opacity}
+.hero-silk .silk-hero-title{position:absolute;z-index:3;top:50%;left:var(--pad);right:var(--pad);margin:0;transform:translate3d(0,-50%,0);color:var(--ink);will-change:transform,opacity;pointer-events:none;text-shadow:0 2px 30px #0006}
+.hero-silk .silk-hero-title span{color:#b9bab4}
+.studio-intro{padding-top:clamp(55px,8vw,120px)}
+.studio-intro .hero-label{margin-bottom:clamp(35px,5vw,80px)}
+.studio-intro .hero-bottom{padding-bottom:55px}
+.studio-intro .hero-rule{padding-bottom:0}
+@media(max-width:800px){
+ .hero-silk{height:190svh;min-height:0}
+ .hero-silk .silk-hero-title{font-size:clamp(60px,12.6vw,100px)}
+ .studio-intro .hero-label{display:flex;gap:14px;flex-wrap:wrap}
+ .studio-intro .hero-label span:last-child{display:inline}
+ .studio-intro{padding-top:64px}
+ .studio-intro .hero-bottom{padding-bottom:38px}
+}
+@media(prefers-reduced-motion:reduce){.hero-silk{height:100svh;min-height:0}.hero-silk .silk-sticky{height:100svh;position:relative}.hero-silk .silk-hero-title{will-change:auto}}
