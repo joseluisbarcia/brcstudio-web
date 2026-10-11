@@ -14,8 +14,8 @@
   if (navigation?.type === 'back_forward' && !standalone) return;
   history.scrollRestoration = 'manual';
   const resetStart = () => {
-    if (location.hash) history.replaceState(history.state, '', location.pathname + location.search);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    if (location.hash && ![\'#servicios\',\'#proyectos\',\'#contacto\',\'#estudio\',\'#proceso\',\'#preguntas\'].includes(location.hash)) history.replaceState(history.state, '', location.pathname + location.search);
+    if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
   resetStart();
   window.addEventListener('pageshow', event => {
