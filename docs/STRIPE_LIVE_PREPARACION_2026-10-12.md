@@ -90,3 +90,19 @@ No confundir esas pruebas con Checkout live, entrega real del webhook, renovaci�
 5. **DETENERSE**. Quitar el bloqueo de código y habilitar Checkout requiere autorización comercial posterior. Crear o compartir enlaces pagables también queda fuera de esta preparación.
 
 Referencias técnicas: https://docs.stripe.com/api/checkout/sessions/create ; https://docs.stripe.com/webhooks ; https://docs.stripe.com/billing/subscriptions/webhooks ; https://docs.stripe.com/tax/tax-rates ; https://docs.stripe.com/keys-best-practices .
+
+## Resultado del despliegue de preparación
+
+PR borrador: https://github.com/joseluisbarcia/brcstudio-web/pull/20 .
+Previsualización: https://deploy-preview-20--brcstudio-web.netlify.app .
+
+Netlify completó correctamente el despliegue del código de la PR (`ready`, ocho funciones: cuatro existentes y cuatro nuevas). Comprobaciones HTTP realizadas sin secretos y sin crear sesiones:
+
+| Ruta en preview | Resultado | Significado |
+|---|---:|---|
+| POST /api/stripe-live-checkout | 503 | Pagos reales bloqueados |
+| GET /api/brc-live-sales | 401 | Registro privado inaccesible sin autorización |
+| POST /api/stripe-live-webhook | 503 | Preview no admite webhook real |
+| GET /api/stripe-live-return | 200 | Retorno neutro disponible |
+
+La portada production y `/stripe-test.html` responden HTTP 200. El despliegue publicado de producción permanece igual al inspeccionado al inicio. No se ha fusionado la PR. La previsualización demuestra el empaquetado y los bloqueos; no demuestra autenticación live, persistencia real ni entregas desde Stripe activo. El siguiente cambio de esta rama solo añade este registro de resultados, sin otro despliegue.
