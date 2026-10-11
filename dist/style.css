@@ -202,3 +202,12 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 .stage-bottom{align-items:center;z-index:3}
 .stage-bottom .video-toggle{position:static;transform:none;bottom:auto;left:auto;background:#242526;color:#c6c6c2;border:1px solid #535450;border-radius:18px;padding:5px 13px;min-height:32px;font-size:11px;line-height:1.2;white-space:nowrap;box-shadow:none}
 .stage-bottom .video-toggle:hover{background:#373835;color:#fff}
+
+/* Portfolio: dedicated bottom strip. Never overlap the phone or its CTA. */
+.project .stage{display:grid;grid-template-rows:minmax(0,1fr) 58px;justify-items:center;align-items:center;padding:44px 16px 0;box-sizing:border-box}
+.project .stage .phone{grid-row:1;align-self:center;max-height:100%;box-sizing:border-box}
+.project .stage .stage-bottom{grid-row:2;position:relative;inset:auto;width:100%;height:58px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-sizing:border-box;padding:0 12px;z-index:2}
+.project .stage .stage-bottom span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.project .stage .stage-bottom .video-toggle{flex-shrink:0;position:static!important;inset:auto!important;transform:none!important;margin:0;background:transparent;color:#bfc0bd;border:1px solid #60615f;border-radius:18px;padding:6px 13px;min-height:32px;font-size:11px;line-height:1.2;box-shadow:none}
+.project .stage .stage-bottom .video-toggle:hover{background:#ffffff12;color:#fff}
+@media(max-width:800px){.project .stage{padding:38px 12px 0;grid-template-rows:minmax(0,1fr) 58px}.project .stage .stage-bottom{padding:0 4px}.project .stage .stage-bottom span:last-of-type{display:none}}
