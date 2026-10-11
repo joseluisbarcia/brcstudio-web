@@ -66,3 +66,15 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 
 /* Native video must remain visible; poster shows until first frame. */
 .hero-silk .silk-film,.hero-silk .silk-film.silk-ready{opacity:1!important;display:block!important;visibility:visible!important}
+
+/* Web reformas: reserve a clear CTA strip at the foot of the phone.
+   Keep the whole recording visible above the playback control. */
+.reformas .scroll-phone .screen{display:block;padding:22px 0 0;position:relative;overflow:hidden}
+.reformas .scroll-phone .screen video{
+  width:100%;height:calc(100% - 60px);object-fit:contain;object-position:center top;
+}
+.reformas .scroll-phone .screen .video-cover{
+  top:22px;bottom:60px;left:0;right:0;width:100%;height:calc(100% - 82px);
+  padding:0;object-fit:contain;object-position:center top;
+}
+.reformas .scroll-phone .video-toggle{bottom:9px;z-index:4}
