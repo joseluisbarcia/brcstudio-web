@@ -216,3 +216,9 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 .project .stage .stage-bottom{display:flex!important;justify-content:center!important;align-items:center!important}
 .project .stage .stage-bottom span{display:none!important}
 .project .stage .stage-bottom .video-toggle{position:relative!important;left:auto!important;right:auto!important;transform:none!important;margin:0 auto!important}
+
+/* Anchor navigation: fixed header clearance on iPhone and desktop. */
+html{scroll-padding-top:0!important}
+#proyectos,#servicios,#estudio,#contacto{scroll-margin-top:calc(110px + 22px)!important}
+@media(max-width:800px){#proyectos,#servicios,#estudio,#contacto{scroll-margin-top:calc(88px + 24px)!important}}
+@media(max-width:380px){#proyectos,#servicios,#estudio,#contacto{scroll-margin-top:calc(100px + 24px)!important}}
