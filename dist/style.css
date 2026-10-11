@@ -121,3 +121,20 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
  .project-case{margin-bottom:20px}
 }
 @media(prefers-reduced-motion:reduce){.project-case summary span{transition:none}}
+
+/* Portfolio alignment: equal card rows regardless of description length. */
+.project{display:flex;flex-direction:column}
+.project-meta{min-height:0;display:grid;grid-template-rows:auto auto minmax(0,1fr);grid-auto-flow:row;padding-bottom:18px}
+.project-meta>p:not(.category){min-height:112px}
+.project-case{margin-top:0;align-self:stretch}
+.project-case summary span{font-family:inherit;font-size:19px;color:#c8c8c4}
+@media(max-width:800px){.project-meta>p:not(.category){min-height:148px}}
+@media(max-width:420px){.project-meta>p:not(.category){min-height:168px}}
+/* Natural hero: the silk animates but scrolling is never trapped in a sticky scene. */
+.hero-silk.silk-scroll{height:100svh;min-height:680px;position:relative}
+.hero-silk .silk-sticky{height:100%;position:relative;top:auto}
+.header{position:fixed;top:0;left:0;right:0;z-index:30;max-width:1600px;background:linear-gradient(to bottom,rgba(0,0,0,.82),rgba(0,0,0,0));transition:background .2s ease}
+.header.is-scrolled{background:rgba(0,0,0,.94);border-bottom:1px solid #292929;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+@media(max-width:800px){.hero-silk.silk-scroll{min-height:650px;height:100svh}}
+@media(max-width:380px){.hero-silk.silk-scroll{min-height:620px}}
+@media(prefers-reduced-motion:reduce){.hero-silk.silk-scroll{height:100svh;min-height:650px}}
