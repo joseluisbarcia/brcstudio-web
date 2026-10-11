@@ -211,3 +211,8 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 .project .stage .stage-bottom .video-toggle{flex-shrink:0;position:static!important;inset:auto!important;transform:none!important;margin:0;background:transparent;color:#bfc0bd;border:1px solid #60615f;border-radius:18px;padding:6px 13px;min-height:32px;font-size:11px;line-height:1.2;box-shadow:none}
 .project .stage .stage-bottom .video-toggle:hover{background:#ffffff12;color:#fff}
 @media(max-width:800px){.project .stage{padding:38px 12px 0;grid-template-rows:minmax(0,1fr) 58px}.project .stage .stage-bottom{padding:0 4px}.project .stage .stage-bottom span:last-of-type{display:none}}
+
+/* Playback control centered to the phone axis, not offset by footer text. */
+.project .stage .stage-bottom{display:flex!important;justify-content:center!important;align-items:center!important}
+.project .stage .stage-bottom span{display:none!important}
+.project .stage .stage-bottom .video-toggle{position:relative!important;left:auto!important;right:auto!important;transform:none!important;margin:0 auto!important}
