@@ -197,6 +197,8 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
  .faq-items summary{padding:21px 0}
 }
 
-/* Keep the reformas player control below the phone, outside the screen. */
-.stage.reformas .phone{margin-bottom:34px}
-.stage.reformas .reformas-toggle{position:absolute;bottom:23px;left:50%;transform:translateX(-50%);z-index:4;white-space:nowrap;background:#f2f0eb;color:#171717;border-color:#dedbd4;min-height:36px;padding:7px 14px}
+
+/* Uniform unobtrusive portfolio playback controls below every phone. */
+.stage-bottom{align-items:center;z-index:3}
+.stage-bottom .video-toggle{position:static;transform:none;bottom:auto;left:auto;background:#242526;color:#c6c6c2;border:1px solid #535450;border-radius:18px;padding:5px 13px;min-height:32px;font-size:11px;line-height:1.2;white-space:nowrap;box-shadow:none}
+.stage-bottom .video-toggle:hover{background:#373835;color:#fff}
