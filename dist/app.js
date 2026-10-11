@@ -53,7 +53,7 @@ scheduleCaseAlignment();
 // Video bytes are requested only when the phone is actually visible.
 const connection = navigator.connection;
 const players = [...document.querySelectorAll('video[data-src]')].map(video => {
- const toggle = video.parentElement.querySelector('.video-toggle') || video.closest('.phone')?.querySelector('.video-toggle');
+ const toggle = video.closest('.stage').querySelector('.video-toggle');
  const name = video.closest('.project').querySelector('h3').textContent;
  const trimStart = ['psymorph', 'reformas'].includes(video.id) ? 1 : 0;
  let startReady = false;
