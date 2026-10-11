@@ -138,3 +138,16 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 @media(max-width:800px){.hero-silk.silk-scroll{min-height:650px;height:100svh}}
 @media(max-width:380px){.hero-silk.silk-scroll{min-height:620px}}
 @media(prefers-reduced-motion:reduce){.hero-silk.silk-scroll{height:100svh;min-height:650px}}
+
+/* Case studies: shared editorial baseline across all five carousel cards.
+   Fixed rows on the same breakpoint align both separators and the areas footer. */
+.project-case .case-body{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(112px,auto) auto minmax(148px,auto) auto;align-content:start}
+.project-case .case-body h4{margin:22px 0 8px}
+.project-case .case-body>p:not(.case-areas){margin:0;align-self:start}
+.project-case .case-areas{align-self:start;margin:0}
+@media(max-width:800px){
+ .project-case .case-body{grid-template-rows:auto minmax(128px,auto) auto minmax(166px,auto) auto}
+}
+@media(max-width:420px){
+ .project-case .case-body{grid-template-rows:auto minmax(136px,auto) auto minmax(180px,auto) auto}
+}
