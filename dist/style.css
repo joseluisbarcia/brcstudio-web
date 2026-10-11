@@ -78,3 +78,11 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
   padding:0;object-fit:contain;object-position:center top;
 }
 .reformas .scroll-phone .video-toggle{bottom:9px;z-index:4}
+
+/* Reformas: show the entire recorded frame; don't reserve/crop its bottom CTA. */
+.reformas .scroll-phone .screen{display:block;padding:0;overflow:hidden}
+.reformas .scroll-phone .screen video{width:100%;height:100%;object-fit:contain;object-position:center center}
+.reformas .scroll-phone .screen .video-cover{inset:0;width:100%;height:100%;padding:0;object-fit:contain;object-position:center center}
+.reformas .scroll-phone .video-toggle{bottom:auto;top:40px;left:auto;right:8px;transform:none;z-index:4;padding:5px 9px;min-height:30px;font-size:10px;background:#151515d9}
+.contact-email{font-size:14px;color:#d7d7d2;text-decoration:underline;text-decoration-color:#777;text-underline-offset:5px;overflow-wrap:anywhere}
+.contact-email:hover{color:#fff}
