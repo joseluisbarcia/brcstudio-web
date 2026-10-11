@@ -1,5 +1,14 @@
 # BRC Studio — preparación de Stripe activo, SIN ACTIVACIÓN
 
+
+> **Actualización: acceso activo verificado (12 octubre, segunda revisión).** Ya se han leído en Stripe activo los ocho productos y sus precios: compra 490 / 290 / 249 EUR; alta 149 EUR; mensualidad recurrente 39 EUR cada mes; compras posteriores 290 / 190 / 99 EUR. Todos activos, EUR y `tax_behavior=exclusive`. No se ha cambiado ningún precio. Los bloqueos de acceso de la sección inicial quedan como historial de la primera revisión.
+>
+> Stripe Tax está `pending` por falta de `head_office` y no tiene registros fiscales; no se habilita. Esto no implica ausencia de alta ante Hacienda. La consulta de tasas manuales y estado de activación bancaria/identidad no está disponible con las operaciones expuestas por este conector; sigue pendiente de verificación. No existen endpoints webhook live. Las copias conservan metadata.environment=test, pero su `livemode=true` confirma el modo real; esa etiqueta no decide el entorno en el código.
+>
+> Los identificadores reales verificados se han documentado en un informe privado y están preparados para la variable `BRC_LIVE_CATALOG_JSON` (Functions, production). El código acepta únicamente identificadores de esta configuración de servidor, contrasta importes contra el catálogo auditado y vuelve a validar los recursos en Stripe. No acepta importes, tasas ni IDs de precio enviados por un cliente.
+>
+> **Bloqueo operativo actual:** el navegador de trabajo solicita inicio de sesión en Netlify para escribir variables; el conector solo ofrece lectura. No se han guardado secretos ni creado webhook real, ni fusionado la PR. Se mantienen todos los bloqueos comerciales. Nueve pruebas locales pasan; funciones de pruebas y dist intactos. El informe privado es `BRC_Stripe_catalogo_activo_2026-10-12.md`.
+
 Fecha: 12 octubre 2026 (Madrid). Repositorio: `joseluisbarcia/brcstudio-web`.
 Proyecto Netlify: `brcstudio-web`. Se omiten identificadores internos de infraestructura en este repositorio público.
 

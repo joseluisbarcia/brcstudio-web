@@ -26,7 +26,7 @@ try {
     charges_enabled: account.charges_enabled, payouts_enabled: account.payouts_enabled,
     details_submitted: account.details_submitted, items,
     tax_rates: taxes.filter(t => t.livemode).map(t => ({ id: t.id, percentage: t.percentage, country: t.country, inclusive: t.inclusive, active: t.active })),
-    note: 'Amounts are expected sandbox references, not independently approved live pricing. Automatic Tax not enabled. No legal or fiscal validation implied.' };
+    note: 'Amounts match the live catalog audit dated 2026-10-12; this run verifies they still match. Automatic Tax not enabled. No legal or fiscal validation implied.' };
   console.log(JSON.stringify(report, null, 2));
   if (items.some(i => !i.verified)) process.exitCode = 2;
 } catch { console.error('Audit failed. Check live account permissions privately; no secrets or raw Stripe errors were printed.'); process.exitCode = 1; }

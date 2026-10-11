@@ -19,6 +19,14 @@ export function client() {
   if (!/^(rk|sk)_live_/.test(key || '')) throw new Error('Live key unavailable');
   return new Stripe(key, { apiVersion: API_VERSION, maxNetworkRetries: 2, timeout: 15000 });
 }
+export function configuredItem(key) {
+  const entry = catalog[key];
+  if (!entry) throw new Error('Unknown catalog item');
+  let ids;
+  try { ids = JSON.parse(env('BRC_LIVE_CATALOG_JSON') || '{}')[key]; } catch { throw new Error('Invalid catalog configuration'); }
+  if (!/^price_[A-Za-z0-9]+$/.test(ids?.priceId || '') || !/^prod_[A-Za-z0-9]+$/.test(ids?.productId || '')) throw new Error('Live catalog unavailable');
+  return { ...entry, priceId: ids.priceId, productId: ids.productId };
+}
 export function validatePrice(price, expected) {
   if (!price || price.livemode !== true || !price.active || price.currency !== 'eur' ||
       price.unit_amount !== expected.amount || price.tax_behavior !== 'exclusive' ||
@@ -56,7 +64,7 @@ export async function checkoutParams(stripe, input, now = Date.now()) {
   validateTax(await stripe.taxRates.retrieve(taxId));
   const line_items = [];
   for (const key of plans[input.plan]) {
-    const item = catalog[key];
+    const item = configuredItem(key);
     if (!item.priceId || !item.productId) throw new Error('Catalog not verified');
     validatePrice(await stripe.prices.retrieve(item.priceId, { expand: ['product'] }), item);
     line_items.push({ price: item.priceId, quantity: 1, tax_rates: [taxId] });

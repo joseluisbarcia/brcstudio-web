@@ -1,5 +1,5 @@
-// Live IDs must be verified against the connected LIVE account before filling these fields.
-// The expected amounts below were read from the existing sandbox on 2026-10-11.
+// Amounts and recurrence verified against the LIVE account on 2026-10-12 (Madrid).
+// Live identifiers are supplied through BRC_LIVE_CATALOG_JSON in Functions, never from the caller.
 export const commercialReleaseApproved = false;
 export const catalog = {
   web_fase1: { amount: 49000, priceId: null, productId: null },

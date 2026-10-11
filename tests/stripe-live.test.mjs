@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import Stripe from 'stripe';
 import { catalog, commercialReleaseApproved } from '../server/stripe-live-catalog.mjs';
-import { eventRecord, paidSales, checkoutParams, validatePrice, validateCustomer, validateTax } from '../server/stripe-live.mjs';
+import { eventRecord, paidSales, checkoutParams, configuredItem, validatePrice, validateCustomer, validateTax } from '../server/stripe-live.mjs';
 import checkout from '../netlify/functions/stripe-live-checkout.mjs';
 import { createHandler } from '../netlify/functions/stripe-live-webhook.mjs';
 import sales from '../netlify/functions/brc-live-sales.mjs';
@@ -37,7 +37,8 @@ test('VAT validation excludes unreviewed tax and territories', () => {
 test('monthly checkout includes one-time setup and renewal tax without paid add-ons', async () => {
   const backup = structuredClone(catalog);
   try {
-    for (const [key,item] of Object.entries(catalog)) { item.priceId = 'price_' + key; item.productId = 'prod_' + key; }
+    for (const [key,item] of Object.entries(catalog)) { item.priceId = 'price_' + key.replaceAll('_',''); item.productId = 'prod_' + key.replaceAll('_',''); }
+    values.BRC_LIVE_CATALOG_JSON = JSON.stringify(Object.fromEntries(Object.entries(catalog).map(([k,v]) => [k, {priceId: v.priceId, productId:v.productId}])));
     values.STRIPE_LIVE_TAX_RATE = 'txr_fixture';
     const stripe = { customers: { retrieve: async () => customer }, taxRates: { retrieve: async () => tax }, prices: { retrieve: async id => price(Object.values(catalog).find(v => v.priceId === id)) } };
     const now = Date.now();
@@ -85,4 +86,12 @@ test('signed webhook persists idempotently; bad signatures, test events and stor
   const failed = createHandler(() => ({ setJSON: async () => { throw new Error('offline'); } }));
   assert.equal((await failed(request(event('invoice.payment_failed')))).status, 503);
   values.CONTEXT = 'deploy-preview'; assert.equal((await handler(request(event('checkout.session.completed')))).status, 503);
+});
+
+test('live catalog is mandatory and cannot override audited amounts', () => {
+  values.BRC_LIVE_CATALOG_JSON = 'invalid';
+  assert.throws(() => configuredItem('mensual'));
+  values.BRC_LIVE_CATALOG_JSON = JSON.stringify({ mensual: { priceId: 'price_fixture', productId: 'prod_fixture', amount: 1 } });
+  assert.equal(configuredItem('mensual').amount, 3900);
+  assert.throws(() => configuredItem('alta'));
 });
