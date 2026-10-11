@@ -89,3 +89,6 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 
 /* Dissolve the end of the silk loop into its poster, then back to frame one. */
 .hero-silk .silk-film,.hero-silk .silk-film.silk-ready{opacity:var(--silk-opacity,1)!important;transition:opacity .4s ease!important}
+
+/* Continuous native loop: no end-of-video opacity transitions. */
+.hero-silk .silk-film,.hero-silk .silk-film.silk-ready{opacity:1!important;transition:none!important}
