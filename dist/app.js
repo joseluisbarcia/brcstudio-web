@@ -105,8 +105,9 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
   const rect=section.getBoundingClientRect();
   const distance=Math.max(1,section.offsetHeight-innerHeight);
   const p=clamp(-rect.top/distance);
-  overlay.style.transform='translate3d(0,'+(-Math.round(p*Math.min(innerHeight*.55,500)))+'px,0)';
-  overlay.style.opacity=String(clamp((.96-p)/.10));
+  // Keep all hero content fixed in place during the silk scroll sequence.
+  overlay.style.transform='none';
+  overlay.style.opacity='1';
  }
  function schedule(){if(!queued){queued=true;requestAnimationFrame(render)}}
  addEventListener('scroll',schedule,{passive:true});
