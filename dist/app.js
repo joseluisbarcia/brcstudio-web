@@ -23,6 +23,33 @@ dots.forEach((dot,index)=>dot.addEventListener('click',()=>go(index)));
 rail.addEventListener('keydown',event=>{if(event.key==='ArrowRight'||event.key==='ArrowLeft'){event.preventDefault();go(active+(event.key==='ArrowRight'?1:-1));}});
 let queued=false;rail.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(()=>{update();queued=false;});}},{passive:true});
 window.addEventListener('resize',update);update();
+// Keep all five case studies on the same editorial grid, even with varying copy.
+const cases = [...document.querySelectorAll('.project-case')];
+function alignCases(){
+ const bodies=cases.map(item=>item.querySelector('.case-body'));
+ bodies.forEach(body=>{body.style.gridTemplateRows='';});
+ if(!bodies.length)return;
+ const maxChallenge=Math.max(...bodies.map(body=>body.children[1].scrollHeight));
+ const maxSolution=Math.max(...bodies.map(body=>body.children[3].scrollHeight));
+ bodies.forEach(body=>{
+  body.style.gridTemplateRows=`auto ${Math.ceil(maxChallenge)}px auto ${Math.ceil(maxSolution)}px auto`;
+ });
+}
+let caseResizePending=false;
+function scheduleCaseAlignment(){
+ if(caseResizePending)return;
+ caseResizePending=true;
+ requestAnimationFrame(()=>{caseResizePending=false;alignCases();});
+}
+cases.forEach(item=>item.addEventListener('toggle',()=>{
+ // A single open case at a time avoids an unnecessarily tall carousel.
+ if(item.open)cases.forEach(other=>{if(other!==item)other.open=false;});
+ scheduleCaseAlignment();
+}));
+addEventListener('resize',scheduleCaseAlignment,{passive:true});
+document.fonts?.ready.then(scheduleCaseAlignment);
+scheduleCaseAlignment();
+
 // Video bytes are requested only when the phone is actually visible.
 const connection = navigator.connection;
 const players = [...document.querySelectorAll('video[data-src]')].map(video => {
@@ -83,3 +110,21 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 });
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
+
+/* Native continuous silk loop. The hero scrolls naturally with the page. */
+(() => {
+ const film=document.querySelector('#silk-film');
+ const header=document.querySelector('.header');
+ if(!film||!header)return;
+ function play(){film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
+ film.loop=true;
+ film.setAttribute('loop','');
+ film.addEventListener('canplay',play,{once:true});
+ document.addEventListener('touchstart',play,{once:true,passive:true});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});
+ play();
+ let scheduled=false;
+ function updateHeader(){scheduled=false;header.classList.toggle('is-scrolled',window.scrollY>64);}
+ addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateHeader)}},{passive:true});
+ updateHeader();
+})();
