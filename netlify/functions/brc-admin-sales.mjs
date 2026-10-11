@@ -13,7 +13,15 @@ export default async function(request){
   if (!password || password.length<20) return reply("<div class=box>Panel pendiente de activar. Configura una contraseña de al menos 20 caracteres en Netlify (BRC_ADMIN_PASSWORD) y vuelve a desplegar.</div>",503);
   const url=new URL(request.url);
   if(request.method==="POST"){
-    if(request.headers.get("origin")!=="https://brcstudio.es") return reply("<div class=box>Origen no permitido.</div>",403);
+    const origin=request.headers.get("origin");
+    const referer=request.headers.get("referer");
+    const fetchSite=request.headers.get("sec-fetch-site");
+    const allowed="https://brcstudio.es";
+    // Browsers may omit Origin on same-site form POST. Accept same-origin Referer or Fetch Metadata as fallback.
+    const sameOriginReferer=(()=>{try{return new URL(referer).origin===allowed}catch{return false}})();
+    const sameOriginFetch=fetchSite==="same-origin";
+    if(origin!==allowed && !sameOriginReferer && !sameOriginFetch) return reply("<div class=box>Origen no permitido.</div>",403);
+    if(origin && origin!=="null" && origin!==allowed) return reply("<div class=box>Origen no permitido.</div>",403);
     const form=await request.formData();
     if(form.get("action")==="logout")return new Response(null,{status:303,headers:{location:url.pathname,"set-cookie":"brc_admin=; Path=/admin/ventas; HttpOnly; Secure; SameSite=Strict; Max-Age=0","cache-control":"no-store"}});
     const candidate=String(form.get("password")??"");
