@@ -151,3 +151,11 @@ html,body,main,.work,.services,.contact,footer,.studio-intro{background-color:#0
 @media(max-width:420px){
  .project-case .case-body{grid-template-rows:auto minmax(136px,auto) auto minmax(180px,auto) auto}
 }
+
+/* Compact portfolio and responsive navigation */
+.carousel{align-items:flex-start}
+.project{align-self:flex-start}
+.project-case .case-body{padding-bottom:10px}
+.carousel-footer{margin-top:14px}
+#proyectos,#servicios,#estudio,#contacto{scroll-margin-top:110px}
+@media(max-width:800px){.work{padding-top:70px}.section-head{margin-bottom:28px}.carousel{gap:16px}.services{padding-top:88px}.header{height:88px}.brand{font-size:clamp(22px,5.5vw,31px)}}
