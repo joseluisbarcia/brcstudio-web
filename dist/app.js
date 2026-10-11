@@ -84,35 +84,20 @@ const players = [...document.querySelectorAll('video[data-src]')].map(video => {
 document.addEventListener('visibilitychange',()=>players.forEach(player=>document.hidden?player.video.pause():player.resume()));
 reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player=>player.video.pause());});
 
-/* v7: native inline video playback; JS only animates title on scroll. */
+/* Native continuous silk loop. The hero scrolls naturally with the page. */
 (() => {
- const section=document.querySelector('#silk-transition');
  const film=document.querySelector('#silk-film');
- const title=document.querySelector('#hero-title');
- const overlay=section?.querySelector('.hero-overlay');
- if(!section||!film||!title||!overlay)return;
- let queued=false;
- const clamp=n=>Math.max(0,Math.min(1,n));
+ const header=document.querySelector('.header');
+ if(!film||!header)return;
+ function play(){film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
  film.loop=true;
  film.setAttribute('loop','');
- function play(){film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
- // Safari autoplay can need a user gesture in embedded browsers.
- document.addEventListener('touchstart',play,{once:true,passive:true});
- document.addEventListener('pointerdown',play,{once:true,passive:true});
- document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});
  film.addEventListener('canplay',play,{once:true});
+ document.addEventListener('touchstart',play,{once:true,passive:true});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)play()});
  play();
- function render(){
-  queued=false;
-  const rect=section.getBoundingClientRect();
-  const distance=Math.max(1,section.offsetHeight-innerHeight);
-  const p=clamp(-rect.top/distance);
-  // Keep all hero content fixed in place during the silk scroll sequence.
-  overlay.style.transform='none';
-  overlay.style.opacity='1';
- }
- function schedule(){if(!queued){queued=true;requestAnimationFrame(render)}}
- addEventListener('scroll',schedule,{passive:true});
- addEventListener('resize',schedule,{passive:true});
- render();
+ let scheduled=false;
+ function updateHeader(){scheduled=false;header.classList.toggle('is-scrolled',window.scrollY>64);}
+ addEventListener('scroll',()=>{if(!scheduled){scheduled=true;requestAnimationFrame(updateHeader)}},{passive:true});
+ updateHeader();
 })();
