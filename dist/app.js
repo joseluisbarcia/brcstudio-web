@@ -93,7 +93,7 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  if(!section||!film||!title||!overlay)return;
  let queued=false;
  const clamp=n=>Math.max(0,Math.min(1,n));
- function play(){film.muted=true;film.playbackRate=0.68;film.play().catch(()=>{});}
+ function play(){film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
  // Safari autoplay can need a user gesture in embedded browsers.
  document.addEventListener('touchstart',play,{once:true,passive:true});
  document.addEventListener('pointerdown',play,{once:true,passive:true});
