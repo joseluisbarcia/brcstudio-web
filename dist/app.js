@@ -93,30 +93,9 @@ reduced.addEventListener('change',()=>{if(reduced.matches)players.forEach(player
  if(!section||!film||!title||!overlay)return;
  let queued=false;
  const clamp=n=>Math.max(0,Math.min(1,n));
- let restarting=false;
- film.loop=false;
- film.removeAttribute('loop');
- function play(){if(restarting)return;film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
- // Hold the last frame for 1.5 seconds; dissolve through the opening
- // still while seeking to frame zero, masking the hard cut at the loop.
- film.addEventListener('timeupdate',()=>{
-  if(film.duration && film.currentTime >= film.duration-0.45 && !restarting){
-   film.style.setProperty('--silk-opacity','0');
-  }
- });
- film.addEventListener('ended',()=>{
-  if(restarting)return;
-  restarting=true;
-  film.style.setProperty('--silk-opacity','0');
-  setTimeout(()=>{
-   try{film.currentTime=0;}catch{}
-   setTimeout(()=>{
-    restarting=false;
-    if(!document.hidden)film.play().catch(()=>{});
-    film.style.setProperty('--silk-opacity','1');
-   },1100);
-  },400);
- });
+ film.loop=true;
+ film.setAttribute('loop','');
+ function play(){film.muted=true;film.playbackRate=1;film.play().catch(()=>{});}
  // Safari autoplay can need a user gesture in embedded browsers.
  document.addEventListener('touchstart',play,{once:true,passive:true});
  document.addEventListener('pointerdown',play,{once:true,passive:true});
