@@ -81,9 +81,9 @@ Pago inicial de 149 € + IVA por el alta, más 39 € + IVA por el primer mes. 
 
 **Estado:** borrador de condiciones listo para revisión. No constituye autorización de venta, no publica pagos ni modifica Stripe.
 
-## 7. Propuesta operativa de mantenimiento y entrega (PENDIENTE DE APROBACIÓN)
+## 7. Propuesta operativa de mantenimiento y entrega (NO APROBADA; subordinada al brief maestro Drive del 11/10/2026)
 
-**Plan mensual, 39 €/mes + IVA:** hosting y publicación del sitio contratado, mantenimiento técnico y de seguridad razonable, resolución de incidencias imputables a la web desarrollada por BRC, soporte por correo y hasta **dos cambios pequeños de contenido al mes**, no acumulables (por ejemplo, actualizar un precio, horario, foto o texto breve). Las modificaciones deben afectar a páginas o secciones existentes, con material proporcionado por el cliente. No se incluyen rediseños, páginas nuevas, funciones o integraciones nuevas, creación de contenido, campañas, gestión del Perfil de Empresa de Google ni garantía de posicionamiento. Todo trabajo adicional se presupuesta antes de realizarse.
+**ATENCIÓN: el límite de dos cambios que sigue es una hipótesis no aprobada, NO una condición comercial. La autogestión del cliente mediante futuro Admin Supabase debe diferenciarse de las solicitudes manuales a BRC.**\n\n**Plan mensual, 39 €/mes + IVA:** hosting y publicación del sitio contratado, mantenimiento técnico y de seguridad razonable, resolución de incidencias imputables a la web desarrollada por BRC, soporte por correo y hasta **dos cambios pequeños de contenido al mes**, no acumulables (por ejemplo, actualizar un precio, horario, foto o texto breve). Las modificaciones deben afectar a páginas o secciones existentes, con material proporcionado por el cliente. No se incluyen rediseños, páginas nuevas, funciones o integraciones nuevas, creación de contenido, campañas, gestión del Perfil de Empresa de Google ni garantía de posicionamiento. Todo trabajo adicional se presupuesta antes de realizarse.
 
 **Operativa sugerida:** peticiones por correo a jose@brcstudio.es; acuse en un máximo orientativo de dos días hábiles y ejecución de cambios ordinarios en un máximo orientativo de cinco días hábiles, sujetos a recepción de materiales y a incidencias técnicas; estas ventanas **no están aprobadas ni constituyen SLA contractual**. Definir canal definitivo, horarios y prioridades antes de vender.
 
@@ -94,3 +94,20 @@ Pago inicial de 149 € + IVA por el alta, más 39 € + IVA por el primer mes. 
 **Compra directa:** durante los 30 días de soporte se corrigen errores de funcionamiento del trabajo entregado. Cambios de diseño, contenido y ampliaciones se presupuestan aparte. Tras ese período, el hosting y mantenimiento se contratarán por separado o se gestionarán por el cliente; definir condiciones antes de emitir oferta.
 
 **Pendiente de aprobación comercial y revisión legal:** número de cambios, plazos de respuesta, derechos de uso, entrega técnica, tratamiento de licencias y proceso de cancelación. No publicar estas condiciones como definitivas todavía.
+
+
+## 8. Conciliación con fuentes maestras Drive (12/10/2026)
+
+**Jerarquía:** prevalecen `BRIEF — PROYECTO BARBERÍA` (versión consolidada 11/10/2026), las fichas PDF `BRC Studio - Compra web - clientes.pdf` y `BRC Studio - Plan mensual - clientes.pdf`, y la hoja `LEADS MADRID — MAESTRO` (pestaña `GUÍA DE LLAMADAS`). Este borrador GitHub no debe cambiar lo ya comunicado al cliente.
+
+**Confirmado:** compra 490 € + IVA, web y dominio del cliente, 30 días de soporte de incidencias de entrega, sin mantenimiento continuo; plan mensual 149 € + IVA de alta y 39 €/mes + IVA, alojamiento, dominio, mantenimiento y soporte ordinario, sin permanencia, dominio del cliente y web de BRC hasta compra. Cancelación al terminar el periodo pagado. Compra posterior 290/190/99 € + IVA según meses. PDF informativos, no contrato.
+
+**Admin futuro:** Supabase Pro existente es la opción preferida, NO una implementación ya validada. El cliente deberá poder autogestionar servicios, precios, horarios, fotografías, textos, contacto y enlace de reservas sin GitHub. Se requiere validar Auth, aislamiento multi-tenant, RLS, Storage, cuotas, backups, costes incrementales y ciclo de vida tras compra/baja. No alterar proyectos PsyMorph u Onyra. La plantilla maestra está en `joseluisbarcia/solo-barber-kit`, con despliegues y repositorios de clientes independientes. **No prometer Admin como disponible hasta completar pruebas.**
+
+**Conflicto resuelto:** el tope propuesto de **dos pequeños cambios al mes** NO está aprobado y NO figura en los PDF vigentes. Una vez exista Admin, las ediciones autónomas del barbero no deberían computarse como intervenciones manuales de soporte; el número de solicitudes manuales a BRC sigue por decidir. No introducir dicho límite en materiales comerciales sin aprobación y sincronización de todos los documentos.
+
+**Otro límite:** el brief define impago: aviso y siete días naturales para regularizar; luego suspensión de publicación y soporte, conservando el dominio del cliente. El documento contractual futuro debe recogerlo y el backend NO debe suspender automáticamente sin comprobar estado y condiciones.
+
+**Comisiones y fases:** comercial cobra 41 % de compras y compras posteriores (redondeo al euro), 75 € por alta; no cobra mensualidades. Fases 2 (290 €) y 3 (249 €) son decisiones futuras condicionadas a cinco rechazos por precio cada una, no descuentos públicos. No mezclar precios de fases con los de compra posterior.
+
+**No modificar los dos PDF de clientes ni la hoja maestra hasta decidir y aprobar cambios.**
