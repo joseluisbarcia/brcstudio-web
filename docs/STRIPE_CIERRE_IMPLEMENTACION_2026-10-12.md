@@ -105,3 +105,11 @@ SMTP, disponibilidad del secreto sandbox, clic de pago, renovación efectiva y a
 - [Resultados HTTP](evidence/brc-final-http-20261012.json). La captura [Checkout sandbox antes del pago](evidence/brc-sandbox-checkout-pendiente-20261012.jpg) es histórica, no representa el estado actual.
 - Verificador temporal protegido: `a72d7c19e9d8c743ec2810ae9d2ef459907865ba`, ajuste a Invoice API actual `40ef6691d2efd48a0a122b30703cb674f2d2fd7b`; Netlify `6acce93b3de83a4dec52f579`, ready. Se elimina después de recoger la evidencia.
 - `npm run build` ejecutado nuevamente: 80/80 pruebas y validación de estáticos correctas.
+
+### Despliegue final del cierre ejecutado
+
+- Commit de retirada definitiva del verificador y evidencias: `89a0c6cc2f78dc3054d19d4be37d703fc38944ad`.
+- Netlify: `6accea2453cecc047bfedc9f`, **ready**, commit coincidente, sin error.
+- Relectura final: webhook live 19 eventos, nuevo sandbox 19 y antiguo sandbox 2, todos habilitados; portal live privado sin cambios de plan. [Configuración y evento final de baja](evidence/brc-stripe-config-final-20261012.json).
+- Comprobaciones HTTP posteriores en `brc-final-http-20261012.json`: ambos verificadores QA, tanto ruta pública como ruta directa de función, devuelven 404; live sigue desactivado y webhooks rechazan peticiones sin firma.
+- No quedan tareas técnicas de sandbox pendientes. La falta de permiso Tax Rates en la clave live impide declarar el cierre técnico completo.

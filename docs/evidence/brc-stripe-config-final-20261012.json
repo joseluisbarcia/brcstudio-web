@@ -1,0 +1,145 @@
+{
+  "0": [
+    {
+      "id": "we_1UPWqyDwLerTapleMqYF8SPh",
+      "url": "https://brcstudio.es/api/stripe-live-webhook",
+      "status": "enabled",
+      "api_version": "2026-09-30.endive",
+      "enabled_events": [
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded",
+        "invoice.paid",
+        "invoice.payment_failed",
+        "invoice.payment_action_required",
+        "customer.subscription.created",
+        "customer.subscription.updated",
+        "customer.subscription.deleted",
+        "customer.subscription.paused",
+        "customer.subscription.resumed",
+        "refund.created",
+        "refund.updated",
+        "refund.failed",
+        "charge.refunded",
+        "charge.dispute.created",
+        "charge.dispute.updated",
+        "charge.dispute.closed",
+        "charge.dispute.funds_withdrawn",
+        "charge.dispute.funds_reinstated"
+      ]
+    }
+  ],
+  "1": [
+    {
+      "id": "we_1UPi3lD95NECz80FkHLusrot",
+      "url": "https://brcstudio.es/api/brc-order-test-webhook",
+      "status": "enabled",
+      "api_version": "2026-09-30.endive",
+      "enabled_events": [
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded",
+        "invoice.paid",
+        "invoice.payment_failed",
+        "invoice.payment_action_required",
+        "customer.subscription.created",
+        "customer.subscription.updated",
+        "customer.subscription.deleted",
+        "customer.subscription.paused",
+        "customer.subscription.resumed",
+        "refund.created",
+        "refund.updated",
+        "refund.failed",
+        "charge.refunded",
+        "charge.dispute.created",
+        "charge.dispute.updated",
+        "charge.dispute.closed",
+        "charge.dispute.funds_withdrawn",
+        "charge.dispute.funds_reinstated"
+      ]
+    },
+    {
+      "id": "we_1UPTt4D95NECz80FdMmpPexP",
+      "url": "https://brcstudio.es/api/stripe-test-webhook",
+      "status": "enabled",
+      "api_version": "2026-09-30.endive",
+      "enabled_events": [
+        "checkout.session.completed",
+        "checkout.session.async_payment_succeeded"
+      ]
+    }
+  ],
+  "checked_at": "2026-10-12T14:11:05.597Z",
+  "portal": [
+    {
+      "id": "bpc_1UPiBTDwLerTaplennYWGOYT",
+      "active": true,
+      "features": {
+        "customer_update": {
+          "allowed_updates": [],
+          "enabled": false
+        },
+        "invoice_history": {
+          "enabled": true
+        },
+        "payment_method_update": {
+          "enabled": true,
+          "payment_method_configuration": null
+        },
+        "subscription_cancel": {
+          "cancellation_reason": {
+            "enabled": false,
+            "feedback_options": [],
+            "options": [
+              "too_expensive",
+              "missing_features",
+              "switched_service",
+              "unused",
+              "other"
+            ]
+          },
+          "enabled": true,
+          "mode": "at_period_end",
+          "proration_behavior": "none"
+        },
+        "subscription_pause": {
+          "enabled": false
+        },
+        "subscription_update": {
+          "billing_cycle_anchor": "unchanged",
+          "default_allowed_updates": [],
+          "enabled": false,
+          "proration_behavior": "none",
+          "schedule_at_period_end": {
+            "conditions": []
+          },
+          "trial_update_behavior": "end_trial"
+        }
+      },
+      "login_page": {
+        "enabled": false,
+        "url": null
+      }
+    }
+  ],
+  "cancellation_events": [
+    {
+      "id": "evt_1UPjtJD95NECz80FcqC5aURa",
+      "pending_webhooks": 0,
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "status": "canceled",
+      "ended_at": 1800100800
+    },
+    {
+      "id": "evt_1UPjTaD95NECz80F0Ngmxz6Q",
+      "pending_webhooks": 0,
+      "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+      "status": "canceled",
+      "ended_at": 1794484800
+    }
+  ],
+  "deployment": {
+    "id": "6accea2453cecc047bfedc9f",
+    "state": "ready",
+    "commit_ref": "89a0c6cc2f78dc3054d19d4be37d703fc38944ad",
+    "error_message": null
+  }
+}

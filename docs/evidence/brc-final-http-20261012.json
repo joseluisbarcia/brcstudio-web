@@ -1,62 +1,98 @@
-[
-  {
-    "method": "GET",
-    "path": "/api/stripe-live-checkout",
-    "status": 200,
-    "body": "{\"enabled\":false,\"tax_rate_configured\":true,\"release_ready\":false}"
-  },
-  {
-    "method": "POST",
-    "path": "/api/stripe-live-checkout",
-    "status": 503,
-    "body": "{\"error\":\"Live checkout is disabled\",\"code\":\"ORDER_ACCEPTANCE_NOT_READY\"}"
-  },
-  {
-    "method": "POST",
-    "path": "/api/stripe-live-webhook",
-    "status": 400,
-    "body": "Invalid signature"
-  },
-  {
-    "method": "POST",
-    "path": "/api/brc-order-test-webhook",
-    "status": 400,
-    "body": "Invalid signature"
-  },
-  {
-    "method": "GET",
-    "path": "/api/brc-closure-qa-status",
-    "status": 404,
-    "body": null
-  },
-  {
-    "method": "GET",
-    "path": "/.netlify/functions/brc-closure-qa",
-    "status": 404,
-    "body": null
-  },
-  {
-    "method": "GET",
-    "path": "/stripe-test.html",
-    "status": 200,
-    "body": null
-  },
-  {
-    "method": "GET",
-    "path": "/pedido",
-    "status": 200,
-    "body": null
-  },
-  {
-    "method": "GET",
-    "path": "/admin/ventas/contratos?id=a237bc13-84a9-49e4-a197-60a552ff1078",
-    "status": 401,
-    "body": null
-  },
-  {
-    "method": "GET",
-    "path": "/admin/ventas/bajas-prueba",
-    "status": 401,
-    "body": null
-  }
-]
+{
+  "checked_at": "2026-10-12T14:11:00.382435+00:00",
+  "checks": [
+    {
+      "method": "GET",
+      "path": "/api/stripe-live-checkout",
+      "status": 200,
+      "expected": 200,
+      "pass": true,
+      "body": {
+        "enabled": false,
+        "tax_rate_configured": true,
+        "release_ready": false
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/stripe-live-checkout",
+      "status": 503,
+      "expected": 503,
+      "pass": true,
+      "body": {
+        "error": "Live checkout is disabled",
+        "code": "ORDER_ACCEPTANCE_NOT_READY"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/stripe-live-webhook",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/brc-order-test-webhook",
+      "status": 400,
+      "expected": 400,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/brc-closure-qa-status",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/brc-closure-qa",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/brc-qa-lifecycle",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/.netlify/functions/brc-qa-lifecycle",
+      "status": 404,
+      "expected": 404,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/stripe-test.html",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/pedido",
+      "status": 200,
+      "expected": 200,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ventas/contratos?id=a237bc13-84a9-49e4-a197-60a552ff1078",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    },
+    {
+      "method": "GET",
+      "path": "/admin/ventas/bajas-prueba",
+      "status": 401,
+      "expected": 401,
+      "pass": true
+    }
+  ]
+}
