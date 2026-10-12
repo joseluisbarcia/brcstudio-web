@@ -50,8 +50,10 @@ async function run(){
   const panelText=await panel.text();progress.panel_status=panel.status;progress.panel_contains_fresh_event=panelText.includes('evt_1UPjQKD95NECz80FcUhZhgRC');
   progress.panel_contains_fixture_order=panelText.includes('qa-20261012-subscription');
   const liveKey=Netlify.env.get('STRIPE_LIVE_SECRET_KEY');
-  if(/^(sk|rk)_live_/.test(liveKey??'')){
+  progress.live_key_available=/^(sk|rk)_live_/.test(liveKey??'');
+  if(progress.live_key_available){
    const tax=await fetch('https://api.stripe.com/v1/tax_rates/txr_1UPX5ZDwLerTaplePClmgRMy',{headers:{Authorization:'Bearer '+liveKey}});
+   progress.live_tax_read_status=tax.status;
    if(tax.ok){const t=await tax.json();progress.live_tax={id:t.id,active:t.active,livemode:t.livemode,country:t.country,percentage:t.percentage,inclusive:t.inclusive}}
   }
   // Exercise the already-approved cancellation only. Never create/pay a subscription.
