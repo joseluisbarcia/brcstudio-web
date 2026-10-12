@@ -8,11 +8,11 @@ import * as reconciliation from '../netlify/lib/reconciliation.mjs';
 const signingSecret='whsec_'+crypto.randomBytes(32).toString('hex');
 const tax='txr_1UPX5ZDwLerTaplePClmgRMy';
 const price='price_1UPVEWDwLerTapleCN8WYU7L';
-async function load(file,{env={},fetch=()=>{throw Error('Network forbidden in audit')},store,exportName="default"}={}) {
+async function load(file,{env={},fetch=()=>{throw Error('Network forbidden in audit')},store,storeName='brc-live-sales',exportName="default"}={}) {
  const context=vm.createContext({Request,Response,URL,URLSearchParams,Buffer,Date,console,Netlify:{env:{get:k=>env[k]}},fetch});
  const module=new vm.SourceTextModule(await readFile(new URL('../netlify/functions/'+file,import.meta.url),'utf8'),{context});
  await module.link(async name=>{
-  const values=name==='node:crypto'?crypto:name.endsWith('reconciliation.mjs')?reconciliation:{getStore:options=>{assert.equal(options.name,'brc-live-sales');assert.equal(options.consistency,'strong');return store}};
+  const values=name==='node:crypto'?crypto:name.endsWith('reconciliation.mjs')?reconciliation:{getStore:options=>{assert.equal(options.name,storeName);assert.equal(options.consistency,'strong');return store}};
   const names=Object.keys(values);return new vm.SyntheticModule(names,function(){for(const key of names)this.setExport(key,values[key])},{context});
  });await module.evaluate();return module.namespace[exportName];
 }
@@ -117,4 +117,17 @@ test('out-of-order subscription events are immutable snapshots',async()=>{
 test('test checkout remains test-only in isolated local execution',async()=>{
  const h=await load('stripe-test-checkout.mjs',{env:{STRIPE_TEST_SECRET_KEY:'sk_live_fixture',STRIPE_TEST_TAX_RATE:'txr_fixture'}});
  assert.equal((await h(request())).status,503);
+});
+
+test('actual Stripe sandbox events replay safely, including du_ disputes, refunds and portal cancellation',async()=>{
+ const events=JSON.parse(await readFile(new URL('./fixtures/stripe-sandbox-20261012.json',import.meta.url),'utf8'));
+ const store=memory();
+ const handler=await load('stripe-live-webhook.mjs',{exportName:'handleWebhook',store,storeName:'brc-order-test-sales',env:{STRIPE_ORDER_TEST_WEBHOOK_SECRET:signingSecret,STRIPE_TEST_PRICE_MONTHLY:'price_1UPSAjD95NECz80Fivlph4MH'}});
+ for(const event of events){const response=await handler(signed(event),false);assert.equal(response.status,200,event.type);assert.equal(await response.text(),'Registered',event.type)}
+ const count=store.records.size;
+ for(const event of events)assert.equal(await (await handler(signed(event),false)).text(),'Already registered');
+ assert.equal(store.records.size,count);
+ assert.ok([...store.records.keys()].some(k=>k.startsWith('adjustment-events/du_')));
+ assert.equal([...store.records.keys()].some(k=>k.startsWith('checkout/')),false);
+ const live=await webhook();assert.equal((await live.handler(signed(events[0]))).status,400);assert.equal(live.store.records.size,0);
 });

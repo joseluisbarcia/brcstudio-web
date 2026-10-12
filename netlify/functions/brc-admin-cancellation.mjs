@@ -48,9 +48,10 @@ export async function handleCancellation(req,mode='live'){
   const key=hash(subscription+':'+evidence);
   const intent={environment:mode,subscription,customer:sub.customer.id,evidence,identity_verified_by:'direccion',identity_method:'manual_known_channel',recorded_at:new Date().toISOString()};
   await store.setJSON('request/'+key,intent,{onlyIfNew:true});
-  const result=sub.cancel_at_period_end?sub:await api('subscriptions/'+subscription,new URLSearchParams({cancel_at_period_end:'true',proration_behavior:'none'}));
-  if(result.id!==subscription||result.livemode!==live||result.cancel_at_period_end!==true)throw Error('Unconfirmed cancellation');
-  await store.setJSON('result/'+key,{...intent,cancel_at_period_end:true,cancel_at:result.cancel_at??null},{onlyIfNew:true});
+  const scheduled=s=>{const ends=[...new Set((s.items?.data??[]).map(i=>i.current_period_end).filter(Number.isSafeInteger))];return s.cancel_at_period_end===true||(ends.length===1&&s.cancel_at===ends[0])};
+  const result=scheduled(sub)?sub:await api('subscriptions/'+subscription,new URLSearchParams({cancel_at_period_end:'true',proration_behavior:'none'}));
+  if(result.id!==subscription||result.livemode!==live||!scheduled(result))throw Error('Unconfirmed cancellation');
+  await store.setJSON('result/'+key,{...intent,cancellation_scheduled:true,cancel_at_period_end:result.cancel_at_period_end===true,cancel_at:result.cancel_at??null},{onlyIfNew:true});
   return page('<p>Baja confirmada por Stripe al final del período pagado. No se ha solicitado reembolso ni cancelación inmediata.</p>');
  }catch{return page('No se puede confirmar el resultado. Consulta Stripe antes de informar al cliente; reintentar con la misma referencia es seguro.',503)}
 }

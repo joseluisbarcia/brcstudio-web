@@ -1,7 +1,7 @@
 // Production receipt journal. Never charges, changes subscriptions or grants access.
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { getStore } from "@netlify/blobs";
-import {adjustmentTypes,adjustment} from "../lib/reconciliation.mjs";
+import {adjustmentTypes,adjustment,resolveAdjustment} from "../lib/reconciliation.mjs";
 
 const monthlyPrice = "price_1UPVEWDwLerTapleCN8WYU7L";
 const checkoutTypes = ["checkout.session.completed", "checkout.session.async_payment_succeeded"];
@@ -78,6 +78,13 @@ export async function handleWebhook(request,live=true) {
   record.seller=metadata.brc_seller??record.seller??null;
   record.terms_hash=metadata.brc_terms_hash??null;
   record.reconciliation_required=!record.order_id;
+  if(adjustmentTypes.includes(event.type)){
+    const apiKey=Netlify.env.get(live?'STRIPE_LIVE_SECRET_KEY':'STRIPE_TEST_SECRET_KEY');
+    if(apiKey){
+      if(!(live?/^(sk|rk)_live_/:/^(sk|rk)_test_/).test(apiKey))return reply('Reconciliation key mode mismatch',503);
+      try{record=await resolveAdjustment(record,{secret:apiKey,live})}catch{return reply('Reconciliation unavailable',503)}
+    }
+  }
   try {
     const store=getStore({name:live?"brc-live-sales":"brc-order-test-sales",consistency:"strong"});
     // One atomic write: no race-prone read-then-write; await persistence before 2xx.

@@ -47,3 +47,9 @@ test('Stripe permission failure never claims completed cancellation',async()=>{
 test('already scheduled cancellation is read-only in Stripe',async()=>{
  const {handler,calls}=await setup({subscription:{...sub,cancel_at_period_end:true}});assert.equal((await handler(request())).status,200);assert.equal(calls.filter(c=>c.method==='POST').length,0);
 });
+
+test('portal cancellation with cancel_at equal to item end is recognized without another mutation',async()=>{
+ const {handler,calls,rows}=await setup({subscription:{...sub,cancel_at:1794484800,items:{data:[{price:{id:price},current_period_end:1794484800}]}}});
+ assert.equal((await handler(request())).status,200);assert.equal(calls.filter(c=>c.method==='POST').length,0);
+ assert.equal([...rows.values()].find(r=>r.cancellation_scheduled)?.cancel_at_period_end,false);
+});

@@ -1,0 +1,1826 @@
+[
+  {
+    "id": "evt_1UPi8dD95NECz80Fgu93uR1x",
+    "type": "charge.dispute.closed",
+    "created": 1791807331,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "du_1UPi6gD95NECz80F3xgzWhMa",
+        "object": "dispute",
+        "amount": 4719,
+        "balance_transaction": "txn_1UPi6gD95NECz80FXUKblpb0",
+        "balance_transactions": [
+          {
+            "id": "txn_1UPi6gD95NECz80FXUKblpb0",
+            "object": "balance_transaction",
+            "amount": -4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807210,
+            "currency": "eur",
+            "description": "Chargeback withdrawal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 2000,
+            "fee_details": [
+              {
+                "amount": 2000,
+                "application": null,
+                "currency": "eur",
+                "description": "Dispute fee",
+                "type": "stripe_fee"
+              }
+            ],
+            "net": -6719,
+            "reporting_category": "dispute",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          },
+          {
+            "id": "txn_1UPi8cD95NECz80Fprby1kze",
+            "object": "balance_transaction",
+            "amount": 4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807330,
+            "currency": "eur",
+            "description": "Chargeback reversal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 0,
+            "fee_details": [],
+            "net": 4719,
+            "reporting_category": "dispute_reversal",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          }
+        ],
+        "charge": "ch_3UPi6eD95NECz80F1HtJD1EZ",
+        "created": 1791807210,
+        "currency": "eur",
+        "enhanced_eligibility_types": [],
+        "evidence": {
+          "access_activity_log": null,
+          "billing_address": null,
+          "cancellation_policy": null,
+          "cancellation_policy_disclosure": null,
+          "cancellation_rebuttal": null,
+          "customer_communication": null,
+          "customer_email_address": "brc-qa-dispute@example.invalid",
+          "customer_name": "BRC QA disputa — SIN VALIDEZ FISCAL",
+          "customer_purchase_ip": null,
+          "customer_signature": null,
+          "duplicate_charge_documentation": null,
+          "duplicate_charge_explanation": null,
+          "duplicate_charge_id": null,
+          "enhanced_evidence": {},
+          "product_description": "Subscription creation",
+          "receipt": null,
+          "refund_policy": null,
+          "refund_policy_disclosure": null,
+          "refund_refusal_explanation": null,
+          "service_date": null,
+          "service_documentation": null,
+          "shipping_address": null,
+          "shipping_carrier": null,
+          "shipping_date": null,
+          "shipping_documentation": null,
+          "shipping_tracking_number": null,
+          "uncategorized_file": null,
+          "uncategorized_text": "winning_evidence"
+        },
+        "evidence_details": {
+          "due_by": 1792540799,
+          "enhanced_eligibility": {},
+          "has_evidence": true,
+          "past_due": false,
+          "submission_count": 1
+        },
+        "intended_submission_method": "prefer_manual",
+        "is_charge_refundable": true,
+        "livemode": false,
+        "metadata": {},
+        "payment_intent": "pi_3UPi6eD95NECz80F1yJ6Xm3v",
+        "payment_method_details": {
+          "card": {
+            "brand": "visa",
+            "case_type": "chargeback",
+            "network": "visa",
+            "network_reason_code": "10.4"
+          },
+          "type": "card"
+        },
+        "reason": "fraudulent",
+        "status": "won"
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi8dD95NECz80Fc9wA7tbT",
+    "type": "charge.dispute.funds_reinstated",
+    "created": 1791807331,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "du_1UPi6gD95NECz80F3xgzWhMa",
+        "object": "dispute",
+        "amount": 4719,
+        "balance_transaction": "txn_1UPi6gD95NECz80FXUKblpb0",
+        "balance_transactions": [
+          {
+            "id": "txn_1UPi6gD95NECz80FXUKblpb0",
+            "object": "balance_transaction",
+            "amount": -4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807210,
+            "currency": "eur",
+            "description": "Chargeback withdrawal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 2000,
+            "fee_details": [
+              {
+                "amount": 2000,
+                "application": null,
+                "currency": "eur",
+                "description": "Dispute fee",
+                "type": "stripe_fee"
+              }
+            ],
+            "net": -6719,
+            "reporting_category": "dispute",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          },
+          {
+            "id": "txn_1UPi8cD95NECz80Fprby1kze",
+            "object": "balance_transaction",
+            "amount": 4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807330,
+            "currency": "eur",
+            "description": "Chargeback reversal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 0,
+            "fee_details": [],
+            "net": 4719,
+            "reporting_category": "dispute_reversal",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          }
+        ],
+        "charge": "ch_3UPi6eD95NECz80F1HtJD1EZ",
+        "created": 1791807210,
+        "currency": "eur",
+        "enhanced_eligibility_types": [],
+        "evidence": {
+          "access_activity_log": null,
+          "billing_address": null,
+          "cancellation_policy": null,
+          "cancellation_policy_disclosure": null,
+          "cancellation_rebuttal": null,
+          "customer_communication": null,
+          "customer_email_address": "brc-qa-dispute@example.invalid",
+          "customer_name": "BRC QA disputa — SIN VALIDEZ FISCAL",
+          "customer_purchase_ip": null,
+          "customer_signature": null,
+          "duplicate_charge_documentation": null,
+          "duplicate_charge_explanation": null,
+          "duplicate_charge_id": null,
+          "enhanced_evidence": {},
+          "product_description": "Subscription creation",
+          "receipt": null,
+          "refund_policy": null,
+          "refund_policy_disclosure": null,
+          "refund_refusal_explanation": null,
+          "service_date": null,
+          "service_documentation": null,
+          "shipping_address": null,
+          "shipping_carrier": null,
+          "shipping_date": null,
+          "shipping_documentation": null,
+          "shipping_tracking_number": null,
+          "uncategorized_file": null,
+          "uncategorized_text": "winning_evidence"
+        },
+        "evidence_details": {
+          "due_by": 1792540799,
+          "enhanced_eligibility": {},
+          "has_evidence": true,
+          "past_due": false,
+          "submission_count": 1
+        },
+        "intended_submission_method": "prefer_manual",
+        "is_charge_refundable": true,
+        "livemode": false,
+        "metadata": {},
+        "payment_intent": "pi_3UPi6eD95NECz80F1yJ6Xm3v",
+        "payment_method_details": {
+          "card": {
+            "brand": "visa",
+            "case_type": "chargeback",
+            "network": "visa",
+            "network_reason_code": "10.4"
+          },
+          "type": "card"
+        },
+        "reason": "fraudulent",
+        "status": "won"
+      }
+    }
+  },
+  {
+    "id": "evt_3UPi6eD95NECz80F1UbWady4",
+    "type": "charge.dispute.updated",
+    "created": 1791807327,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "du_1UPi6gD95NECz80F3xgzWhMa",
+        "object": "dispute",
+        "amount": 4719,
+        "balance_transaction": "txn_1UPi6gD95NECz80FXUKblpb0",
+        "balance_transactions": [
+          {
+            "id": "txn_1UPi6gD95NECz80FXUKblpb0",
+            "object": "balance_transaction",
+            "amount": -4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807210,
+            "currency": "eur",
+            "description": "Chargeback withdrawal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 2000,
+            "fee_details": [
+              {
+                "amount": 2000,
+                "application": null,
+                "currency": "eur",
+                "description": "Dispute fee",
+                "type": "stripe_fee"
+              }
+            ],
+            "net": -6719,
+            "reporting_category": "dispute",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          }
+        ],
+        "charge": "ch_3UPi6eD95NECz80F1HtJD1EZ",
+        "created": 1791807210,
+        "currency": "eur",
+        "enhanced_eligibility_types": [],
+        "evidence": {
+          "access_activity_log": null,
+          "billing_address": null,
+          "cancellation_policy": null,
+          "cancellation_policy_disclosure": null,
+          "cancellation_rebuttal": null,
+          "customer_communication": null,
+          "customer_email_address": "brc-qa-dispute@example.invalid",
+          "customer_name": "BRC QA disputa — SIN VALIDEZ FISCAL",
+          "customer_purchase_ip": null,
+          "customer_signature": null,
+          "duplicate_charge_documentation": null,
+          "duplicate_charge_explanation": null,
+          "duplicate_charge_id": null,
+          "enhanced_evidence": {},
+          "product_description": "Subscription creation",
+          "receipt": null,
+          "refund_policy": null,
+          "refund_policy_disclosure": null,
+          "refund_refusal_explanation": null,
+          "service_date": null,
+          "service_documentation": null,
+          "shipping_address": null,
+          "shipping_carrier": null,
+          "shipping_date": null,
+          "shipping_documentation": null,
+          "shipping_tracking_number": null,
+          "uncategorized_file": null,
+          "uncategorized_text": "winning_evidence"
+        },
+        "evidence_details": {
+          "due_by": 1792540799,
+          "enhanced_eligibility": {},
+          "has_evidence": true,
+          "past_due": false,
+          "submission_count": 1
+        },
+        "intended_submission_method": "prefer_manual",
+        "is_charge_refundable": false,
+        "livemode": false,
+        "metadata": {},
+        "payment_intent": "pi_3UPi6eD95NECz80F1yJ6Xm3v",
+        "payment_method_details": {
+          "card": {
+            "brand": "visa",
+            "case_type": "chargeback",
+            "network": "visa",
+            "network_reason_code": "10.4"
+          },
+          "type": "card"
+        },
+        "reason": "fraudulent",
+        "status": "under_review"
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi7dD95NECz80FCqq5mFd7",
+    "type": "customer.subscription.updated",
+    "created": 1791807269,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "sub_1UPi3ND95NECz80FUH3JP3x4",
+        "object": "subscription",
+        "application": null,
+        "application_fee_percent": null,
+        "automatic_tax": {
+          "disabled_reason": null,
+          "enabled": false,
+          "liability": null
+        },
+        "billing_cycle_anchor": 1791806400,
+        "billing_cycle_anchor_config": null,
+        "billing_mode": {
+          "flexible": {
+            "proration_discounts": "included"
+          },
+          "type": "flexible",
+          "updated_at": 1791806400
+        },
+        "billing_schedules": [],
+        "billing_thresholds": null,
+        "cancel_at": 1794484800,
+        "cancel_at_period_end": false,
+        "canceled_at": 1791806400,
+        "cancellation_details": {
+          "comment": null,
+          "feedback": null,
+          "feedback_option": null,
+          "reason": "cancellation_requested"
+        },
+        "collection_method": "charge_automatically",
+        "created": 1791806400,
+        "currency": "eur",
+        "customer": "cus_VQZBRQdNADjeOj",
+        "customer_account": null,
+        "days_until_due": null,
+        "default_payment_method": null,
+        "default_source": null,
+        "default_tax_rates": [
+          {
+            "id": "txr_1UPSchD95NECz80F7QLOONTN",
+            "object": "tax_rate",
+            "active": true,
+            "country": "ES",
+            "created": 1791747691,
+            "description": "IVA general España 21 %",
+            "display_name": "Impuesto a las ventas",
+            "effective_percentage": 21,
+            "flat_amount": null,
+            "inclusive": false,
+            "jurisdiction": null,
+            "jurisdiction_level": null,
+            "livemode": false,
+            "metadata": {},
+            "percentage": 21,
+            "rate_type": "percentage",
+            "state": null,
+            "tax_type": null
+          }
+        ],
+        "description": null,
+        "discounts": [],
+        "ended_at": null,
+        "invoice_settings": {
+          "account_tax_ids": null,
+          "custom_fields": null,
+          "description": null,
+          "footer": null,
+          "issuer": {
+            "type": "self"
+          }
+        },
+        "items": {
+          "object": "list",
+          "data": [
+            {
+              "id": "si_VQZBcsCZ3yQSRq",
+              "object": "subscription_item",
+              "billing_thresholds": null,
+              "created": 1791806400,
+              "current_period_end": 1794484800,
+              "current_period_start": 1791806400,
+              "current_trial": null,
+              "discounts": [],
+              "metadata": {},
+              "plan": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "plan",
+                "active": true,
+                "amount": 3900,
+                "amount_decimal": "3900",
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "interval": "month",
+                "interval_count": 1,
+                "livemode": false,
+                "metadata": {},
+                "meter": null,
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "tiers_mode": null,
+                "transform_usage": null,
+                "trial_period_days": null,
+                "usage_type": "licensed"
+              },
+              "price": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "price",
+                "active": true,
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "custom_unit_amount": null,
+                "livemode": false,
+                "lookup_key": null,
+                "metadata": {},
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "recurring": {
+                  "interval": "month",
+                  "interval_count": 1,
+                  "meter": null,
+                  "trial_period_days": null,
+                  "usage_type": "licensed"
+                },
+                "tax_behavior": "exclusive",
+                "tiers_mode": null,
+                "transform_quantity": null,
+                "type": "recurring",
+                "unit_amount": 3900,
+                "unit_amount_decimal": "3900"
+              },
+              "quantity": 1,
+              "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+              "tax_rates": []
+            }
+          ],
+          "has_more": false,
+          "total_count": 1,
+          "url": "/v1/subscription_items?subscription=sub_1UPi3ND95NECz80FUH3JP3x4"
+        },
+        "latest_invoice": "in_1UPi3ND95NECz80F4zOXf2jx",
+        "livemode": false,
+        "managed_payments": {
+          "enabled": false
+        },
+        "metadata": {
+          "brc_order_id": "qa-20261012-subscription",
+          "brc_plan": "mensual",
+          "brc_qa": "closure-20261012",
+          "brc_seller": "direccion"
+        },
+        "next_pending_invoice_item_invoice": null,
+        "on_behalf_of": null,
+        "pause_collection": null,
+        "payment_settings": {
+          "payment_method_options": null,
+          "payment_method_types": null,
+          "save_default_payment_method": "off"
+        },
+        "pending_invoice_item_interval": null,
+        "pending_setup_intent": null,
+        "pending_update": null,
+        "plan": {
+          "id": "price_1UPSAjD95NECz80Fivlph4MH",
+          "object": "plan",
+          "active": true,
+          "amount": 3900,
+          "amount_decimal": "3900",
+          "billing_scheme": "per_unit",
+          "created": 1791745957,
+          "currency": "eur",
+          "interval": "month",
+          "interval_count": 1,
+          "livemode": false,
+          "metadata": {},
+          "meter": null,
+          "nickname": null,
+          "product": "prod_VQImH6j5vKkDDA",
+          "tiers_mode": null,
+          "transform_usage": null,
+          "trial_period_days": null,
+          "usage_type": "licensed"
+        },
+        "quantity": 1,
+        "schedule": null,
+        "start_date": 1791806400,
+        "status": "active",
+        "test_clock": "clock_1UPi2WD95NECz80FjPrX6YHR",
+        "transfer_data": null,
+        "trial_end": null,
+        "trial_settings": {
+          "end_behavior": {
+            "billing_cycle_anchor": "now",
+            "missing_payment_method": "create_invoice"
+          }
+        },
+        "trial_start": null
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi6hD95NECz80FNJ3xvonU",
+    "type": "customer.subscription.created",
+    "created": 1791807211,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "sub_1UPi6eD95NECz80FUN1cmS6o",
+        "object": "subscription",
+        "application": null,
+        "application_fee_percent": null,
+        "automatic_tax": {
+          "disabled_reason": null,
+          "enabled": false,
+          "liability": null
+        },
+        "billing_cycle_anchor": 1791807208,
+        "billing_cycle_anchor_config": null,
+        "billing_mode": {
+          "flexible": {
+            "proration_discounts": "included"
+          },
+          "type": "flexible",
+          "updated_at": 1791807208
+        },
+        "billing_schedules": [],
+        "billing_thresholds": null,
+        "cancel_at": 1794485608,
+        "cancel_at_period_end": true,
+        "canceled_at": 1791807208,
+        "cancellation_details": {
+          "comment": null,
+          "feedback": null,
+          "feedback_option": null,
+          "reason": "cancellation_requested"
+        },
+        "collection_method": "charge_automatically",
+        "created": 1791807208,
+        "currency": "eur",
+        "customer": "cus_VQZEeXq7WvIRXB",
+        "customer_account": null,
+        "days_until_due": null,
+        "default_payment_method": null,
+        "default_source": null,
+        "default_tax_rates": [
+          {
+            "id": "txr_1UPSchD95NECz80F7QLOONTN",
+            "object": "tax_rate",
+            "active": true,
+            "country": "ES",
+            "created": 1791747691,
+            "description": "IVA general España 21 %",
+            "display_name": "Impuesto a las ventas",
+            "effective_percentage": 21,
+            "flat_amount": null,
+            "inclusive": false,
+            "jurisdiction": null,
+            "jurisdiction_level": null,
+            "livemode": false,
+            "metadata": {},
+            "percentage": 21,
+            "rate_type": "percentage",
+            "state": null,
+            "tax_type": null
+          }
+        ],
+        "description": null,
+        "discounts": [],
+        "ended_at": null,
+        "invoice_settings": {
+          "account_tax_ids": null,
+          "custom_fields": null,
+          "description": null,
+          "footer": null,
+          "issuer": {
+            "type": "self"
+          }
+        },
+        "items": {
+          "object": "list",
+          "data": [
+            {
+              "id": "si_VQZFTwyJNj50w3",
+              "object": "subscription_item",
+              "billing_thresholds": null,
+              "created": 1791807208,
+              "current_period_end": 1794485608,
+              "current_period_start": 1791807208,
+              "current_trial": null,
+              "discounts": [],
+              "metadata": {},
+              "plan": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "plan",
+                "active": true,
+                "amount": 3900,
+                "amount_decimal": "3900",
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "interval": "month",
+                "interval_count": 1,
+                "livemode": false,
+                "metadata": {},
+                "meter": null,
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "tiers_mode": null,
+                "transform_usage": null,
+                "trial_period_days": null,
+                "usage_type": "licensed"
+              },
+              "price": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "price",
+                "active": true,
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "custom_unit_amount": null,
+                "livemode": false,
+                "lookup_key": null,
+                "metadata": {},
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "recurring": {
+                  "interval": "month",
+                  "interval_count": 1,
+                  "meter": null,
+                  "trial_period_days": null,
+                  "usage_type": "licensed"
+                },
+                "tax_behavior": "exclusive",
+                "tiers_mode": null,
+                "transform_quantity": null,
+                "type": "recurring",
+                "unit_amount": 3900,
+                "unit_amount_decimal": "3900"
+              },
+              "quantity": 1,
+              "subscription": "sub_1UPi6eD95NECz80FUN1cmS6o",
+              "tax_rates": []
+            }
+          ],
+          "has_more": false,
+          "total_count": 1,
+          "url": "/v1/subscription_items?subscription=sub_1UPi6eD95NECz80FUN1cmS6o"
+        },
+        "latest_invoice": "in_1UPi6eD95NECz80Fy9qOaOfb",
+        "livemode": false,
+        "managed_payments": {
+          "enabled": false
+        },
+        "metadata": {
+          "brc_order_id": "qa-20261012-dispute",
+          "brc_plan": "mensual",
+          "brc_qa": "closure-dispute-20261012",
+          "brc_seller": "direccion"
+        },
+        "next_pending_invoice_item_invoice": null,
+        "on_behalf_of": null,
+        "pause_collection": null,
+        "payment_settings": {
+          "payment_method_options": null,
+          "payment_method_types": null,
+          "save_default_payment_method": "off"
+        },
+        "pending_invoice_item_interval": null,
+        "pending_setup_intent": null,
+        "pending_update": null,
+        "plan": {
+          "id": "price_1UPSAjD95NECz80Fivlph4MH",
+          "object": "plan",
+          "active": true,
+          "amount": 3900,
+          "amount_decimal": "3900",
+          "billing_scheme": "per_unit",
+          "created": 1791745957,
+          "currency": "eur",
+          "interval": "month",
+          "interval_count": 1,
+          "livemode": false,
+          "metadata": {},
+          "meter": null,
+          "nickname": null,
+          "product": "prod_VQImH6j5vKkDDA",
+          "tiers_mode": null,
+          "transform_usage": null,
+          "trial_period_days": null,
+          "usage_type": "licensed"
+        },
+        "quantity": 1,
+        "schedule": null,
+        "start_date": 1791807208,
+        "status": "active",
+        "test_clock": null,
+        "transfer_data": null,
+        "trial_end": null,
+        "trial_settings": {
+          "end_behavior": {
+            "billing_cycle_anchor": "now",
+            "missing_payment_method": "create_invoice"
+          }
+        },
+        "trial_start": null
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi6hD95NECz80F3tSsuH3l",
+    "type": "invoice.paid",
+    "created": 1791807211,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "in_1UPi6eD95NECz80Fy9qOaOfb",
+        "object": "invoice",
+        "account_country": "ES",
+        "account_name": "Entorno de prueba de BRC Studio",
+        "account_tax_ids": null,
+        "amount_due": 4719,
+        "amount_overpaid": 0,
+        "amount_paid": 4719,
+        "amount_remaining": 0,
+        "amount_shipping": 0,
+        "application": null,
+        "attempt_count": 1,
+        "attempted": true,
+        "auto_advance": false,
+        "automatic_tax": {
+          "disabled_reason": null,
+          "enabled": false,
+          "liability": null,
+          "provider": null,
+          "status": null
+        },
+        "automatically_finalizes_at": null,
+        "billing_reason": "subscription_create",
+        "collection_method": "charge_automatically",
+        "created": 1791807208,
+        "currency": "eur",
+        "custom_fields": null,
+        "customer": "cus_VQZEeXq7WvIRXB",
+        "customer_account": null,
+        "customer_address": null,
+        "customer_email": "brc-qa-dispute@example.invalid",
+        "customer_name": "BRC QA disputa — SIN VALIDEZ FISCAL",
+        "customer_phone": null,
+        "customer_shipping": null,
+        "customer_tax_exempt": "none",
+        "customer_tax_ids": [],
+        "default_payment_method": null,
+        "default_source": null,
+        "default_tax_rates": [
+          {
+            "id": "txr_1UPSchD95NECz80F7QLOONTN",
+            "object": "tax_rate",
+            "active": true,
+            "country": "ES",
+            "created": 1791747691,
+            "description": "IVA general España 21 %",
+            "display_name": "Impuesto a las ventas",
+            "effective_percentage": 21,
+            "flat_amount": null,
+            "inclusive": false,
+            "jurisdiction": null,
+            "jurisdiction_level": null,
+            "livemode": false,
+            "metadata": {},
+            "percentage": 21,
+            "rate_type": "percentage",
+            "state": null,
+            "tax_type": null
+          }
+        ],
+        "description": null,
+        "discounts": [],
+        "due_date": null,
+        "effective_at": 1791807208,
+        "ending_balance": 0,
+        "footer": null,
+        "from_invoice": null,
+        "issuer": {
+          "type": "self"
+        },
+        "last_finalization_error": null,
+        "latest_revision": null,
+        "lines": {
+          "object": "list",
+          "data": [
+            {
+              "id": "il_1UPi6eD95NECz80FgyIPa0FR",
+              "object": "line_item",
+              "amount": 3900,
+              "currency": "eur",
+              "description": "1 × BRC Plan — Mensualidad (a €39.00/mes)",
+              "discount_amounts": [],
+              "discountable": true,
+              "discounts": [],
+              "invoice": "in_1UPi6eD95NECz80Fy9qOaOfb",
+              "livemode": false,
+              "metadata": {
+                "brc_order_id": "qa-20261012-dispute",
+                "brc_plan": "mensual",
+                "brc_qa": "closure-dispute-20261012",
+                "brc_seller": "direccion"
+              },
+              "parent": {
+                "invoice_item_details": null,
+                "subscription_item_details": {
+                  "invoice_item": null,
+                  "proration": false,
+                  "proration_details": {
+                    "credited_items": null
+                  },
+                  "subscription": "sub_1UPi6eD95NECz80FUN1cmS6o",
+                  "subscription_item": "si_VQZFTwyJNj50w3"
+                },
+                "type": "subscription_item_details"
+              },
+              "period": {
+                "end": 1794485608,
+                "start": 1791807208
+              },
+              "pretax_credit_amounts": [],
+              "pricing": {
+                "price_details": {
+                  "price": "price_1UPSAjD95NECz80Fivlph4MH",
+                  "product": "prod_VQImH6j5vKkDDA"
+                },
+                "type": "price_details",
+                "unit_amount_decimal": "3900"
+              },
+              "quantity": 1,
+              "quantity_decimal": "1",
+              "subtotal": 3900,
+              "taxes": [
+                {
+                  "amount": 819,
+                  "tax_behavior": "exclusive",
+                  "tax_rate_details": {
+                    "tax_rate": "txr_1UPSchD95NECz80F7QLOONTN"
+                  },
+                  "taxability_reason": "not_available",
+                  "taxable_amount": 3900,
+                  "type": "tax_rate_details"
+                }
+              ]
+            }
+          ],
+          "has_more": false,
+          "total_count": 1,
+          "url": "/v1/invoices/in_1UPi6eD95NECz80Fy9qOaOfb/lines"
+        },
+        "livemode": false,
+        "metadata": {},
+        "next_payment_attempt": null,
+        "number": "19GHBXNB-0007",
+        "on_behalf_of": null,
+        "parent": {
+          "quote_details": null,
+          "subscription_details": {
+            "metadata": {
+              "brc_order_id": "qa-20261012-dispute",
+              "brc_plan": "mensual",
+              "brc_qa": "closure-dispute-20261012",
+              "brc_seller": "direccion"
+            },
+            "subscription": "sub_1UPi6eD95NECz80FUN1cmS6o"
+          },
+          "type": "subscription_details"
+        },
+        "payment_settings": {
+          "default_mandate": null,
+          "payment_method_options": null,
+          "payment_method_types": null
+        },
+        "period_end": 1791807208,
+        "period_start": 1791807208,
+        "post_payment_credit_notes_amount": 0,
+        "pre_payment_credit_notes_amount": 0,
+        "receipt_number": null,
+        "rendering": null,
+        "shipping_cost": null,
+        "shipping_details": null,
+        "starting_balance": 0,
+        "statement_descriptor": null,
+        "status": "paid",
+        "status_transitions": {
+          "finalized_at": 1791807208,
+          "marked_uncollectible_at": null,
+          "paid_at": 1791807208,
+          "voided_at": null
+        },
+        "subtotal": 3900,
+        "subtotal_excluding_tax": 3900,
+        "test_clock": null,
+        "total": 4719,
+        "total_discount_amounts": [],
+        "total_excluding_tax": 3900,
+        "total_pretax_credit_amounts": [],
+        "total_taxes": [
+          {
+            "amount": 819,
+            "tax_behavior": "exclusive",
+            "tax_rate_details": {
+              "tax_rate": "txr_1UPSchD95NECz80F7QLOONTN"
+            },
+            "taxability_reason": "not_available",
+            "taxable_amount": 3900,
+            "type": "tax_rate_details"
+          }
+        ],
+        "webhooks_delivered_at": 1791807208
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi6iD95NECz80FUyyrnKoy",
+    "type": "charge.dispute.funds_withdrawn",
+    "created": 1791807210,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "du_1UPi6gD95NECz80F3xgzWhMa",
+        "object": "dispute",
+        "amount": 4719,
+        "balance_transaction": "txn_1UPi6gD95NECz80FXUKblpb0",
+        "balance_transactions": [
+          {
+            "id": "txn_1UPi6gD95NECz80FXUKblpb0",
+            "object": "balance_transaction",
+            "amount": -4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807210,
+            "currency": "eur",
+            "description": "Chargeback withdrawal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 2000,
+            "fee_details": [
+              {
+                "amount": 2000,
+                "application": null,
+                "currency": "eur",
+                "description": "Dispute fee",
+                "type": "stripe_fee"
+              }
+            ],
+            "net": -6719,
+            "reporting_category": "dispute",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          }
+        ],
+        "charge": "ch_3UPi6eD95NECz80F1HtJD1EZ",
+        "created": 1791807210,
+        "currency": "eur",
+        "enhanced_eligibility_types": [],
+        "evidence": {
+          "access_activity_log": null,
+          "billing_address": null,
+          "cancellation_policy": null,
+          "cancellation_policy_disclosure": null,
+          "cancellation_rebuttal": null,
+          "customer_communication": null,
+          "customer_email_address": null,
+          "customer_name": null,
+          "customer_purchase_ip": null,
+          "customer_signature": null,
+          "duplicate_charge_documentation": null,
+          "duplicate_charge_explanation": null,
+          "duplicate_charge_id": null,
+          "enhanced_evidence": {},
+          "product_description": null,
+          "receipt": null,
+          "refund_policy": null,
+          "refund_policy_disclosure": null,
+          "refund_refusal_explanation": null,
+          "service_date": null,
+          "service_documentation": null,
+          "shipping_address": null,
+          "shipping_carrier": null,
+          "shipping_date": null,
+          "shipping_documentation": null,
+          "shipping_tracking_number": null,
+          "uncategorized_file": null,
+          "uncategorized_text": null
+        },
+        "evidence_details": {
+          "due_by": 1792540799,
+          "enhanced_eligibility": {},
+          "has_evidence": false,
+          "past_due": false,
+          "submission_count": 0
+        },
+        "intended_submission_method": "prefer_manual",
+        "is_charge_refundable": false,
+        "livemode": false,
+        "metadata": {},
+        "payment_intent": "pi_3UPi6eD95NECz80F1yJ6Xm3v",
+        "payment_method_details": {
+          "card": {
+            "brand": "visa",
+            "case_type": "chargeback",
+            "network": "visa",
+            "network_reason_code": "10.4"
+          },
+          "type": "card"
+        },
+        "reason": "fraudulent",
+        "status": "needs_response"
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi6iD95NECz80FIwA35YSe",
+    "type": "charge.dispute.created",
+    "created": 1791807210,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "du_1UPi6gD95NECz80F3xgzWhMa",
+        "object": "dispute",
+        "amount": 4719,
+        "balance_transaction": "txn_1UPi6gD95NECz80FXUKblpb0",
+        "balance_transactions": [
+          {
+            "id": "txn_1UPi6gD95NECz80FXUKblpb0",
+            "object": "balance_transaction",
+            "amount": -4719,
+            "available_on": 1792368000,
+            "balance_type": "payments",
+            "created": 1791807210,
+            "currency": "eur",
+            "description": "Chargeback withdrawal for ch_3UPi6eD95NECz80F1HtJD1EZ",
+            "exchange_rate": null,
+            "fee": 2000,
+            "fee_details": [
+              {
+                "amount": 2000,
+                "application": null,
+                "currency": "eur",
+                "description": "Dispute fee",
+                "type": "stripe_fee"
+              }
+            ],
+            "net": -6719,
+            "reporting_category": "dispute",
+            "source": "du_1UPi6gD95NECz80F3xgzWhMa",
+            "status": "pending",
+            "type": "adjustment"
+          }
+        ],
+        "charge": "ch_3UPi6eD95NECz80F1HtJD1EZ",
+        "created": 1791807210,
+        "currency": "eur",
+        "enhanced_eligibility_types": [],
+        "evidence": {
+          "access_activity_log": null,
+          "billing_address": null,
+          "cancellation_policy": null,
+          "cancellation_policy_disclosure": null,
+          "cancellation_rebuttal": null,
+          "customer_communication": null,
+          "customer_email_address": null,
+          "customer_name": null,
+          "customer_purchase_ip": null,
+          "customer_signature": null,
+          "duplicate_charge_documentation": null,
+          "duplicate_charge_explanation": null,
+          "duplicate_charge_id": null,
+          "enhanced_evidence": {},
+          "product_description": null,
+          "receipt": null,
+          "refund_policy": null,
+          "refund_policy_disclosure": null,
+          "refund_refusal_explanation": null,
+          "service_date": null,
+          "service_documentation": null,
+          "shipping_address": null,
+          "shipping_carrier": null,
+          "shipping_date": null,
+          "shipping_documentation": null,
+          "shipping_tracking_number": null,
+          "uncategorized_file": null,
+          "uncategorized_text": null
+        },
+        "evidence_details": {
+          "due_by": 1792540799,
+          "enhanced_eligibility": {},
+          "has_evidence": false,
+          "past_due": false,
+          "submission_count": 0
+        },
+        "intended_submission_method": "prefer_manual",
+        "is_charge_refundable": false,
+        "livemode": false,
+        "metadata": {},
+        "payment_intent": "pi_3UPi6eD95NECz80F1yJ6Xm3v",
+        "payment_method_details": {
+          "card": {
+            "brand": "visa",
+            "case_type": "chargeback",
+            "network": "visa",
+            "network_reason_code": "10.4"
+          },
+          "type": "card"
+        },
+        "reason": "fraudulent",
+        "status": "needs_response"
+      }
+    }
+  },
+  {
+    "id": "evt_3UPi3ND95NECz80F1wsBqqqO",
+    "type": "refund.updated",
+    "created": 1791807079,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "re_3UPi3ND95NECz80F1GnCiyGH",
+        "object": "refund",
+        "amount": 1000,
+        "balance_transaction": "txn_3UPi3ND95NECz80F1xZtbpNV",
+        "charge": "ch_3UPi3ND95NECz80F1e301wwV",
+        "created": 1791807078,
+        "currency": "eur",
+        "customer": "cus_VQZBRQdNADjeOj",
+        "customer_account": null,
+        "destination_details": {
+          "card": {
+            "reference": "5650035298752661",
+            "reference_status": "available",
+            "reference_type": "acquirer_reference_number",
+            "type": "refund"
+          },
+          "type": "card"
+        },
+        "metadata": {
+          "brc_order_id": "qa-20261012-subscription",
+          "brc_qa": "closure-20261012"
+        },
+        "payment_intent": "pi_3UPi3ND95NECz80F1nVCPNtf",
+        "payment_method": "pm_1UPi2lD95NECz80F5xl1w2z6",
+        "reason": null,
+        "receipt_number": null,
+        "source_transfer_reversal": null,
+        "status": "succeeded",
+        "transfer_reversal": null
+      }
+    }
+  },
+  {
+    "id": "evt_3UPi3ND95NECz80F1wWaV2zu",
+    "type": "charge.refunded",
+    "created": 1791807079,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "ch_3UPi3ND95NECz80F1e301wwV",
+        "object": "charge",
+        "amount": 22748,
+        "amount_captured": 22748,
+        "amount_refunded": 1000,
+        "application": null,
+        "application_fee": null,
+        "application_fee_amount": null,
+        "balance_transaction": "txn_3UPi3ND95NECz80F1ENpkKNP",
+        "billing_details": {
+          "address": {
+            "city": null,
+            "country": null,
+            "line1": null,
+            "line2": null,
+            "postal_code": null,
+            "state": null
+          },
+          "email": null,
+          "name": null,
+          "phone": null,
+          "tax_id": null
+        },
+        "calculated_statement_descriptor": "ENTORNO DE PRUEBA DE B",
+        "captured": true,
+        "created": 1791807006,
+        "currency": "eur",
+        "customer": "cus_VQZBRQdNADjeOj",
+        "description": "Subscription creation",
+        "destination": null,
+        "dispute": null,
+        "disputed": false,
+        "failure_balance_transaction": null,
+        "failure_code": null,
+        "failure_message": null,
+        "fraud_details": {},
+        "livemode": false,
+        "metadata": {},
+        "on_behalf_of": null,
+        "order": null,
+        "outcome": {
+          "advice_code": null,
+          "network_advice_code": null,
+          "network_decline_code": null,
+          "network_status": "approved_by_network",
+          "reason": null,
+          "risk_level": "normal",
+          "risk_score": 57,
+          "seller_message": "Payment complete.",
+          "type": "authorized"
+        },
+        "paid": true,
+        "payment_intent": "pi_3UPi3ND95NECz80F1nVCPNtf",
+        "payment_method": "pm_1UPi2lD95NECz80F5xl1w2z6",
+        "payment_method_details": {
+          "card": {
+            "amount_authorized": 22748,
+            "authorization_code": "937502",
+            "brand": "visa",
+            "checks": {
+              "address_line1_check": null,
+              "address_postal_code_check": null,
+              "cvc_check": "pass"
+            },
+            "country": "US",
+            "electronic_commerce_indicator": "07",
+            "exp_month": 10,
+            "exp_year": 2027,
+            "extended_authorization": {
+              "status": "disabled"
+            },
+            "fingerprint": "20T9mMhXsavcCygs",
+            "funding": "credit",
+            "incremental_authorization": {
+              "status": "unavailable"
+            },
+            "installments": null,
+            "last4": "4242",
+            "mandate": null,
+            "multicapture": {
+              "status": "unavailable"
+            },
+            "network": "visa",
+            "network_token": {
+              "used": false
+            },
+            "network_transaction_id": "504884571097710",
+            "overcapture": {
+              "maximum_amount_capturable": 22748,
+              "status": "unavailable"
+            },
+            "regulated_status": "unregulated",
+            "three_d_secure": null,
+            "transaction_link_id": null,
+            "wallet": null
+          },
+          "type": "card"
+        },
+        "radar_options": {},
+        "receipt_email": "brc-qa-20261012@example.invalid",
+        "receipt_number": null,
+        "refunded": false,
+        "review": null,
+        "shipping": null,
+        "source": null,
+        "source_transfer": null,
+        "statement_descriptor": null,
+        "statement_descriptor_suffix": null,
+        "status": "succeeded",
+        "transfer_data": null,
+        "transfer_group": null
+      }
+    }
+  },
+  {
+    "id": "evt_3UPi3ND95NECz80F1slcmR6Z",
+    "type": "refund.created",
+    "created": 1791807079,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "re_3UPi3ND95NECz80F1GnCiyGH",
+        "object": "refund",
+        "amount": 1000,
+        "balance_transaction": "txn_3UPi3ND95NECz80F1xZtbpNV",
+        "charge": "ch_3UPi3ND95NECz80F1e301wwV",
+        "created": 1791807078,
+        "currency": "eur",
+        "customer": "cus_VQZBRQdNADjeOj",
+        "customer_account": null,
+        "destination_details": {
+          "card": {
+            "reference_status": "pending",
+            "reference_type": "acquirer_reference_number",
+            "type": "refund"
+          },
+          "type": "card"
+        },
+        "metadata": {
+          "brc_order_id": "qa-20261012-subscription",
+          "brc_qa": "closure-20261012"
+        },
+        "payment_intent": "pi_3UPi3ND95NECz80F1nVCPNtf",
+        "payment_method": "pm_1UPi2lD95NECz80F5xl1w2z6",
+        "reason": null,
+        "receipt_number": null,
+        "source_transfer_reversal": null,
+        "status": "succeeded",
+        "transfer_reversal": null
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi3QD95NECz80FKaTG6jnb",
+    "type": "customer.subscription.created",
+    "created": 1791807007,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "sub_1UPi3ND95NECz80FUH3JP3x4",
+        "object": "subscription",
+        "application": null,
+        "application_fee_percent": null,
+        "automatic_tax": {
+          "disabled_reason": null,
+          "enabled": false,
+          "liability": null
+        },
+        "billing_cycle_anchor": 1791806400,
+        "billing_cycle_anchor_config": null,
+        "billing_mode": {
+          "flexible": {
+            "proration_discounts": "included"
+          },
+          "type": "flexible",
+          "updated_at": 1791806400
+        },
+        "billing_schedules": [],
+        "billing_thresholds": null,
+        "cancel_at": null,
+        "cancel_at_period_end": false,
+        "canceled_at": null,
+        "cancellation_details": {
+          "comment": null,
+          "feedback": null,
+          "feedback_option": null,
+          "reason": null
+        },
+        "collection_method": "charge_automatically",
+        "created": 1791806400,
+        "currency": "eur",
+        "customer": "cus_VQZBRQdNADjeOj",
+        "customer_account": null,
+        "days_until_due": null,
+        "default_payment_method": null,
+        "default_source": null,
+        "default_tax_rates": [
+          {
+            "id": "txr_1UPSchD95NECz80F7QLOONTN",
+            "object": "tax_rate",
+            "active": true,
+            "country": "ES",
+            "created": 1791747691,
+            "description": "IVA general España 21 %",
+            "display_name": "Impuesto a las ventas",
+            "effective_percentage": 21,
+            "flat_amount": null,
+            "inclusive": false,
+            "jurisdiction": null,
+            "jurisdiction_level": null,
+            "livemode": false,
+            "metadata": {},
+            "percentage": 21,
+            "rate_type": "percentage",
+            "state": null,
+            "tax_type": null
+          }
+        ],
+        "description": null,
+        "discounts": [],
+        "ended_at": null,
+        "invoice_settings": {
+          "account_tax_ids": null,
+          "custom_fields": null,
+          "description": null,
+          "footer": null,
+          "issuer": {
+            "type": "self"
+          }
+        },
+        "items": {
+          "object": "list",
+          "data": [
+            {
+              "id": "si_VQZBcsCZ3yQSRq",
+              "object": "subscription_item",
+              "billing_thresholds": null,
+              "created": 1791806400,
+              "current_period_end": 1794484800,
+              "current_period_start": 1791806400,
+              "current_trial": null,
+              "discounts": [],
+              "metadata": {},
+              "plan": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "plan",
+                "active": true,
+                "amount": 3900,
+                "amount_decimal": "3900",
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "interval": "month",
+                "interval_count": 1,
+                "livemode": false,
+                "metadata": {},
+                "meter": null,
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "tiers_mode": null,
+                "transform_usage": null,
+                "trial_period_days": null,
+                "usage_type": "licensed"
+              },
+              "price": {
+                "id": "price_1UPSAjD95NECz80Fivlph4MH",
+                "object": "price",
+                "active": true,
+                "billing_scheme": "per_unit",
+                "created": 1791745957,
+                "currency": "eur",
+                "custom_unit_amount": null,
+                "livemode": false,
+                "lookup_key": null,
+                "metadata": {},
+                "nickname": null,
+                "product": "prod_VQImH6j5vKkDDA",
+                "recurring": {
+                  "interval": "month",
+                  "interval_count": 1,
+                  "meter": null,
+                  "trial_period_days": null,
+                  "usage_type": "licensed"
+                },
+                "tax_behavior": "exclusive",
+                "tiers_mode": null,
+                "transform_quantity": null,
+                "type": "recurring",
+                "unit_amount": 3900,
+                "unit_amount_decimal": "3900"
+              },
+              "quantity": 1,
+              "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+              "tax_rates": []
+            }
+          ],
+          "has_more": false,
+          "total_count": 1,
+          "url": "/v1/subscription_items?subscription=sub_1UPi3ND95NECz80FUH3JP3x4"
+        },
+        "latest_invoice": "in_1UPi3ND95NECz80F4zOXf2jx",
+        "livemode": false,
+        "managed_payments": {
+          "enabled": false
+        },
+        "metadata": {
+          "brc_order_id": "qa-20261012-subscription",
+          "brc_plan": "mensual",
+          "brc_qa": "closure-20261012",
+          "brc_seller": "direccion"
+        },
+        "next_pending_invoice_item_invoice": null,
+        "on_behalf_of": null,
+        "pause_collection": null,
+        "payment_settings": {
+          "payment_method_options": null,
+          "payment_method_types": null,
+          "save_default_payment_method": "off"
+        },
+        "pending_invoice_item_interval": null,
+        "pending_setup_intent": null,
+        "pending_update": null,
+        "plan": {
+          "id": "price_1UPSAjD95NECz80Fivlph4MH",
+          "object": "plan",
+          "active": true,
+          "amount": 3900,
+          "amount_decimal": "3900",
+          "billing_scheme": "per_unit",
+          "created": 1791745957,
+          "currency": "eur",
+          "interval": "month",
+          "interval_count": 1,
+          "livemode": false,
+          "metadata": {},
+          "meter": null,
+          "nickname": null,
+          "product": "prod_VQImH6j5vKkDDA",
+          "tiers_mode": null,
+          "transform_usage": null,
+          "trial_period_days": null,
+          "usage_type": "licensed"
+        },
+        "quantity": 1,
+        "schedule": null,
+        "start_date": 1791806400,
+        "status": "active",
+        "test_clock": "clock_1UPi2WD95NECz80FjPrX6YHR",
+        "transfer_data": null,
+        "trial_end": null,
+        "trial_settings": {
+          "end_behavior": {
+            "billing_cycle_anchor": "now",
+            "missing_payment_method": "create_invoice"
+          }
+        },
+        "trial_start": null
+      }
+    }
+  },
+  {
+    "id": "evt_1UPi3QD95NECz80Fwz8r8krR",
+    "type": "invoice.paid",
+    "created": 1791807007,
+    "livemode": false,
+    "data": {
+      "object": {
+        "id": "in_1UPi3ND95NECz80F4zOXf2jx",
+        "object": "invoice",
+        "account_country": "ES",
+        "account_name": "Entorno de prueba de BRC Studio",
+        "account_tax_ids": null,
+        "amount_due": 22748,
+        "amount_overpaid": 0,
+        "amount_paid": 22748,
+        "amount_remaining": 0,
+        "amount_shipping": 0,
+        "application": null,
+        "attempt_count": 1,
+        "attempted": true,
+        "auto_advance": false,
+        "automatic_tax": {
+          "disabled_reason": null,
+          "enabled": false,
+          "liability": null,
+          "provider": null,
+          "status": null
+        },
+        "automatically_finalizes_at": null,
+        "billing_reason": "subscription_create",
+        "collection_method": "charge_automatically",
+        "created": 1791806400,
+        "currency": "eur",
+        "custom_fields": null,
+        "customer": "cus_VQZBRQdNADjeOj",
+        "customer_account": null,
+        "customer_address": null,
+        "customer_email": "brc-qa-20261012@example.invalid",
+        "customer_name": "BRC QA 20261012 — SIN VALIDEZ FISCAL",
+        "customer_phone": null,
+        "customer_shipping": null,
+        "customer_tax_exempt": "none",
+        "customer_tax_ids": [],
+        "default_payment_method": null,
+        "default_source": null,
+        "default_tax_rates": [
+          {
+            "id": "txr_1UPSchD95NECz80F7QLOONTN",
+            "object": "tax_rate",
+            "active": true,
+            "country": "ES",
+            "created": 1791747691,
+            "description": "IVA general España 21 %",
+            "display_name": "Impuesto a las ventas",
+            "effective_percentage": 21,
+            "flat_amount": null,
+            "inclusive": false,
+            "jurisdiction": null,
+            "jurisdiction_level": null,
+            "livemode": false,
+            "metadata": {},
+            "percentage": 21,
+            "rate_type": "percentage",
+            "state": null,
+            "tax_type": null
+          }
+        ],
+        "description": null,
+        "discounts": [],
+        "due_date": null,
+        "effective_at": 1791806400,
+        "ending_balance": 0,
+        "footer": null,
+        "from_invoice": null,
+        "issuer": {
+          "type": "self"
+        },
+        "last_finalization_error": null,
+        "latest_revision": null,
+        "lines": {
+          "object": "list",
+          "data": [
+            {
+              "id": "il_1UPhtcD95NECz80FhHo7Eh6U",
+              "object": "line_item",
+              "amount": 14900,
+              "currency": "eur",
+              "description": "BRC Plan — Alta inicial",
+              "discount_amounts": [],
+              "discountable": true,
+              "discounts": [],
+              "invoice": "in_1UPi3ND95NECz80F4zOXf2jx",
+              "livemode": false,
+              "metadata": {},
+              "parent": {
+                "invoice_item_details": {
+                  "invoice_item": "ii_1UPi3ND95NECz80FlkSQV4II",
+                  "proration": false,
+                  "proration_details": {
+                    "credited_items": null
+                  },
+                  "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4"
+                },
+                "subscription_item_details": null,
+                "type": "invoice_item_details"
+              },
+              "period": {
+                "end": 1794484800,
+                "start": 1791806400
+              },
+              "pretax_credit_amounts": [],
+              "pricing": {
+                "price_details": {
+                  "price": "price_1UPSAiD95NECz80FA7rzD8lc",
+                  "product": "prod_VQImoKjAEDI8uK"
+                },
+                "type": "price_details",
+                "unit_amount_decimal": "14900"
+              },
+              "quantity": 1,
+              "quantity_decimal": "1",
+              "subtotal": 14900,
+              "taxes": [
+                {
+                  "amount": 3129,
+                  "tax_behavior": "exclusive",
+                  "tax_rate_details": {
+                    "tax_rate": "txr_1UPSchD95NECz80F7QLOONTN"
+                  },
+                  "taxability_reason": "not_available",
+                  "taxable_amount": 14900,
+                  "type": "tax_rate_details"
+                }
+              ]
+            },
+            {
+              "id": "il_1UPhtdD95NECz80FCWycrDLl",
+              "object": "line_item",
+              "amount": 3900,
+              "currency": "eur",
+              "description": "1 × BRC Plan — Mensualidad (a €39.00/mes)",
+              "discount_amounts": [],
+              "discountable": true,
+              "discounts": [],
+              "invoice": "in_1UPi3ND95NECz80F4zOXf2jx",
+              "livemode": false,
+              "metadata": {
+                "brc_order_id": "qa-20261012-subscription",
+                "brc_plan": "mensual",
+                "brc_qa": "closure-20261012",
+                "brc_seller": "direccion"
+              },
+              "parent": {
+                "invoice_item_details": null,
+                "subscription_item_details": {
+                  "invoice_item": null,
+                  "proration": false,
+                  "proration_details": {
+                    "credited_items": null
+                  },
+                  "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+                  "subscription_item": "si_VQZBcsCZ3yQSRq"
+                },
+                "type": "subscription_item_details"
+              },
+              "period": {
+                "end": 1794484800,
+                "start": 1791806400
+              },
+              "pretax_credit_amounts": [],
+              "pricing": {
+                "price_details": {
+                  "price": "price_1UPSAjD95NECz80Fivlph4MH",
+                  "product": "prod_VQImH6j5vKkDDA"
+                },
+                "type": "price_details",
+                "unit_amount_decimal": "3900"
+              },
+              "quantity": 1,
+              "quantity_decimal": "1",
+              "subtotal": 3900,
+              "taxes": [
+                {
+                  "amount": 819,
+                  "tax_behavior": "exclusive",
+                  "tax_rate_details": {
+                    "tax_rate": "txr_1UPSchD95NECz80F7QLOONTN"
+                  },
+                  "taxability_reason": "not_available",
+                  "taxable_amount": 3900,
+                  "type": "tax_rate_details"
+                }
+              ]
+            }
+          ],
+          "has_more": false,
+          "total_count": 2,
+          "url": "/v1/invoices/in_1UPi3ND95NECz80F4zOXf2jx/lines"
+        },
+        "livemode": false,
+        "metadata": {},
+        "next_payment_attempt": null,
+        "number": "19GHBXNB-0006",
+        "on_behalf_of": null,
+        "parent": {
+          "quote_details": null,
+          "subscription_details": {
+            "metadata": {
+              "brc_order_id": "qa-20261012-subscription",
+              "brc_plan": "mensual",
+              "brc_qa": "closure-20261012",
+              "brc_seller": "direccion"
+            },
+            "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4"
+          },
+          "type": "subscription_details"
+        },
+        "payment_settings": {
+          "default_mandate": null,
+          "payment_method_options": null,
+          "payment_method_types": null
+        },
+        "period_end": 1791806400,
+        "period_start": 1791806400,
+        "post_payment_credit_notes_amount": 0,
+        "pre_payment_credit_notes_amount": 0,
+        "receipt_number": null,
+        "rendering": null,
+        "shipping_cost": null,
+        "shipping_details": null,
+        "starting_balance": 0,
+        "statement_descriptor": null,
+        "status": "paid",
+        "status_transitions": {
+          "finalized_at": 1791806400,
+          "marked_uncollectible_at": null,
+          "paid_at": 1791806400,
+          "voided_at": null
+        },
+        "subtotal": 18800,
+        "subtotal_excluding_tax": 18800,
+        "test_clock": "clock_1UPi2WD95NECz80FjPrX6YHR",
+        "total": 22748,
+        "total_discount_amounts": [],
+        "total_excluding_tax": 18800,
+        "total_pretax_credit_amounts": [],
+        "total_taxes": [
+          {
+            "amount": 3948,
+            "tax_behavior": "exclusive",
+            "tax_rate_details": {
+              "tax_rate": "txr_1UPSchD95NECz80F7QLOONTN"
+            },
+            "taxability_reason": "not_available",
+            "taxable_amount": 18800,
+            "type": "tax_rate_details"
+          }
+        ],
+        "webhooks_delivered_at": 1791806400
+      }
+    }
+  }
+]
