@@ -5,7 +5,7 @@ export async function checkoutForOrder(identity,db,env,fetcher=fetch,now=Date.no
  const {offer}=identity;
  if(offer.environment!=='test')return {status:503,error:'LIVE_CHECKOUT_DISABLED'};
  const acceptance=await db.get('acceptance/'+offer.id,{type:'json'});
- if(!acceptance||acceptance.terms_hash!==offer.terms_hash||acceptance.email!==offer.email||acceptance.environment!=='test')return {status:403,error:'ACCEPTANCE_REQUIRED'};
+ if(!acceptance||acceptance.terms_hash!==offer.terms_hash||acceptance.email!==offer.email||acceptance.environment!=='test'||acceptance.authority_declaration!==true||!acceptance.identity_verification?.authority_reference||acceptance.identity_method!=='independent_manual_verification_and_customer_declaration')return {status:403,error:'ACCEPTANCE_REQUIRED'};
  const secret=env('STRIPE_TEST_SECRET_KEY'),tax=env('STRIPE_TEST_TAX_RATE');
  const prices=offer.plan==='compra'?[env('STRIPE_TEST_PRICE_PURCHASE')]:[env('STRIPE_TEST_PRICE_SETUP'),env('STRIPE_TEST_PRICE_MONTHLY')];
  if(!/^(sk|rk)_test_/.test(secret??'')||!/^txr_/.test(tax??'')||prices.some(x=>!/^price_/.test(x??'')))return {status:503,error:'TEST_CONFIGURATION_MISSING'};
@@ -28,6 +28,12 @@ export async function checkoutForOrder(identity,db,env,fetcher=fetch,now=Date.no
  if(now-attempt.created_at>20*3600000||attempt.expires_at<=Math.floor(now/1000))return {status:409,error:'MANUAL_RECONCILIATION_REQUIRED'};
  const metadata={brc_order_id:offer.id,brc_plan:offer.plan,brc_seller:offer.seller,brc_terms_hash:offer.terms_hash,brc_acceptance_id:hash(offer.id+':'+acceptance.terms_hash),internal_test:'true'};
  const body=new URLSearchParams({mode:offer.plan==='compra'?'payment':'subscription',client_reference_id:offer.id,customer_email:offer.email,billing_address_collection:'required','tax_id_collection[enabled]':'true',expires_at:String(attempt.expires_at),success_url:'https://brcstudio.es/stripe-test-success.html?session_id={CHECKOUT_SESSION_ID}',cancel_url:'https://brcstudio.es/pedido'});
+ const fixture=await db.get('test-customer/'+offer.id,{type:'json'});
+ if(fixture?.qa===true&&/^cus_[A-Za-z0-9]+$/.test(fixture.customer)){
+  const customer=await api('customers/'+fixture.customer);
+  if(customer.livemode!==false||customer.test_clock!==fixture.clock)return {status:409,error:'TEST_CUSTOMER_MISMATCH'};
+  body.delete('customer_email');body.set('customer',customer.id);body.set('customer_update[address]','auto');body.set('customer_update[name]','auto');
+ }
  for(const [k,v] of Object.entries(metadata)){
   body.set(`metadata[${k}]`,v);
   body.set(`${offer.plan==='mensual'?'subscription_data':'payment_intent_data'}[metadata][${k}]`,v);

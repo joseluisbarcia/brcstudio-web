@@ -11,7 +11,7 @@ const env=k=>({STRIPE_TEST_SECRET_KEY:'rk_test_fixture',STRIPE_TEST_TAX_RATE:'tx
 async function ready(plan='mensual'){
  const offer=makeOffer({...draft,plan},input),db=memory();
  await db.setJSON('offer/'+orderId,offer,{onlyIfNew:true});
- await db.setJSON('acceptance/'+orderId,{order_id:orderId,email:offer.email,terms_hash:offer.terms_hash,environment:'test'},{onlyIfNew:true});
+ await db.setJSON('acceptance/'+orderId,{order_id:orderId,email:offer.email,terms_hash:offer.terms_hash,environment:'test',authority_declaration:true,identity_verification:{authority_reference:'qa-authority'},identity_method:'independent_manual_verification_and_customer_declaration'},{onlyIfNew:true});
  return {offer,db,identity:{offer}};
 }
 function provider(offer){const calls=[];return {calls,fetch:async(url,o)=>{
@@ -25,11 +25,11 @@ test('proposal hash covers fiscal details, scope, exact prices and conditions',(
  assert.match(o.terms,/Sin permanencia ni penalización/);
 });
 for(const [name,change] of [['unreviewed VAT',{fiscal_review:''}],['unsupported jurisdiction',{tax_scope:'CANARIAS'}],['missing seller data',{supplier_tax_id:''}],['unfinished terms',{terms:'[PENDIENTE]'}]])test('proposal blocks '+name,()=>assert.throws(()=>makeOffer(draft,{...input,...change})));
-test('email proof requires a delivered token, exact proposal and unexpired challenge',async()=>{
+test('manual link requires verified recipient, exact proposal and unexpired challenge',async()=>{
  const {db,offer}=await ready(),token='a'.repeat(64),key=hash(token);
- await db.setJSON('challenge/'+key,{order_id:orderId,email:offer.email,terms_hash:offer.terms_hash,expires_at:Date.now()+60000},{onlyIfNew:true});
+ await db.setJSON('challenge/'+key,{order_id:orderId,email:offer.email,terms_hash:offer.terms_hash,expires_at:Date.now()+60000,verification:{verified_signatory:'Fixture'}},{onlyIfNew:true});
  assert.equal(await customer(token,db),null);
- await db.setJSON('delivery/'+key,{message_id:'fixture'},{onlyIfNew:true});assert.equal((await customer(token,db)).offer.id,orderId);
+ await db.setJSON('delivery/'+key,{channel:'whatsapp_manual'},{onlyIfNew:true});assert.equal((await customer(token,db)).offer.id,orderId);
  db.rows.get('challenge/'+key).expires_at=0;assert.equal(await customer(token,db),null);
 });
 test('live proposal cannot create a session regardless of flags or acceptance',async()=>{

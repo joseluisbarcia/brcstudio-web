@@ -1,6 +1,5 @@
 import {createHash,createHmac,timingSafeEqual,randomBytes} from 'node:crypto';
 import {getStore} from '@netlify/blobs';
-import nodemailer from 'nodemailer';
 export const ORIGIN='https://brcstudio.es';
 export const TERMS_VERSION='brc-2026-10-12-v1';
 export const hash=s=>createHash('sha256').update(s).digest('hex');
@@ -18,26 +17,25 @@ export function admin(req){
 export const headers={'content-type':'text/html; charset=utf-8','cache-control':'no-store, private','x-robots-tag':'noindex, nofollow','referrer-policy':'no-referrer','x-content-type-options':'nosniff','content-security-policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'self'; form-action 'self' https://checkout.stripe.com; base-uri 'none'; frame-ancestors 'none'"};
 export const page=(body,status=200)=>new Response(`<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BRC Studio · Propuesta privada</title><style>body{font:16px system-ui;max-width:800px;margin:30px auto;padding:20px;line-height:1.5}label{display:block;margin:16px 0}input,textarea,select,button{font:inherit;padding:12px;width:100%;box-sizing:border-box}input[type=checkbox]{width:auto}pre{white-space:pre-wrap;overflow-wrap:anywhere}small{display:block;color:#555}</style></head><body>${body}</body></html>`,{status,headers});
 export const originOK=req=>new URL(req.url).origin===ORIGIN&&(req.method==='GET'||req.headers.get('origin')===ORIGIN);
-export function mailReady(){return ['smtp.zoho.eu','smtppro.zoho.eu'].includes(Netlify.env.get('BRC_SMTP_HOST'))&&Netlify.env.get('BRC_SMTP_USER')==='jose@brcstudio.es'&&!!Netlify.env.get('BRC_SMTP_PASSWORD')}
-export async function invite(offer,db=store()){
- if(!mailReady())throw Error('MAIL_NOT_CONFIGURED');
- const token=randomBytes(32).toString('hex'),key=hash(token);
- await db.setJSON('challenge/'+key,{order_id:offer.id,email:offer.email,terms_hash:offer.terms_hash,expires_at:Math.min(offer.expires_at,Date.now()+48*3600000)},{onlyIfNew:true});
- const transport=nodemailer.createTransport({host:Netlify.env.get('BRC_SMTP_HOST'),port:465,secure:true,auth:{user:Netlify.env.get('BRC_SMTP_USER'),pass:Netlify.env.get('BRC_SMTP_PASSWORD')},connectionTimeout:10000,socketTimeout:15000});
- try{
-  const sent=await transport.sendMail({from:'BRC Studio <jose@brcstudio.es>',to:offer.email,subject:'BRC Studio · Revisión y aceptación de propuesta',text:`Propuesta privada para ${offer.business}. Revisa el documento y acepta solo si estás de acuerdo. Este mensaje no acredita aceptación ni inicia cobros.\n\n${ORIGIN}/pedido#${token}\n\nVálido hasta ${new Date(Math.min(offer.expires_at,Date.now()+48*3600000)).toISOString()}. Si no has solicitado esta propuesta, ignora el mensaje.`});
-  if(!sent.accepted?.length)throw Error('MAIL_NOT_ACCEPTED');
-  await db.setJSON('delivery/'+key,{order_id:offer.id,message_id:sent.messageId,recorded_at:new Date().toISOString()},{onlyIfNew:true});
- }finally{transport.close()}
- // Never return the bearer token to an administrator or put it in HTTP logs.
+export async function issueLink(offer,input,db=store()){
+ const signatory=String(input.verified_signatory??'').trim(),phone=String(input.phone??'').trim();
+ const identity_reference=String(input.identity_reference??'').trim(),authority_reference=String(input.authority_reference??'').trim();
+ if(signatory.length<3||signatory.length>160||!/^\+[1-9][0-9]{7,14}$/.test(phone)||identity_reference.length<10||identity_reference.length>240||authority_reference.length<10||authority_reference.length>240||!['known_contact_call','in_person'].includes(input.verification_method))throw Error('IDENTITY_REVIEW_REQUIRED');
+ const token=randomBytes(32).toString('hex'),key=hash(token),now=Date.now();
+ const verification={verified_signatory:signatory,phone,identity_reference,authority_reference,verification_method:input.verification_method,verified_by:'direccion',verified_at:new Date(now).toISOString(),channel:'whatsapp_manual',seller:offer.seller};
+ await db.setJSON('challenge/'+key,{order_id:offer.id,email:offer.email,terms_hash:offer.terms_hash,expires_at:Math.min(offer.expires_at,now+48*3600000),verification},{onlyIfNew:true});
+ await db.setJSON('delivery/'+key,{order_id:offer.id,channel:'whatsapp_manual',status:'link_generated_for_manual_delivery',recorded_at:new Date(now).toISOString(),seller:offer.seller},{onlyIfNew:true});
+ return {url:ORIGIN+'/pedido#'+token,token_hash:key};
 }
+export const normalizedName=s=>String(s??'').normalize('NFKC').trim().toLocaleLowerCase('es').replace(/\s+/g,' ');
 export async function customer(token,db=store()){
  if(!/^[a-f0-9]{64}$/.test(token??''))return null;
  const challenge=await db.get('challenge/'+hash(token),{type:'json'});
  if(!challenge||challenge.expires_at<Date.now())return null;
  const delivery=await db.get('delivery/'+hash(token),{type:'json'});
  const offer=await db.get('offer/'+challenge.order_id,{type:'json'});
- if(!delivery||!offer||offer.expires_at<Date.now()||offer.email!==challenge.email||offer.terms_hash!==challenge.terms_hash)return null;
+ const revoked=await db.get('revocation/'+hash(token),{type:'json'});
+ if(revoked||!challenge.verification||delivery?.channel!=='whatsapp_manual'||!offer||offer.expires_at<Date.now()||offer.email!==challenge.email||offer.terms_hash!==challenge.terms_hash)return null;
  return {offer,challenge,delivery,token_hash:hash(token)};
 }
 export function makeOffer(draft,input,now=Date.now()){
