@@ -79,3 +79,16 @@ Tras resolver los bloqueos y obtener autorización comercial expresa, datos fisc
 3. **Activación posterior:** datos fiscales reales, revisión legal/fiscal y autorización comercial. Cargo live, factura fiscal final, webhook live auténtico y conciliación bancaria requieren una operación real autorizada; no realizados.
 
 Los antiguos bloqueos de SMTP, secreto sandbox ausente y avance de reloj no son pendientes actuales.
+
+## Commits y despliegue comprobado
+
+- Inicio: `061269eb5f969f0a7ef302fd89ffa24592787f68`.
+- Enlaces sin SMTP: `389bd57481c17a24ce74658595e2ed8f49bea7fa`.
+- SDK Blobs corregido: `c4ecd3eb7a56838b2769786ed7fd23ce6727502c`.
+- Formulario del cliente: `1425f3f294132262a456de132b189a3c99500fef`.
+- Activación futura simulada y bloqueada: `9ea5a172829cab92311f60878196540af3cc72f7`.
+- Verificación de baja y panel: `b5875578739c5d84dd1558d44b466a7ad6fe4b33`, `af141e1339b1beb6c0fb4ab433c94d77c07a9ecc`.
+- Código final, retirada QA y documentación: `022e17c7363849a41e0b620cae507e86eb7aa587`.
+- Netlify de ese código: `6acce5b545749a5f388241ec`, **ready**, commit coincidente, sin error. Los commits posteriores de evidencia/documentación conservan ese código.
+- Comprobación posterior: GET live `enabled:false`, POST live 503; webhooks live/nuevo sandbox sin firma 400; rutas QA pública y directa 404; página test anterior y propuesta 200; contratos y bajas sin autenticar 401.
+- [Resultados HTTP](evidence/brc-final-http-20261012.json). [Checkout sandbox pendiente](evidence/brc-sandbox-checkout-pendiente-20261012.jpg).
