@@ -1,0 +1,148 @@
+{
+  "checked_at": "2026-10-12T14:07:00.478Z",
+  "action_status": null,
+  "live_disabled": true,
+  "webhook_secret_available": true,
+  "subscription": {
+    "id": "sub_1UPje3D95NECz80FqvaSC8Hw",
+    "status": "active",
+    "cancel_at": null,
+    "cancel_at_period_end": false,
+    "ended_at": null
+  },
+  "clock": {
+    "id": "clock_1UPi2WD95NECz80FjPrX6YHR",
+    "status": "ready",
+    "frozen_time": 1797429600
+  },
+  "invoices": [
+    {
+      "id": "in_1UPjs6D95NECz80FXjIGEFcr",
+      "status": "paid",
+      "paid": true,
+      "total": 4719,
+      "amount_paid": 4719,
+      "amount_remaining": 0,
+      "currency": "eur",
+      "billing_reason": "subscription_cycle",
+      "lines": [
+        {
+          "amount": 3900,
+          "quantity": 1,
+          "description": "1 \u00d7 BRC Plan \u2014 Mensualidad (a \u20ac39.00/mes)"
+        }
+      ]
+    },
+    {
+      "id": "in_1UPje1D95NECz80FLbmVJs9N",
+      "status": "paid",
+      "paid": true,
+      "total": 22748,
+      "amount_paid": 22748,
+      "amount_remaining": 0,
+      "currency": "eur",
+      "billing_reason": "subscription_create",
+      "lines": [
+        {
+          "amount": 14900,
+          "quantity": 1,
+          "description": "BRC Plan \u2014 Alta inicial"
+        },
+        {
+          "amount": 3900,
+          "quantity": 1,
+          "description": "1 \u00d7 BRC Plan \u2014 Mensualidad (a \u20ac39.00/mes)"
+        }
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "key": "checkout/cs_test_b1VYocXpzP8c9qhVIk0bi5uW9PZX7igOKBa4WN8dLn4nPI5t3kcpAx5uQL",
+      "event": "evt_1UPje4D95NECz80FzayzIGd9",
+      "type": "checkout.session.completed",
+      "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+      "seller": "direccion",
+      "amount_total": 22748,
+      "invoice": "in_1UPje1D95NECz80FLbmVJs9N",
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "live": false
+    },
+    {
+      "key": "renewal/in_1UPjs6D95NECz80FXjIGEFcr",
+      "event": "evt_1UPjsCD95NECz80FpKaYIgd7",
+      "type": "invoice.paid",
+      "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+      "seller": "direccion",
+      "amount_total": 4719,
+      "invoice": "in_1UPjs6D95NECz80FXjIGEFcr",
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "status": "paid",
+      "live": false
+    },
+    {
+      "key": "invoice-events/in_1UPje1D95NECz80FLbmVJs9N/evt_1UPje4D95NECz80Fys3J38H4",
+      "event": "evt_1UPje4D95NECz80Fys3J38H4",
+      "type": "invoice.paid",
+      "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+      "seller": "direccion",
+      "amount_total": 22748,
+      "invoice": "in_1UPje1D95NECz80FLbmVJs9N",
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "status": "paid",
+      "live": false
+    },
+    {
+      "key": "subscription-events/sub_1UPje3D95NECz80FqvaSC8Hw/evt_1UPje4D95NECz80FYO6k4377",
+      "event": "evt_1UPje4D95NECz80FYO6k4377",
+      "type": "customer.subscription.created",
+      "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+      "seller": "direccion",
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "status": "active",
+      "live": false
+    },
+    {
+      "key": "subscription-events/sub_1UPje3D95NECz80FqvaSC8Hw/evt_1UPjs7D95NECz80FuuJg4vgm",
+      "event": "evt_1UPjs7D95NECz80FuuJg4vgm",
+      "type": "customer.subscription.updated",
+      "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+      "seller": "direccion",
+      "subscription": "sub_1UPje3D95NECz80FqvaSC8Hw",
+      "status": "active",
+      "live": false
+    }
+  ],
+  "panel": {
+    "status": 200,
+    "contains_order": true,
+    "events": [
+      {
+        "id": "evt_1UPje4D95NECz80FzayzIGd9",
+        "visible": true
+      },
+      {
+        "id": "evt_1UPjsCD95NECz80FpKaYIgd7",
+        "visible": true
+      },
+      {
+        "id": "evt_1UPje4D95NECz80Fys3J38H4",
+        "visible": true
+      },
+      {
+        "id": "evt_1UPje4D95NECz80FYO6k4377",
+        "visible": true
+      },
+      {
+        "id": "evt_1UPjs7D95NECz80FuuJg4vgm",
+        "visible": true
+      }
+    ]
+  },
+  "live_tax": {
+    "status": 403,
+    "error_code": "more_permissions_required",
+    "error_type": "invalid_request_error",
+    "permission_denied": true
+  }
+}

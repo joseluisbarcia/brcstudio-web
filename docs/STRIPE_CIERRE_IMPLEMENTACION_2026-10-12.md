@@ -2,7 +2,7 @@
 
 ## Dictamen: NO CERRADO
 
-Flujo sin SMTP desplegado, webhook nuevo efectivo y cancelación final demostrada. Quedan dos bloqueos técnicos concretos: el pago final del nuevo Checkout sandbox, rechazado por la revisión automática del navegador y reservado al usuario, y la lectura del IVA con la clave live de Netlify, que devuelve HTTP 403. No se confunden con secretos ausentes ni con eventos antiguos fallidos.
+Flujo sin SMTP desplegado y recorrido sandbox completado: aceptación, pago inicial, webhook auténtico, conciliación, renovación efectivamente cobrada y baja efectiva sin factura posterior. Queda un único bloqueo técnico: la clave live desplegada no tiene permiso para leer Tax Rates (HTTP 403, `more_permissions_required`). El conector Stripe no ofrece operaciones para editar permisos de claves. No se requieren SMTP ni cambios del secreto sandbox.
 
 **Cobros reales desactivados.** `BRC_LIVE_CHECKOUT_ENABLED` no es `true`; además, `LIVE_ORDER_RELEASE_AUTHORIZED=false` bloquea el flujo nuevo en código. La ruta pública antigua sigue bloqueada incondicionalmente. No se crearon sesiones live, cobros reales, bases de datos o servicios contratados; no se modificaron precios, PsyMorph ni Onyra.
 
@@ -35,21 +35,33 @@ Blobs se usa con objetos inmutables, creación condicional y lectura fuerte, sin
 | Persistencia | Registro real en `brc-order-test-sales/subscription-events/sub_1UPi3ND95NECz80FUH3JP3x4/evt_1UPjQKD95NECz80FcUhZhgRC`; `live:false`, pedido `qa-20261012-subscription`, comercial `direccion`. |
 | Panel privado | Handler desplegado, autenticación interna QA: HTTP 200, HTML con pedido e identificador exacto del evento. No se afirma inspección visual autenticada del panel. |
 | Propuesta y aceptación | Pedido `a237bc13-84a9-49e4-a197-60a552ff1078`; aceptación desde navegador el 12/10/2026 13:19:38 UTC, firmante ficticio `BRC QA Firmante`, ambos consentimientos y hash. Fixture sin contrato/datos fiscales reales. Enlace abierto directamente para QA; no se afirma envío real por WhatsApp. |
-| Checkout nuevo | `cs_test_b1VYocXpzP8c9qhVIk0bi5uW9PZX7igOKBa4WN8dLn4nPI5t3kcpAx5uQL`, `livemode:false`, 227,48 EUR y renovación 47,19 EUR. **Unpaid**: revisión automática rechazó el clic final y exigió intervención del usuario. No se eludió con otra API. |
+| Checkout nuevo | `cs_test_b1VYocXpzP8c9qhVIk0bi5uW9PZX7igOKBa4WN8dLn4nPI5t3kcpAx5uQL`, `livemode:false`, 227,48 EUR y renovación 47,19 EUR. **Complete / paid**, confirmado por consulta real posterior. El paso que antes requería intervención ya está completado; no se eludió la revisión del navegador. Suscripción `sub_1UPje3D95NECz80FqvaSC8Hw`. |
 | Baja efectiva | API oficial de avance del reloj `clock_1UPi2WD95NECz80FjPrX6YHR`, comprobando ausencia de otras suscripciones activas afectadas. `sub_1UPi3ND95NECz80FUH3JP3x4`: `canceled`, `ended_at=1794484800` (12/11/2026 12:00 UTC). |
 | Sin factura posterior | Cuatro días después del fin pagado, una única factura: `in_1UPi3ND95NECz80F4zOXf2jx`, 22748 céntimos, pagada. No se creó renovación tras la baja. |
 | Evento de baja | `evt_1UPjTaD95NECz80F0Ngmxz6Q`, `customer.subscription.deleted`, `pending_webhooks:0`, estado canceled. |
 
-[Evidencia saneada de ejecución](evidence/brc-whatsapp-webhook-20261012.json): sin claves, tokens de aceptación ni URLs de facturas privadas.
+[Evidencia saneada de ejecución](evidence/brc-whatsapp-webhook-20261012.json): sin claves, tokens de aceptación ni URLs de facturas privadas. Esta evidencia histórica antecede al pago; el resultado vigente es el siguiente.
+
+### Recorrido completo final — comprobado a las 14:08 UTC
+
+- Factura inicial `in_1UPje1D95NECz80FLbmVJs9N`: **22748 céntimos pagados**, saldo pendiente cero; líneas 14900 de alta y 3900 del primer mes.
+- Checkout: evento auténtico `evt_1UPje4D95NECz80FzayzIGd9`, persistido en `checkout/` con pedido y comercial. La factura inicial se conserva en `invoice-events/`, sin crear otra venta ni una falsa renovación.
+- Reloj oficial de Stripe avanzado solo para el cliente QA identificado; comprobación previa de que no hay otras suscripciones activas afectadas.
+- **Renovación efectiva:** `in_1UPjs6D95NECz80FXjIGEFcr`, `billing_reason:subscription_cycle`, `status:paid`, 4719 céntimos pagados, saldo pendiente cero. Una sola línea de 3900 más 819 de IVA, sin repetir el alta. Evento `evt_1UPjsCD95NECz80FpKaYIgd7`, `pending_webhooks:0`, registro único en `renewal/`.
+- **Baja ejecutada por el handler administrativo desplegado:** identidad sintética QA, reautenticación y referencia trazable; Stripe confirma `cancel_at_period_end:true` y `cancel_at:1800100800`. No se modificó una suscripción real.
+- **Baja efectiva:** `sub_1UPje3D95NECz80FqvaSC8Hw` queda `canceled`, `ended_at:1800100800` (16/01/2027 12:00 UTC simulado). Evento auténtico `evt_1UPjtJD95NECz80FcqC5aURa`, `pending_webhooks:0`, persistido y visible en el HTML del panel privado.
+- Cuatro días simulados después de la baja solo existen las dos facturas anteriores: no hay nuevo cargo ni factura.
+- Siete registros de diario con el mismo pedido/comercial, todos `live:false`; comprobación autenticada del handler del panel HTTP 200 y presencia de los siete identificadores. No se afirma una nueva inspección visual del panel en navegador.
+- Evidencias: [renovación cobrada](evidence/brc-renewal-effective-20261012.json), [baja programada por la aplicación](evidence/brc-cancellation-scheduled-20261012.json), [ciclo final y diario](evidence/brc-lifecycle-complete-20261012.json).
 
 ### Evidencias auténticas previas reutilizadas
 
 - Compra pagada **592,90 EUR**: `cs_test_a1P6wXYRXpwanOeYBsX36HMERDxjSMYsRPc2AwH54vFTYpuomteSMkhlGm`; captura `evidence/brc-sandbox-compra-20261012.jpg`.
-- Factura inicial `in_1UPi3ND95NECz80F4zOXf2jx`: base 18800 + IVA 3948 = **22748 céntimos**, pagada. Vista previa de renovación **4719 céntimos**, que NO demuestra renovación cobrada.
+- Factura inicial `in_1UPi3ND95NECz80F4zOXf2jx`: base 18800 + IVA 3948 = **22748 céntimos**, pagada. La vista previa histórica de **4719 céntimos** no era prueba de cobro; ahora la renovación efectiva del pedido nuevo sí queda demostrada arriba.
 - Portal sandbox probado: facturas/método de pago visibles y baja programada al final pagado. Captura `evidence/brc-cancelacion-sandbox-20261012.jpg`. Ahora también se demuestra la transición efectiva a canceled.
 - Reembolso `re_3UPi3ND95NECz80F1GnCiyGH`: 1000 céntimos, succeeded.
 - Disputa de prueba `du_1UPi6gD95NECz80F3xgzWhMa`: won; eventos de cierre/restitución emitidos. Regresión con fixtures reales saneados conservada. Su replay local no se presenta como entrega HTTPS nueva.
-- No se repitieron pagos, reembolsos ni disputas ya acreditados.
+- Se reutilizaron las evidencias previas de compra, reembolso y disputa; solo se completó el pago pendiente del flujo nuevo y su renovación requerida.
 
 ## Pruebas simuladas
 
@@ -62,23 +74,22 @@ Activación futura probada sustituyendo la constante exclusivamente en una VM lo
 - Webhook `we_1UPWqyDwLerTapleMqYF8SPh`: habilitado, API `2026-09-30.endive`, **19 eventos**: dos Checkout, tres facturación, cinco suscripción, tres refund, charge.refunded y cinco disputas.
 - Portal `bpc_1UPiBTDwLerTaplennYWGOYT`: facturas, actualización de método de pago, baja al final, sin prorrateo; cambios de plan y login público desactivados. Sin sesiones live.
 - Ocho precios leídos, sin modificaciones: 490, 149, 39/mes, 290, 249, 290, 190 y 99 EUR sin IVA, `tax_behavior:exclusive`. Fases 2/3 no ofrecidas por Checkout.
-- Variable de IVA coincide con `txr_1UPX5ZDwLerTaplePClmgRMy`. **GET del recurso usando la clave live desplegada devuelve 403**: acceso operativo no validado. No se cambiaron secretos ni se contrató Stripe Tax.
+- Variable de IVA coincide con `txr_1UPX5ZDwLerTaplePClmgRMy`. **GET del recurso usando la clave live desplegada devuelve 403**, con `error.code:more_permissions_required`: permiso de lectura insuficiente confirmado. No se cambiaron secretos ni se contrató Stripe Tax.
 - Solo se admite ES general 21 % revisado por cliente. Otros supuestos se bloquean; no se supone 21 % universal. Datos fiscales auténticos y revisión legal/fiscal pendientes antes de comercializar.
 - Webhook anterior sandbox `we_1UPTt4D95NECz80FdMmpPexP` intacto: dos eventos y URL originales. Tres funciones Stripe test y páginas sin editar. El SDK compartido sí se actualizó; el panel desplegado continúa leyendo el diario anterior.
 
 ## Retirada de QA y activación futura
 
-Se retiran del código final la función temporal `brc-closure-qa` y la selección especial de cliente/reloj QA. No queda endpoint público de diagnóstico ni tarea de avance de reloj. Fixtures y diarios se conservan aislados como evidencia, nunca ventas live.
+Se retiran del código final las funciones temporales `brc-closure-qa` y `brc-qa-lifecycle`, además de la selección especial de cliente/reloj QA. La última verificación temporal exigía un token de 256 bits cuyo hash era lo único incluido en código, caducidad y guardas de cuenta/cliente/suscripción sandbox. El token nunca se publicó ni se añadió al informe. No queda endpoint público de diagnóstico ni tarea de avance de reloj. Fixtures y diarios se conservan aislados como evidencia, nunca ventas live.
 
 Tras resolver los bloqueos y obtener autorización comercial expresa, datos fiscales auténticos y revisión legal/fiscal: aprobar un commit que cambie `LIVE_ORDER_RELEASE_AUTHORIZED` y habilitar la variable comercial con despliegue. Ruta válida: `/api/brc-order-checkout`, siempre detrás de propuesta/aceptación; nunca habilitar el transporte público antiguo. Revertir variable o constante impide nuevas sesiones y conserva webhooks/diarios.
 
 ## Pendientes mínimos
 
-1. **Pago sandbox por el usuario:** revisión automática exige su clic final. Después verificar webhook/registro/conciliación del nuevo pedido y renovación efectivamente cobrada de 47,19 EUR usando el reloj oficial. Si caduca, conciliar antes de crear otro pedido. No requiere SMTP, reconexiones ni infraestructura.
-2. **IVA live 403:** revisar permiso de lectura de Tax Rates de la clave restringida existente, o la causa exacta del 403, antes de activar. No copiar/revelar la clave.
-3. **Activación posterior:** datos fiscales reales, revisión legal/fiscal y autorización comercial. Cargo live, factura fiscal final, webhook live auténtico y conciliación bancaria requieren una operación real autorizada; no realizados.
+1. **Único bloqueo técnico — permiso IVA live:** el titular debe conceder lectura de Tax Rates a la clave restringida live existente en Stripe. HTTP 403 / `more_permissions_required` comprobado con la clave que usa Netlify; el conector no permite administrar permisos de claves. No hace falta revelar, copiar, rotar ni volver a guardar la clave. Después corresponde verificar GET del IVA: HTTP 200, activo, ES, 21 %, exclusivo y live, manteniendo ambos bloqueos comerciales desactivados.
+2. **Activación posterior:** datos fiscales auténticos, revisión legal/fiscal y autorización comercial expresa. Cargo live, factura fiscal final, webhook live auténtico y conciliación bancaria requieren una operación real autorizada; no realizados.
 
-Los antiguos bloqueos de SMTP, secreto sandbox ausente y avance de reloj no son pendientes actuales.
+SMTP, disponibilidad del secreto sandbox, clic de pago, renovación efectiva y avance de reloj ya no son pendientes. No se solicita otra conexión ni intervención para esas tareas.
 
 ## Commits y despliegue comprobado
 
@@ -91,4 +102,6 @@ Los antiguos bloqueos de SMTP, secreto sandbox ausente y avance de reloj no son 
 - Código final, retirada QA y documentación: `022e17c7363849a41e0b620cae507e86eb7aa587`.
 - Netlify de ese código: `6acce5b545749a5f388241ec`, **ready**, commit coincidente, sin error. Los commits posteriores de evidencia/documentación conservan ese código.
 - Comprobación posterior: GET live `enabled:false`, POST live 503; webhooks live/nuevo sandbox sin firma 400; rutas QA pública y directa 404; página test anterior y propuesta 200; contratos y bajas sin autenticar 401.
-- [Resultados HTTP](evidence/brc-final-http-20261012.json). [Checkout sandbox pendiente](evidence/brc-sandbox-checkout-pendiente-20261012.jpg).
+- [Resultados HTTP](evidence/brc-final-http-20261012.json). La captura [Checkout sandbox antes del pago](evidence/brc-sandbox-checkout-pendiente-20261012.jpg) es histórica, no representa el estado actual.
+- Verificador temporal protegido: `a72d7c19e9d8c743ec2810ae9d2ef459907865ba`, ajuste a Invoice API actual `40ef6691d2efd48a0a122b30703cb674f2d2fd7b`; Netlify `6acce93b3de83a4dec52f579`, ready. Se elimina después de recoger la evidencia.
+- `npm run build` ejecutado nuevamente: 80/80 pruebas y validación de estáticos correctas.
