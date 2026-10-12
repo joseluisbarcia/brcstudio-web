@@ -80,3 +80,17 @@ Pago inicial de 149 € + IVA por el alta, más 39 € + IVA por el primer mes. 
 6. Mantener `BRC_LIVE_CHECKOUT_ENABLED` desactivado hasta autorización expresa.
 
 **Estado:** borrador de condiciones listo para revisión. No constituye autorización de venta, no publica pagos ni modifica Stripe.
+
+## 7. Propuesta operativa de mantenimiento y entrega (PENDIENTE DE APROBACIÓN)
+
+**Plan mensual, 39 €/mes + IVA:** hosting y publicación del sitio contratado, mantenimiento técnico y de seguridad razonable, resolución de incidencias imputables a la web desarrollada por BRC, soporte por correo y hasta **dos cambios pequeños de contenido al mes**, no acumulables (por ejemplo, actualizar un precio, horario, foto o texto breve). Las modificaciones deben afectar a páginas o secciones existentes, con material proporcionado por el cliente. No se incluyen rediseños, páginas nuevas, funciones o integraciones nuevas, creación de contenido, campañas, gestión del Perfil de Empresa de Google ni garantía de posicionamiento. Todo trabajo adicional se presupuesta antes de realizarse.
+
+**Operativa sugerida:** peticiones por correo a jose@brcstudio.es; acuse en un máximo orientativo de dos días hábiles y ejecución de cambios ordinarios en un máximo orientativo de cinco días hábiles, sujetos a recepción de materiales y a incidencias técnicas; estas ventanas **no están aprobadas ni constituyen SLA contractual**. Definir canal definitivo, horarios y prioridades antes de vender.
+
+**Cancelación del plan mensual:** el cliente puede solicitarla en cualquier momento, sin permanencia ni penalización. Se deja de renovar al final del período pagado, manteniendo el servicio hasta esa fecha. No se aplica devolución proporcional salvo obligación legal. La solicitud deberá ser confirmada por BRC y reflejarse en Stripe con `cancel_at_period_end` u opción equivalente, sin cobro posterior. **No se ha automatizado todavía este procedimiento.**
+
+**Entrega y titularidad — propuesta:** el dominio se registra a nombre del cliente. Si compra la web, BRC entrega una copia de los archivos del sitio y los recursos cuya licencia permita transferencia, junto con instrucciones de publicación; los servicios de terceros, cuentas y licencias no transferibles quedan excluidos. El traslado a otro alojamiento y soporte posterior se presupuestan si requieren trabajo adicional. Si cancela sin comprar, conserva su dominio y sus propios materiales; la licencia de uso y entrega del código de la web deben definirse expresamente antes de contratar. **No prometer entrega del código al cancelar sin compra** ni retirada automática del dominio.
+
+**Compra directa:** durante los 30 días de soporte se corrigen errores de funcionamiento del trabajo entregado. Cambios de diseño, contenido y ampliaciones se presupuestan aparte. Tras ese período, el hosting y mantenimiento se contratarán por separado o se gestionarán por el cliente; definir condiciones antes de emitir oferta.
+
+**Pendiente de aprobación comercial y revisión legal:** número de cambios, plazos de respuesta, derechos de uso, entrega técnica, tratamiento de licencias y proceso de cancelación. No publicar estas condiciones como definitivas todavía.
