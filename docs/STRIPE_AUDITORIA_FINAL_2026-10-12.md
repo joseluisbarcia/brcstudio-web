@@ -4,11 +4,13 @@ Fecha: 12 de octubre de 2026 (Europe/Madrid). **No autoriza la activación comer
 
 ## Resultado y estado de entrega
 
-**Auditoría parcialmente completada; activación comercial NO aprobada.** Correcciones y 33 pruebas guardadas en GitHub, commit `8afe86170a0b9f639b57465b5dc8d1eb21063371`. No están confirmadas en producción: Netlify continúa mostrando el despliegue inicial y GitHub no muestra estados ni check-runs de despliegue para el nuevo commit. El conector Netlify disponible permite consultar proyectos y despliegues, pero no iniciarlos ni leer variables de sitio; no hay CLI autenticada disponible en esta sesión.
+**Correcciones desplegadas; activación comercial NO aprobada.** Commit de código `8afe86170a0b9f639b57465b5dc8d1eb21063371`, despliegue Netlify `6acca19cd0d6a32b48a53e15`, ready, publicado 12/10/2026 09:00:28 UTC. El despliegue automático sí se completó tras la espera inicial. Escaneo: 56 archivos, ninguna coincidencia de secretos. Las tres funciones de prueba y el panel conservan exactamente los mismos digest de despliegue que antes.
 
-**BRC_LIVE_CHECKOUT_ENABLED: valor efectivo pendiente de verificación.** El código inspeccionado bloquea todo valor distinto del literal true, pero eso no demuestra el valor configurado. No se ha cambiado la variable. El nuevo GET permitirá verificarla tras desplegar. Cero sesiones/enlaces live encontrados es evidencia adicional, no prueba por sí sola de bloqueo.
+**Bloqueo efectivo VERIFICADO en producción:** GET /api/stripe-live-checkout devuelve HTTP 200 con `enabled=false` y `tax_rate_configured=true`. Esto comprueba que la condición BRC_LIVE_CHECKOUT_ENABLED !== "true" bloquea POST y que la tasa configurada coincide con el ID aprobado. No se ha cambiado ninguna variable. No se lee ni afirma el texto bruto del valor (false/ausente/otro valor desactivado); se certifica su efecto en el runtime desplegado.
 
-La ampliación de eventos del webhook no se aplicó: lectura posterior confirma que siguen solo los dos eventos Checkout. Para resolver ambos bloqueos es necesario acceso operativo al panel web; las reglas del navegador exigen permiso para usarlo cuando el conector resulta insuficiente o falla reiteradamente. No se ha abierto el navegador ni supuesto una sesión iniciada.
+Después del despliegue: webhook sin firma vuelve a dar 400; ambas modalidades de Checkout sandbox vuelven a responder 200 con livemode=false y totales 59290/22748. No se pagaron esas sesiones.
+
+**Bloqueo restante de acceso:** la ampliación de eventos del webhook no se aplicó. El conector Stripe devolvió dos veces una petición de reautenticación y la lectura posterior confirma que siguen solo los dos eventos Checkout. Las reglas del navegador exigen permiso para usarlo cuando el conector falla reiteradamente; no se ha abierto ni supuesto una sesión iniciada. El código de renovaciones está desplegado, pero Stripe aún no envía esos eventos a este endpoint.
 
 ## Alcance y límites
 
@@ -60,7 +62,7 @@ Alta + primer mes: 188,00 € + 39,48 € = **227,48 €**. Renovación: **47,19
 
 ## Pendientes antes de autorizar la activación
 
-1. Confirmar despliegue de este commit y GET de disponibilidad: enabled=false, tax_rate_configured=true.
+1. **Resuelto:** despliegue ready y GET verificado con enabled=false, tax_rate_configured=true.
 2. Ampliar el webhook live a invoice.paid, invoice.payment_failed, invoice.payment_action_required y customer.subscription.created/updated/deleted/paused/resumed, conservando los dos eventos Checkout. El conector ha pedido reautenticación dos veces y no ha ejecutado la escritura; no se considera aplicado.
 3. Entrega auténtica firmada por Stripe al endpoint live y persistencia real de Blobs no demostradas. La validación positiva, concurrencia y reintentos se han probado localmente con secreto efímero; el rechazo sin firma sí se comprobó en producción. No enviar ventas ficticias a brc-live-sales.
 4. El panel /admin/ventas sigue mostrando exclusivamente pruebas. Para live, falta una vista privada de comprobantes/renovaciones y procedimiento de conciliación, impagos, cancelaciones y reembolsos. No confundir el diario nuevo con una gestión operativa completa.
