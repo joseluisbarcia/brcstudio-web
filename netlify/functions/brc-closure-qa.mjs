@@ -54,6 +54,23 @@ async function run(){
    const tax=await fetch('https://api.stripe.com/v1/tax_rates/txr_1UPX5ZDwLerTaplePClmgRMy',{headers:{Authorization:'Bearer '+liveKey}});
    if(tax.ok){const t=await tax.json();progress.live_tax={id:t.id,active:t.active,livemode:t.livemode,country:t.country,percentage:t.percentage,inclusive:t.inclusive}}
   }
+  // Exercise the already-approved cancellation only. Never create/pay a subscription.
+  // Abort if this clock has any other active subscription, including a newly paid Checkout.
+  const originalId='sub_1UPi3ND95NECz80FUH3JP3x4';
+  const existing=await api('subscriptions?'+new URLSearchParams({customer,status:'all',limit:'100'}));
+  let original=existing.data.find(x=>x.id===originalId);
+  const safe=original?.livemode===false&&original.test_clock===clock&&original.cancel_at===1794484800&&!existing.has_more&&existing.data.every(x=>x.id===originalId||x.status==='canceled');
+  if(safe&&original.status!=='canceled'){
+   const current=await api('test_helpers/test_clocks/'+clock);
+   const target=1794484800+4*86400;
+   if(current.frozen_time<target)await api('test_helpers/test_clocks/'+clock+'/advance',new URLSearchParams({frozen_time:String(target)}));
+   for(let n=0;n<40;n++){const state=await api('test_helpers/test_clocks/'+clock);if(state.status==='ready')break;await wait(2000)}
+   original=await api('subscriptions/'+originalId);
+  }
+  if(original?.status==='canceled'){
+   const invoices=await api('invoices?'+new URLSearchParams({subscription:originalId,limit:'100'}));
+   progress.prior_cancellation={subscription:originalId,status:original.status,ended_at:original.ended_at,invoices:invoices.data.map(i=>({id:i.id,total:i.total,status:i.status,billing_reason:i.billing_reason})),has_more:invoices.has_more};
+  }else progress.prior_cancellation={status:original?.status??'missing',safe_to_advance:safe};
   const binding=await app.get('checkout/'+order,{type:'json'});
   if(!binding){await save({status:'awaiting_customer_acceptance_and_checkout'});return}
   const session=await api('checkout/sessions/'+binding.session_id);
