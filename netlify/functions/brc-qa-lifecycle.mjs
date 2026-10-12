@@ -29,14 +29,14 @@ export default async function(req){
    if(action==='renew'){
     const invoices=await api('invoices?'+new URLSearchParams({subscription,limit:'100'}));
     const renewal=invoices.data.find(i=>i.billing_reason==='subscription_cycle');
-    if(invoices.has_more||sub.status!=='active'||sub.cancel_at||renewal?.paid)throw Error('RENEWAL_GUARD');
+    if(invoices.has_more||sub.status!=='active'||sub.cancel_at||renewal?.status==='paid')throw Error('RENEWAL_GUARD');
     const end=sub.items.data[0].current_period_end;
     const target=renewal?state.frozen_time+7200:end+7200;
     if(target<=state.frozen_time||target>state.frozen_time+32*86400)throw Error('CLOCK_RANGE');
     await api('test_helpers/test_clocks/'+clock+'/advance',new URLSearchParams({frozen_time:String(target)}));action_status='renewal_clock_advanced';
    }else if(action==='cancel'){
     const invoices=await api('invoices?'+new URLSearchParams({subscription,limit:'100'}));
-    if(!invoices.data.some(i=>i.billing_reason==='subscription_cycle'&&i.paid&&i.total===4719))throw Error('PAID_RENEWAL_REQUIRED');
+    if(!invoices.data.some(i=>i.billing_reason==='subscription_cycle'&&i.status==='paid'&&i.total===4719))throw Error('PAID_RENEWAL_REQUIRED');
     const c=await api('customers/'+customer);
     if(!c.email?.endsWith('@example.invalid'))throw Error('NON_FIXTURE_CUSTOMER');
     const result=await handleCancellation(new Request('https://brcstudio.es/admin/ventas/bajas-prueba',{method:'POST',headers:auth,body:new URLSearchParams({subscription,email:c.email,evidence:'QA final lifecycle 20261012, synthetic identity and request',password})}),'test');
@@ -63,7 +63,7 @@ export default async function(req){
    const r=await fetch('https://api.stripe.com/v1/tax_rates/txr_1UPX5ZDwLerTaplePClmgRMy',{headers:{Authorization:'Bearer '+liveKey}});const t=await r.json();
    live_tax={status:r.status,error_code:t.error?.code,error_type:t.error?.type,permission_denied:/permission/i.test(t.error?.message??''),...(r.ok?{id:t.id,percentage:t.percentage,active:t.active,inclusive:t.inclusive,livemode:t.livemode,country:t.country}:{})};
   }
-  const report={checked_at:new Date().toISOString(),action_status,live_disabled:true,webhook_secret_available:!!Netlify.env.get('STRIPE_ORDER_TEST_WEBHOOK_SECRET'),subscription:{id:sub.id,status:sub.status,cancel_at:sub.cancel_at,cancel_at_period_end:sub.cancel_at_period_end,ended_at:sub.ended_at},clock:await api('test_helpers/test_clocks/'+clock),invoices:invoices.data.map(i=>({id:i.id,status:i.status,paid:i.paid,total:i.total,amount_paid:i.amount_paid,amount_remaining:i.amount_remaining,currency:i.currency,billing_reason:i.billing_reason,lines:i.lines.data.map(l=>({amount:l.amount,quantity:l.quantity,description:l.description}))})),ledger:rows,panel:{status:panel.status,contains_order:html.includes(order),events:rows.map(r=>({id:r.event,visible:html.includes(r.event)}))},live_tax};
+  const report={checked_at:new Date().toISOString(),action_status,live_disabled:true,webhook_secret_available:!!Netlify.env.get('STRIPE_ORDER_TEST_WEBHOOK_SECRET'),subscription:{id:sub.id,status:sub.status,cancel_at:sub.cancel_at,cancel_at_period_end:sub.cancel_at_period_end,ended_at:sub.ended_at},clock:await api('test_helpers/test_clocks/'+clock),invoices:invoices.data.map(i=>({id:i.id,status:i.status,paid:i.status==='paid',total:i.total,amount_paid:i.amount_paid,amount_remaining:i.amount_remaining,currency:i.currency,billing_reason:i.billing_reason,lines:i.lines.data.map(l=>({amount:l.amount,quantity:l.quantity,description:l.description}))})),ledger:rows,panel:{status:panel.status,contains_order:html.includes(order),events:rows.map(r=>({id:r.event,visible:html.includes(r.event)}))},live_tax};
   report.clock={id:report.clock.id,status:report.clock.status,frozen_time:report.clock.frozen_time};
   return Response.json(report,{headers});
  }catch(e){return Response.json({error:String(e.message).slice(0,180)},{status:409,headers})}
