@@ -9,6 +9,7 @@
     "test": "node --experimental-vm-modules --test tests/*.test.mjs"
   },
   "dependencies": {
-    "@netlify/blobs": "^9.0.0"
+    "@netlify/blobs": "^9.0.0",
+    "nodemailer": "10.1.0"
   }
 }

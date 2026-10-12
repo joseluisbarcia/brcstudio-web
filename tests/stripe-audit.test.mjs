@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
 import * as crypto from 'node:crypto';
+import * as reconciliation from '../netlify/lib/reconciliation.mjs';
 
 const signingSecret='whsec_'+crypto.randomBytes(32).toString('hex');
 const tax='txr_1UPX5ZDwLerTaplePClmgRMy';
@@ -11,7 +12,7 @@ async function load(file,{env={},fetch=()=>{throw Error('Network forbidden in au
  const context=vm.createContext({Request,Response,URL,URLSearchParams,Buffer,Date,console,Netlify:{env:{get:k=>env[k]}},fetch});
  const module=new vm.SourceTextModule(await readFile(new URL('../netlify/functions/'+file,import.meta.url),'utf8'),{context});
  await module.link(async name=>{
-  const values=name==='node:crypto'?crypto:{getStore:options=>{assert.equal(options.name,'brc-live-sales');assert.equal(options.consistency,'strong');return store}};
+  const values=name==='node:crypto'?crypto:name.endsWith('reconciliation.mjs')?reconciliation:{getStore:options=>{assert.equal(options.name,'brc-live-sales');assert.equal(options.consistency,'strong');return store}};
   const names=Object.keys(values);return new vm.SyntheticModule(names,function(){for(const key of names)this.setExport(key,values[key])},{context});
  });await module.evaluate();return module.namespace[exportName];
 }

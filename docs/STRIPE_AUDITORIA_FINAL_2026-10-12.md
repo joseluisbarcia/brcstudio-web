@@ -125,3 +125,7 @@ Una vez resueltas las dependencias anteriores: primera operación real controlad
 - Inventario actual del conector Stripe: solo cuenta live `acct_1UPRtYDwLerTaple`. La cuenta sandbox conocida no está accesible; su lectura devuelve `No account found`. Por tanto, no se repitió Checkout/renovación/baja de extremo a extremo en sandbox en esta revisión. Se necesita restablecer acceso al sandbox para completar esa comprobación; no se ha alterado su configuración ni sus datos.
 - No se han creado cargos, sesiones live, enlaces públicos, suscripciones ni ventas ficticias. No se ha contratado ningún servicio ni cambiado precios o condiciones comerciales.
 
+
+
+## Continuación ejecutada
+Consultar [cierre de implementación](STRIPE_CIERRE_IMPLEMENTACION_2026-10-12.md): sustituye el bloqueo arquitectónico de pedidos por diario inmutable, incorpora aceptación por correo, Checkout vinculado exclusivamente sandbox, cancelación sandbox y ajustes. Incluye una compra sandbox real confirmada; no declara completadas las dependencias externas restantes.
