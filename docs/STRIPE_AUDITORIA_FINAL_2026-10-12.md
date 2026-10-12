@@ -112,3 +112,16 @@ El POST de comprobación al Checkout live fue rechazado por revisión automátic
 ### Verificación que requiere autorización de operación real
 
 Una vez resueltas las dependencias anteriores: primera operación real controlada para verificar cargo efectivo, factura fiscal final, entrega firmada live, persistencia, panel y conciliación. No se ha realizado ni se autoriza en este trabajo. Las renovaciones y cancelaciones deben verificarse primero en sandbox con datos nuevos desechables, sin modificar las suscripciones de prueba existentes.
+
+
+### Publicación y comprobaciones HTTP de esta revisión
+
+- Código publicado: `62ae5f89c37a1304af0037c76c95ffc78f75dcd0`.
+- Netlify deploy: `6accbe9bfb3718de5d82e2f7`, `ready`, commit coincidente.
+- GET producción `/api/stripe-live-checkout`: 200, `enabled:false`, `tax_rate_configured:true`, `release_ready:false`.
+- GET sin sesión `/admin/ventas/bajas` y `/admin/ventas/pedidos`: 401.
+- POST sin firma `/api/stripe-live-webhook`: 400 `Invalid signature`, sin registro de venta.
+- GET `/stripe-test.html`: 200. Funciones y páginas de pruebas idénticas a la base `938979b` (diff vacío).
+- Inventario actual del conector Stripe: solo cuenta live `acct_1UPRtYDwLerTaple`. La cuenta sandbox conocida no está accesible; su lectura devuelve `No account found`. Por tanto, no se repitió Checkout/renovación/baja de extremo a extremo en sandbox en esta revisión. Se necesita restablecer acceso al sandbox para completar esa comprobación; no se ha alterado su configuración ni sus datos.
+- No se han creado cargos, sesiones live, enlaces públicos, suscripciones ni ventas ficticias. No se ha contratado ningún servicio ni cambiado precios o condiciones comerciales.
+
