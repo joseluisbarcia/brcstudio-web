@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-12T14:34:50.703Z",
+  "source": "Netlify Functions Production; existing STRIPE_LIVE_SECRET_KEY",
+  "http_status": 200,
+  "tax": {
+    "id": "txr_1UPX5ZDwLerTaplePClmgRMy",
+    "active": true,
+    "livemode": true,
+    "country": "ES",
+    "percentage": 21,
+    "inclusive": false
+  },
+  "environment_live_blocked": true,
+  "code_live_blocked": true
+}

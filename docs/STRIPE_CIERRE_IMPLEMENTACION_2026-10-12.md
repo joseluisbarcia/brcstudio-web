@@ -1,8 +1,8 @@
 # Cierre de implementación Stripe — 12 octubre 2026
 
-## Dictamen: NO CERRADO
+## Dictamen: CERRADO TÉCNICAMENTE — PENDIENTE DE ACTIVACIÓN COMERCIAL
 
-Flujo sin SMTP desplegado y recorrido sandbox completado: aceptación, pago inicial, webhook auténtico, conciliación, renovación efectivamente cobrada y baja efectiva sin factura posterior. Queda un único bloqueo técnico: la clave live desplegada no tiene permiso para leer Tax Rates (HTTP 403, `more_permissions_required`). El conector Stripe no ofrece operaciones para editar permisos de claves. No se requieren SMTP ni cambios del secreto sandbox.
+Flujo sin SMTP desplegado y recorrido sandbox completado: aceptación, pago inicial, webhook auténtico, conciliación, renovación efectivamente cobrada y baja efectiva sin factura posterior. El último bloqueo de permisos ha quedado resuelto y verificado desde Netlify Production con la clave existente el 12/10/2026 a las 16:34:50 de Madrid (14:34:50 UTC): Tax Rates devuelve HTTP 200. No quedan bloqueos técnicos identificados en el alcance de este cierre. No se requieren SMTP ni cambios del secreto sandbox.
 
 **Cobros reales desactivados.** `BRC_LIVE_CHECKOUT_ENABLED` no es `true`; además, `LIVE_ORDER_RELEASE_AUTHORIZED=false` bloquea el flujo nuevo en código. La ruta pública antigua sigue bloqueada incondicionalmente. No se crearon sesiones live, cobros reales, bases de datos o servicios contratados; no se modificaron precios, PsyMorph ni Onyra.
 
@@ -74,7 +74,7 @@ Activación futura probada sustituyendo la constante exclusivamente en una VM lo
 - Webhook `we_1UPWqyDwLerTapleMqYF8SPh`: habilitado, API `2026-09-30.endive`, **19 eventos**: dos Checkout, tres facturación, cinco suscripción, tres refund, charge.refunded y cinco disputas.
 - Portal `bpc_1UPiBTDwLerTaplennYWGOYT`: facturas, actualización de método de pago, baja al final, sin prorrateo; cambios de plan y login público desactivados. Sin sesiones live.
 - Ocho precios leídos, sin modificaciones: 490, 149, 39/mes, 290, 249, 290, 190 y 99 EUR sin IVA, `tax_behavior:exclusive`. Fases 2/3 no ofrecidas por Checkout.
-- Variable de IVA coincide con `txr_1UPX5ZDwLerTaplePClmgRMy`. **GET del recurso usando la clave live desplegada devuelve 403**, con `error.code:more_permissions_required`: permiso de lectura insuficiente confirmado. No se cambiaron secretos ni se contrató Stripe Tax.
+- Variable de IVA coincide con `txr_1UPX5ZDwLerTaplePClmgRMy`. **GET del recurso usando la clave live desplegada devuelve HTTP 200**, `country:ES`, `percentage:21`, `inclusive:false`, `active:true`, `livemode:true`. El 403 histórico de los informes anteriores queda resuelto tras la corrección de permisos por el titular. No se cambiaron claves, variables, precios ni configuración comercial en esta comprobación.
 - Solo se admite ES general 21 % revisado por cliente. Otros supuestos se bloquean; no se supone 21 % universal. Datos fiscales auténticos y revisión legal/fiscal pendientes antes de comercializar.
 - Webhook anterior sandbox `we_1UPTt4D95NECz80FdMmpPexP` intacto: dos eventos y URL originales. Tres funciones Stripe test y páginas sin editar. El SDK compartido sí se actualizó; el panel desplegado continúa leyendo el diario anterior.
 
@@ -82,12 +82,12 @@ Activación futura probada sustituyendo la constante exclusivamente en una VM lo
 
 Se retiran del código final las funciones temporales `brc-closure-qa` y `brc-qa-lifecycle`, además de la selección especial de cliente/reloj QA. La última verificación temporal exigía un token de 256 bits cuyo hash era lo único incluido en código, caducidad y guardas de cuenta/cliente/suscripción sandbox. El token nunca se publicó ni se añadió al informe. No queda endpoint público de diagnóstico ni tarea de avance de reloj. Fixtures y diarios se conservan aislados como evidencia, nunca ventas live.
 
-Tras resolver los bloqueos y obtener autorización comercial expresa, datos fiscales auténticos y revisión legal/fiscal: aprobar un commit que cambie `LIVE_ORDER_RELEASE_AUTHORIZED` y habilitar la variable comercial con despliegue. Ruta válida: `/api/brc-order-checkout`, siempre detrás de propuesta/aceptación; nunca habilitar el transporte público antiguo. Revertir variable o constante impide nuevas sesiones y conserva webhooks/diarios.
+Solo después de obtener autorización comercial expresa, datos fiscales auténticos y revisión legal/fiscal: aprobar un commit que cambie `LIVE_ORDER_RELEASE_AUTHORIZED` y habilitar la variable comercial con despliegue. Ruta válida: `/api/brc-order-checkout`, siempre detrás de propuesta/aceptación; nunca habilitar el transporte público antiguo. Revertir variable o constante impide nuevas sesiones y conserva webhooks/diarios.
 
 ## Pendientes mínimos
 
-1. **Único bloqueo técnico — permiso IVA live:** el titular debe conceder lectura de Tax Rates a la clave restringida live existente en Stripe. HTTP 403 / `more_permissions_required` comprobado con la clave que usa Netlify; el conector no permite administrar permisos de claves. No hace falta revelar, copiar, rotar ni volver a guardar la clave. Después corresponde verificar GET del IVA: HTTP 200, activo, ES, 21 %, exclusivo y live, manteniendo ambos bloqueos comerciales desactivados.
-2. **Activación posterior:** datos fiscales auténticos, revisión legal/fiscal y autorización comercial expresa. Cargo live, factura fiscal final, webhook live auténtico y conciliación bancaria requieren una operación real autorizada; no realizados.
+1. **Activación comercial:** aportar los datos fiscales auténticos del titular, completar la revisión legal/fiscal y obtener autorización comercial expresa. El cierre técnico no autoriza activar cobros.
+2. **Comprobaciones live posteriores:** cargo real, factura fiscal final, webhook live auténtico y conciliación bancaria requieren una transacción real autorizada; no se han realizado y no se presentan como pruebas superadas.
 
 SMTP, disponibilidad del secreto sandbox, clic de pago, renovación efectiva y avance de reloj ya no son pendientes. No se solicita otra conexión ni intervención para esas tareas.
 
@@ -112,4 +112,13 @@ SMTP, disponibilidad del secreto sandbox, clic de pago, renovación efectiva y a
 - Netlify: `6accea2453cecc047bfedc9f`, **ready**, commit coincidente, sin error.
 - Relectura final: webhook live 19 eventos, nuevo sandbox 19 y antiguo sandbox 2, todos habilitados; portal live privado sin cambios de plan. [Configuración y evento final de baja](evidence/brc-stripe-config-final-20261012.json).
 - Comprobaciones HTTP posteriores en `brc-final-http-20261012.json`: ambos verificadores QA, tanto ruta pública como ruta directa de función, devuelven 404; live sigue desactivado y webhooks rechazan peticiones sin firma.
-- No quedan tareas técnicas de sandbox pendientes. La falta de permiso Tax Rates en la clave live impide declarar el cierre técnico completo.
+- No quedan tareas técnicas de sandbox pendientes. El permiso Tax Rates se verificó posteriormente con éxito, como se detalla a continuación.
+
+### Resolución definitiva del permiso IVA — 16:34:50 Madrid
+
+- Consulta ejecutada dentro de Netlify Functions, contexto Production, con `STRIPE_LIVE_SECRET_KEY` existente. La clave no salió de la función ni fue mostrada.
+- `GET /v1/tax_rates/txr_1UPX5ZDwLerTaplePClmgRMy`: **HTTP 200**; ES, 21 %, exclusivo (`inclusive:false`), activo y live.
+- `BRC_LIVE_CHECKOUT_ENABLED` sigue sin ser `true` y `LIVE_ORDER_RELEASE_AUTHORIZED` continúa en `false`. No se creó ninguna sesión live.
+- [Evidencia directa y saneada](evidence/brc-live-tax-verified-20261012.json). Los JSON anteriores con 403 se conservan exclusivamente como historial y quedan sustituidos para el estado actual por esta evidencia.
+- Verificación temporal de solo lectura, protegida por token aleatorio de 256 bits y caducidad, desplegada en `7836a73a7835a6223c4159bb1f07a491c11085ac` / Netlify `6accefe14f61ee8d9f87c3d4`, ready. Se retira en el mismo commit que declara este cierre; no queda función permanente de diagnóstico.
+- No se repitieron pruebas funcionales/sandbox ya superadas. Se conservaron sus evidencias y el resultado previo de 80/80 pruebas.
