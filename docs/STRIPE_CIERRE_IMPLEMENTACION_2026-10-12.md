@@ -32,3 +32,13 @@ La integración NO se declara comercialmente terminada hasta cerrar estas depend
 
 ## Solo verificable mediante operación real posterior
 Cargo liquidado, factura fiscal live final, entrega de evento auténtico live y conciliación bancaria. No forman parte de las pruebas autorizadas y no se han realizado.
+
+## Publicación verificada
+- Commit de implementación: `4abe9aa611be220c24848e546a303070199b5583`.
+- Netlify: `6accc66501556f39732a9362`, estado `ready`, commit coincidente, sin error.
+- HTTP producción: `/api/stripe-live-checkout` 200 con `enabled:false`, `tax_rate_configured:true`, `release_ready:false`; `/pedido` 200; contratos y bajas sandbox sin autenticar 401; webhook live sin firma 400; página test anterior 200.
+- Nuevo webhook sandbox: 503 `Webhook not configured`, bloqueo confirmado y deliberado hasta configurar el secreto separado.
+- La ampliación live de eventos se intentó y reintentó; ambas llamadas devolvieron autenticación requerida, sin confirmación de escritura. No se considera aplicada.
+- Funciones y página originales de prueba: diff vacío respecto al inicio de esta continuación.
+
+- Lectura posterior de Stripe confirma que el endpoint live conserva sus diez eventos originales; los nueve nuevos siguen pendientes de permiso efectivo.
