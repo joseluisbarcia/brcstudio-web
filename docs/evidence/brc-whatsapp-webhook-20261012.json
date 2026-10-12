@@ -1,0 +1,48 @@
+{
+  "order": "a237bc13-84a9-49e4-a197-60a552ff1078",
+  "live_flag_disabled": true,
+  "webhook_configured": true,
+  "atomic_write_verified": true,
+  "fresh_webhook": {
+    "event": "evt_1UPjQKD95NECz80FcUhZhgRC",
+    "type": "customer.subscription.updated",
+    "order": "qa-20261012-subscription",
+    "seller": "direccion",
+    "live": false
+  },
+  "panel_status": 200,
+  "panel_contains_fresh_event": true,
+  "panel_contains_fixture_order": true,
+  "live_key_available": true,
+  "live_tax_read_status": 403,
+  "prior_cancellation": {
+    "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+    "status": "canceled",
+    "ended_at": 1794484800,
+    "invoices": [
+      {
+        "id": "in_1UPi3ND95NECz80F4zOXf2jx",
+        "total": 22748,
+        "status": "paid",
+        "billing_reason": "subscription_create"
+      }
+    ],
+    "has_more": false
+  },
+  "status": "awaiting_user_sandbox_payment",
+  "checkout": "cs_test_b1VYocXpzP8c9qhVIk0bi5uW9PZX7igOKBa4WN8dLn4nPI5t3kcpAx5uQL",
+  "paid": false,
+  "subscription": null,
+  "cancellation_events": [
+    {
+      "id": "evt_1UPjTaD95NECz80F0Ngmxz6Q",
+      "type": "customer.subscription.deleted",
+      "pending_webhooks": 0,
+      "created": 1791812474,
+      "subscription": "sub_1UPi3ND95NECz80FUH3JP3x4",
+      "livemode": false,
+      "status": "canceled",
+      "ended_at": 1794484800
+    }
+  ]
+}

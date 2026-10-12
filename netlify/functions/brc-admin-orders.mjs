@@ -2,7 +2,7 @@ import {createHash,createHmac,timingSafeEqual,randomUUID} from "node:crypto";
 import {getStore} from "@netlify/blobs";
 
 // Internal draft register only. No checkout, no billing, no claim that client accepted.
-const secure={"content-type":"text/html; charset=utf-8","cache-control":"no-store, private","x-robots-tag":"noindex, nofollow","x-content-type-options":"nosniff","referrer-policy":"no-referrer","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"};
+const secure={"content-type":"text/html; charset=utf-8","cache-control":"no-store, private","x-robots-tag":"noindex, nofollow","x-content-type-options":"nosniff","referrer-policy":"same-origin","content-security-policy":"default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'"};
 const origin="https://brcstudio.es";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const same=(a,b)=>timingSafeEqual(createHash("sha256").update(a).digest(),createHash("sha256").update(b).digest());
