@@ -17,6 +17,7 @@ const layout=body=>`<!doctype html><html lang="es"><head><meta charset="utf-8"><
 const reply=(msg,status=200)=>new Response(layout(msg),{status,headers:secure});
 const validText=(s,max)=>typeof s==="string"&&s.trim().length>0&&s.trim().length<=max&&![...s].some(c=>c.charCodeAt(0)<32&&c!=="\n");
 export default async function handler(req){
+ if(new URL(req.url).origin!==origin)return reply("Host no permitido",403);
  if(!["GET","POST"].includes(req.method))return reply("Método no permitido",405);
  if(!auth(req))return reply('<section class="box">Acceso privado. <a href="/admin/ventas">Inicia sesión en el panel de ventas</a> y vuelve aquí.</section>',401);
  if(req.method==="POST"){

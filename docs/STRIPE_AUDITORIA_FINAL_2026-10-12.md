@@ -72,3 +72,43 @@ Alta + primer mes: 188,00 € + 39,48 € = **227,48 €**. Renovación: **47,19
 ## Bloqueo de revisión automática
 
 El POST de comprobación al Checkout live fue rechazado por revisión automática: podría crear una sesión de pago real si estuviese habilitado. No se reintentó ni se eludió. La verificación alternativa es GET de solo lectura y prueba local de la misma condición. Ninguna aprobación comercial se solicitó ni se presupone.
+
+
+## Revisión de cierre ampliada — ejecución posterior del 12/10/2026
+
+**Resultado: NO APTO PARA ACTIVACIÓN COMERCIAL.** Esta sección prevalece sobre cualquier interpretación de preparación completa en el informe anterior. No se han activado pagos ni realizado transacciones reales.
+
+### Evidencia actual
+
+- Base revisada: `938979b` en `main`; 33 pruebas previas superadas antes de modificar.
+- Producción devolvió `enabled:false` y `tax_rate_configured:true` antes del cambio. No se obtuvo el valor bruto de la variable Netlify: se verificó su evaluación en el endpoint desplegado.
+- Stripe live: ocho precios EUR activos, exclusivos de IVA, coincidentes con los importes aprobados. Solo 39 EUR es recurrente mensual; alta 149 EUR es única. Sin sesiones Checkout, suscripciones ni enlaces de pago en los listados consultados (paginación agotada).
+- El webhook `we_1UPWqyDwLerTapleMqYF8SPh` está habilitado en la URL correcta, API `2026-09-30.endive`, con los diez eventos documentados.
+- Portal live: ninguna configuración. Dos intentos de creación devolvieron solicitud de autenticación sin efectuar el cambio; lectura posterior sigue vacía. El navegador alternativo muestra login, sin sesión autenticada reutilizable.
+- Fuentes comerciales leídas: brief actualizado el 12/10, PDF compra, PDF mensual y hoja maestra Madrid. No se han alterado sus condiciones. El brief aprueba dos solicitudes manuales mensuales; los PDF siguen siendo informativos.
+
+### Correcciones ejecutadas
+
+1. **Cierre de seguridad adicional de Checkout:** antes, activar una variable bastaba para exponer un Checkout sin pedido autorizado. Ahora la ruta HTTP siempre devuelve 503; su GET informa `enabled:false, release_ready:false`. Cambiar una variable no evita este bloqueo. El transporte Stripe anterior se conserva como función interna para pruebas aisladas, sin ruta HTTP propia. Para abrir ventas hace falta implementar aceptación/autorización y revisar este bloqueo en código, además de autorización del propietario.
+2. **Bajas privadas funcionales:** `/admin/ventas/bajas`, enlazado desde el panel. Requiere cookie firmada vigente, host y Origin exactos, contraseña de Dirección nuevamente, referencia trazable de identidad verificada por canal conocido, coincidencia del correo con el titular Stripe, modo live y precio mensual BRC. Registra intención antes de enviar `cancel_at_period_end=true` con `proration_behavior=none`; solo muestra éxito si Stripe confirma. Conserva resultado inmutable y clave idempotente. No basta rellenar un formulario para declarar la baja realizada. La verificación de identidad es manual por Dirección, no autenticación autónoma del cliente. No compartir el acceso maestro con comerciales.
+3. **Aislamiento de borradores:** se rechaza su acceso desde hosts de preview para evitar que una previsualización opere sobre el almacén compartido de producción.
+4. **Pruebas:** 47 tests y validación de build superados. Las 13 nuevas pruebas de bajas cubren autenticación, CSRF, reautenticación, evidencia, titular/precio/modo incorrectos, petición efectiva, duplicados y errores de almacenamiento o permisos Stripe. Se usan mocks; ninguna prueba cancela una suscripción real. Una prueba adicional demuestra que activar la variable no abre Checkout.
+
+### Límites de la comprobación
+
+- Importes aprobados: compra 490 + 102,90 = 592,90 EUR; alta + primer mes 188 + 39,48 = 227,48 EUR; renovación 39 + 8,19 = 47,19 EUR. Catálogo y construcción de parámetros comprobados. La comprobación sandbox de renovación del informe anterior sigue siendo evidencia anterior, no una nueva renovación ejecutada.
+- Tasa live: configuración del ID comprobada; evidencia anterior del evento de creación confirma ES 21 %, exclusiva. El conector no expone una lectura directa de TaxRate en las operaciones encontradas. No se llamó a Stripe Tax ni se contrató servicio alguno.
+- Seguridad de firma, duplicados concurrentes, reintentos y orden de eventos comprobada en simulación aislada. La entrega positiva con firma de producción y persistencia real sigue sin probarse; no se han creado ventas ficticias.
+- El transporte de baja está implementado y probado localmente. Sus permisos efectivos de clave en producción y el recorrido completo en sandbox NO están verificados: el conector de escritura no completa la autenticación. No se debe interpretar la publicación de la pantalla como prueba de una baja real.
+
+### Dependencias y trabajo bloqueante restante (no requiere cobrar para resolverse)
+
+- **Pedidos y aceptación:** el registro actual sigue siendo de borradores; no contiene aceptación del cliente, identidad verificada, propuesta final ni autorización de cobro. No se simula aceptación mediante una casilla del administrador. Falta un canal de autenticación del cliente y persistencia transaccional para vincular oferta inmutable, aceptación, sesión y resultado.
+- **Base transaccional:** solo se localizaron Supabase PsyMorph y ONYRA, excluidos de cambios por el brief. No se provisionó Netlify Database ni otro servicio sin poder confirmar ausencia de costes. Arquitectura requerida: Postgres aislado autorizado, pedidos/versiones/aceptaciones con claves únicas, transacciones para reservar una única tentativa de Checkout y patrón outbox con idempotencia Stripe. Blobs permanece como diario inmutable, no sustituto de transacciones, saldos o contabilidad. Falta disponer de ese recurso y credenciales de servicio seguras; no están implementadas las migraciones ni el flujo completo.
+- **Identidad fiscal y condiciones:** faltan NIF y domicilio fiscal completo del prestador y condiciones finales por pedido. No se han inventado. Debe revisarse el tratamiento fiscal según cliente/destino; el transporte existente usa únicamente el caso ES 21 % y sigue inaccesible. No está validado para exenciones, inversión del sujeto pasivo u otros territorios.
+- **Portal:** configuración privada no creada por bloqueo de autenticación. La alternativa de bajas manualmente verificadas está implementada; no habilita facturas o actualización de tarjetas para clientes.
+- **Conciliación completa:** los diez eventos actuales no incluyen reembolsos ni disputas; el panel muestra importes brutos, no netos. Falta implementar y suscribir estos eventos y relacionar todos los eventos con pedido/cliente/comercial una vez exista el flujo de pedidos. Las facturas iniciales no duplican las ventas de Checkout en las pruebas existentes.
+
+### Verificación que requiere autorización de operación real
+
+Una vez resueltas las dependencias anteriores: primera operación real controlada para verificar cargo efectivo, factura fiscal final, entrega firmada live, persistencia, panel y conciliación. No se ha realizado ni se autoriza en este trabajo. Las renovaciones y cancelaciones deben verificarse primero en sandbox con datos nuevos desechables, sin modificar las suscripciones de prueba existentes.

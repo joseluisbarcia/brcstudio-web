@@ -7,13 +7,13 @@ import * as crypto from 'node:crypto';
 const signingSecret='whsec_'+crypto.randomBytes(32).toString('hex');
 const tax='txr_1UPX5ZDwLerTaplePClmgRMy';
 const price='price_1UPVEWDwLerTapleCN8WYU7L';
-async function load(file,{env={},fetch=()=>{throw Error('Network forbidden in audit')},store}={}) {
+async function load(file,{env={},fetch=()=>{throw Error('Network forbidden in audit')},store,exportName="default"}={}) {
  const context=vm.createContext({Request,Response,URL,URLSearchParams,Buffer,Date,console,Netlify:{env:{get:k=>env[k]}},fetch});
  const module=new vm.SourceTextModule(await readFile(new URL('../netlify/functions/'+file,import.meta.url),'utf8'),{context});
  await module.link(async name=>{
   const values=name==='node:crypto'?crypto:{getStore:options=>{assert.equal(options.name,'brc-live-sales');assert.equal(options.consistency,'strong');return store}};
   const names=Object.keys(values);return new vm.SyntheticModule(names,function(){for(const key of names)this.setExport(key,values[key])},{context});
- });await module.evaluate();return module.namespace.default;
+ });await module.evaluate();return module.namespace[exportName];
 }
 const event=(type='checkout.session.completed',object={})=>({id:'evt_audit1',created:Math.floor(Date.now()/1000),livemode:true,type,data:{object:{id:'cs_live_audit1',livemode:true,status:'complete',mode:'payment',payment_status:'paid',metadata:{brc_plan:'compra'},amount_total:59290,currency:'eur',...object}}});
 function signed(value,{age=0,signature,raw}={}) {
@@ -24,22 +24,27 @@ function signed(value,{age=0,signature,raw}={}) {
 function memory() {const records=new Map();return {records,async setJSON(key,value,options){assert.equal(options.onlyIfNew,true);if(records.has(key))return {modified:false};records.set(key,value);return {modified:true}}}}
 async function webhook(store=memory()) {return {store,handler:await load('stripe-live-webhook.mjs',{env:{STRIPE_LIVE_WEBHOOK_SECRET:signingSecret},store})}}
 
-test('live gate fails closed before Stripe for all values except literal true',async()=>{
+test('live gate fails closed before Stripe for disabled environment values',async()=>{
  for(const flag of [undefined,'false','0','TRUE','',false]) {
   const handler=await load('stripe-live-checkout.mjs',{env:{BRC_LIVE_CHECKOUT_ENABLED:flag}});
   assert.equal((await handler(new Request('https://brcstudio.es/api/stripe-live-checkout',{method:'POST',body:'{}'}))).status,503);
   assert.equal((await (await handler(new Request('https://brcstudio.es/api/stripe-live-checkout'))).json()).enabled,false);
  }
 });
-test('GET availability is read only even when enabled',async()=>{
+test('GET remains unavailable when the environment flag requests activation',async()=>{
  const handler=await load('stripe-live-checkout.mjs',{env:{BRC_LIVE_CHECKOUT_ENABLED:'true'}});
- assert.equal((await (await handler(new Request('https://brcstudio.es/api/stripe-live-checkout'))).json()).enabled,true);
+ assert.equal((await (await handler(new Request('https://brcstudio.es/api/stripe-live-checkout'))).json()).enabled,false);
+});
+test('production route cannot be activated by an environment flag or an admin assertion',async()=>{
+ const h=await load('stripe-live-checkout.mjs',{env:{BRC_LIVE_CHECKOUT_ENABLED:'true'}});
+ assert.equal((await h(new Request('https://brcstudio.es/api/stripe-live-checkout',{method:'POST',body:JSON.stringify({plan:'compra',terms_accepted:true})}))).status,503);
+ assert.equal((await (await h(new Request('https://brcstudio.es/api/stripe-live-checkout'))).json()).release_ready,false);
 });
 const checkoutEnv={BRC_LIVE_CHECKOUT_ENABLED:'true',STRIPE_LIVE_SECRET_KEY:'rk_live_'+crypto.randomBytes(24).toString('hex'),STRIPE_LIVE_TAX_RATE:tax};
 const request=(plan='compra',extra={})=>new Request(extra.url??'https://brcstudio.es/api/stripe-live-checkout',{method:'POST',body:extra.body??JSON.stringify({plan}),headers:{origin:extra.origin??'https://brcstudio.es','idempotency-key':extra.key??'d937f213-00a4-44e9-b858-dd9803de4732'}});
 for(const plan of ['compra','mensual'])test('Checkout '+plan+' uses fixed catalog, tax and idempotency',async()=>{
  let sent;
- const handler=await load('stripe-live-checkout.mjs',{env:checkoutEnv,fetch:async(url,options)=>{sent=options;return Response.json({livemode:true,id:'cs_live_fixture',url:'https://checkout.stripe.com/c/pay/fixture'})}});
+ const handler=await load('stripe-live-checkout.mjs',{exportName:'createCheckout',env:checkoutEnv,fetch:async(url,options)=>{sent=options;return Response.json({livemode:true,id:'cs_live_fixture',url:'https://checkout.stripe.com/c/pay/fixture'})}});
  assert.equal((await handler(request(plan))).status,200);
  assert.equal(sent.headers['Idempotency-Key'],'brc-live-d937f213-00a4-44e9-b858-dd9803de4732');
  assert.equal(sent.body.get('line_items[0][tax_rates][0]'),tax);
@@ -56,10 +61,10 @@ for(const [label,req,status] of [
  ['origin',()=>request('compra',{origin:'https://attacker.invalid'}),403],
  ['unknown plan',()=>request('discount'),400],['prototype plan',()=>request('__proto__'),400],
  ['invalid JSON',()=>request('compra',{body:'{'}),400],['missing idempotency',()=>request('compra',{key:''}),400]])
- test('Checkout rejects '+label,async()=>{const h=await load('stripe-live-checkout.mjs',{env:checkoutEnv});assert.equal((await h(req())).status,status)});
+ test('Checkout rejects '+label,async()=>{const h=await load('stripe-live-checkout.mjs',{exportName:'createCheckout',env:checkoutEnv});assert.equal((await h(req())).status,status)});
 for(const [label,env] of [['test key',{STRIPE_LIVE_SECRET_KEY:'sk_test_fixture'}],['wrong tax',{STRIPE_LIVE_TAX_RATE:'txr_other'}]])
- test('Checkout rejects '+label,async()=>{const h=await load('stripe-live-checkout.mjs',{env:{...checkoutEnv,...env}});assert.equal((await h(request())).status,503)});
-test('malformed provider JSON gives controlled 502',async()=>{const h=await load('stripe-live-checkout.mjs',{env:checkoutEnv,fetch:async()=>new Response('invalid')});assert.equal((await h(request())).status,502)});
+ test('Checkout rejects '+label,async()=>{const h=await load('stripe-live-checkout.mjs',{exportName:'createCheckout',env:{...checkoutEnv,...env}});assert.equal((await h(request())).status,503)});
+test('malformed provider JSON gives controlled 502',async()=>{const h=await load('stripe-live-checkout.mjs',{exportName:'createCheckout',env:checkoutEnv,fetch:async()=>new Response('invalid')});assert.equal((await h(request())).status,502)});
 for(const [label,value,options,status] of [
  ['missing signature',event(),{signature:''},400],['forged signature',event(),{signature:'t=1,v1=bad'},400],
  ['expired signature',event(),{age:-301},400],['future signature',event(),{age:301},400],

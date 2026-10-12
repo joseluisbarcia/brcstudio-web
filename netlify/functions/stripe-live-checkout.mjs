@@ -5,7 +5,18 @@ const catalog = {
   mensual: {mode:"subscription", prices:["price_1UPVE7DwLerTaplejCffcCrc","price_1UPVEWDwLerTapleCN8WYU7L"]}
 };
 const json = (body,status=200) => Response.json(body,{status,headers:{"Cache-Control":"no-store"}});
+// Release blocker: drafts are not customer acceptance. No environment variable
+// can bypass this until transactional orders and verified acceptance are implemented.
 export default async function handler(request) {
+  if (request.method === "GET") return json({enabled:false,
+    tax_rate_configured:Netlify.env.get("STRIPE_LIVE_TAX_RATE") === "txr_1UPX5ZDwLerTaplePClmgRMy",
+    release_ready:false});
+  if (request.method !== "POST") return new Response("Method not allowed",{status:405});
+  return json({error:"Live checkout is disabled",code:"ORDER_ACCEPTANCE_NOT_READY"},503);
+}
+// Internal transport retained for isolated tests. Not a Netlify route.
+// Never call this from a route before implementing order/customer authorization.
+export async function createCheckout(request) {
   // Read-only availability check: never calls Stripe or creates a session.
   if (request.method === "GET") return json({enabled:Netlify.env.get("BRC_LIVE_CHECKOUT_ENABLED") === "true",tax_rate_configured:Netlify.env.get("STRIPE_LIVE_TAX_RATE") === "txr_1UPX5ZDwLerTaplePClmgRMy"});
   if (request.method !== "POST") return new Response("Method not allowed",{status:405});
