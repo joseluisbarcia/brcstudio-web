@@ -44,7 +44,7 @@ Incluye la web acordada, publicación, dominio .es a nombre del cliente durante 
 
 Pago inicial de 149 € + IVA por el alta, más 39 € + IVA por el primer mes. Cuotas siguientes de 39 € + IVA/mes. Incluye hosting, dominio y mantenimiento/soporte durante la vigencia del servicio según alcance acordado. El dominio es del cliente; BRC Studio gestiona la web mientras el servicio esté activo.
 
-**Sin permanencia** significa que no se impone un número mínimo de meses; debe acordarse expresamente el momento de efecto de la baja y cómo se tratan cuotas ya devengadas. **[PENDIENTE: plazo de preaviso, canal de cancelación, cambios incluidos, SLA y entrega de contenidos al cancelar]**
+**Política de cancelación aprobada (12/10/2026):** el cliente puede solicitar la baja en cualquier momento, sin permanencia ni penalización. La baja surtirá efecto al finalizar el período mensual ya pagado; la web y los servicios incluidos permanecerán activos hasta ese momento. No se reembolsará proporcionalmente el período ya iniciado, salvo obligación legal aplicable. La suscripción deberá programarse para no renovar después de la fecha efectiva de baja. **[PENDIENTE: canal de cancelación, plazo operativo de gestión, cambios incluidos, SLA y entrega de contenidos al cancelar]**
 
 ### Compra posterior de la web por cliente del plan mensual
 
