@@ -82,3 +82,12 @@ Cargo liquidado, factura fiscal live final, entrega de evento auténtico live y 
 **Después de configurar el secreto:** entrega firmada real, reintentos, persistencia en Blobs y panel del flujo nuevo. Los eventos auténticos existen en Stripe, pero siguen pendientes en ese endpoint. El sistema de pruebas anterior permanece intacto.
 
 Los cobros live siguen bloqueados en código. No se han contratado servicios, cambiado precios ni alterado PsyMorph/ONYRA. La autorización comercial sigue pendiente.
+
+
+### Publicación de esta continuación
+- Commit de código: `a09232dceda493425f4a76d6ca34c231d79d2dac`.
+- Netlify: `6accd1521b621d79b397f659`, `ready`, commit coincidente.
+- El intento de acceso seguro a Netlify quedó en Google con «No se ha encontrado esta cuenta»; no se obtuvieron ni guardaron credenciales y no se modificaron variables. No es un fallo de la conexión Stripe.
+- Prueba visual de baja: `docs/evidence/brc-cancelacion-sandbox-20261012.jpg`.
+
+- HTTP final: Checkout live `enabled:false`, webhook live sin firma 400, webhook nuevo sandbox 503 por secreto ausente, bajas sandbox sin autenticar 401 y página test anterior 200.
