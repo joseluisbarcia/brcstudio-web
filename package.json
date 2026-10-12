@@ -4,8 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/validate.mjs",
-    "dev": "node scripts/serve.mjs"
+    "build": "npm test && node scripts/validate.mjs",
+    "dev": "node scripts/serve.mjs",
+    "test": "node --experimental-vm-modules --test tests/*.test.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^9.0.0"
