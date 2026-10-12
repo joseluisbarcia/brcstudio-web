@@ -2,6 +2,14 @@
 
 Fecha: 12 de octubre de 2026 (Europe/Madrid). **No autoriza la activación comercial.**
 
+## Resultado y estado de entrega
+
+**Auditoría parcialmente completada; activación comercial NO aprobada.** Correcciones y 33 pruebas guardadas en GitHub, commit `8afe86170a0b9f639b57465b5dc8d1eb21063371`. No están confirmadas en producción: Netlify continúa mostrando el despliegue inicial y GitHub no muestra estados ni check-runs de despliegue para el nuevo commit. El conector Netlify disponible permite consultar proyectos y despliegues, pero no iniciarlos ni leer variables de sitio; no hay CLI autenticada disponible en esta sesión.
+
+**BRC_LIVE_CHECKOUT_ENABLED: valor efectivo pendiente de verificación.** El código inspeccionado bloquea todo valor distinto del literal true, pero eso no demuestra el valor configurado. No se ha cambiado la variable. El nuevo GET permitirá verificarla tras desplegar. Cero sesiones/enlaces live encontrados es evidencia adicional, no prueba por sí sola de bloqueo.
+
+La ampliación de eventos del webhook no se aplicó: lectura posterior confirma que siguen solo los dos eventos Checkout. Para resolver ambos bloqueos es necesario acceso operativo al panel web; las reglas del navegador exigen permiso para usarlo cuando el conector resulta insuficiente o falla reiteradamente. No se ha abierto el navegador ni supuesto una sesión iniciada.
+
 ## Alcance y límites
 
 Revisión del repositorio `joseluisbarcia/brcstudio-web`, despliegue Netlify `brcstudio-web`, cuenta live `acct_1UPRtYDwLerTaple` y sandbox independiente `acct_1UPRtoD95NECz80F`. No se han realizado transacciones reales, creado enlaces live, cambiado precios, contratado servicios ni modificado claves o variables. Los datos y funciones de prueba existentes se conservan.
