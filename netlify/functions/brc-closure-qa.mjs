@@ -40,44 +40,25 @@ async function run(){
    if(response.status!==200||!link)throw Error('LINK_'+response.status);
    progress.capsule=publicEncrypt({key:publicKey,oaepHash:'sha256',padding:constants.RSA_PKCS1_OAEP_PADDING},Buffer.from(link)).toString('base64');
   }
+  await journal.setJSON('conditional-probe',{version:1},{onlyIfNew:true});
+  const conflict=await journal.setJSON('conditional-probe',{version:2},{onlyIfNew:true});
+  progress.atomic_write_verified=conflict.modified===false&&(await journal.get('conditional-probe',{type:'json'})).version===1;
+  const testSales=getStore({name:'brc-order-test-sales',consistency:'strong'});
+  const fresh=await testSales.get('subscription-events/sub_1UPi3ND95NECz80FUH3JP3x4/evt_1UPjQKD95NECz80FcUhZhgRC',{type:'json'});
+  progress.fresh_webhook=fresh?{event:fresh.stripe_event_id,type:fresh.event_type,order:fresh.order_id,seller:fresh.seller,live:fresh.live}:null;
+  const panel=await sales(new Request(origin+'/admin/ventas',{headers:auth}));
+  const panelText=await panel.text();progress.panel_status=panel.status;progress.panel_contains_fresh_event=panelText.includes('evt_1UPjQKD95NECz80FcUhZhgRC');
+  progress.panel_contains_fixture_order=panelText.includes('qa-20261012-subscription');
+  const liveKey=Netlify.env.get('STRIPE_LIVE_SECRET_KEY');
+  if(/^(sk|rk)_live_/.test(liveKey??'')){
+   const tax=await fetch('https://api.stripe.com/v1/tax_rates/txr_1UPX5ZDwLerTaplePClmgRMy',{headers:{Authorization:'Bearer '+liveKey}});
+   if(tax.ok){const t=await tax.json();progress.live_tax={id:t.id,active:t.active,livemode:t.livemode,country:t.country,percentage:t.percentage,inclusive:t.inclusive}}
+  }
   const binding=await app.get('checkout/'+order,{type:'json'});
   if(!binding){await save({status:'awaiting_customer_acceptance_and_checkout'});return}
   const session=await api('checkout/sessions/'+binding.session_id);
   if(session.livemode!==false||session.metadata?.brc_order_id!==order)throw Error('SESSION_MISMATCH');
-  await save({checkout:session.id,paid:session.payment_status==='paid',subscription:session.subscription});
-  if(session.payment_status!=='paid'){await save({status:'awaiting_payment'});return}
-  const receipt=await getStore({name:'brc-order-test-sales',consistency:'strong'}).get('checkout/'+session.id,{type:'json'});
-  progress.receipt_persisted=!!receipt;progress.receipt_event=receipt?.stripe_event_id??null;
-  const panel=await sales(new Request(origin+'/admin/ventas',{headers:auth}));
-  progress.panel_contains_order=(await panel.text()).includes(order);
-  if(!receipt){await save({status:'awaiting_signed_webhook'});return}
-  const subId=session.subscription;if(!/^sub_/.test(subId??''))throw Error('SUBSCRIPTION_MISSING');
-  let sub=await api('subscriptions/'+subId);
-  if(sub.livemode!==false||sub.metadata?.brc_order_id!==order||sub.test_clock!==clock)throw Error('SUBSCRIPTION_MISMATCH');
-  const advance=async target=>{
-   const current=await api('test_helpers/test_clocks/'+clock);
-   if(current.frozen_time<target)await api('test_helpers/test_clocks/'+clock+'/advance',new URLSearchParams({frozen_time:String(target)}));
-   for(let n=0;n<50;n++){const state=await api('test_helpers/test_clocks/'+clock);if(state.status==='ready')return;await wait(4000)}
-   throw Error('CLOCK_TIMEOUT');
-  };
-  if(sub.status!=='canceled'&&!sub.cancel_at_period_end){
-   if(!progress.renewal_paid)await advance(sub.items.data[0].current_period_end+4*86400);
-   sub=await api('subscriptions/'+subId);
-   const invoice=await api('invoices/'+sub.latest_invoice);
-   if(invoice.billing_reason!=='subscription_cycle'||invoice.status!=='paid'||invoice.total!==4719)throw Error('RENEWAL_NOT_CONFIRMED');
-   await save({renewal_invoice:invoice.id,renewal_total:invoice.total,renewal_paid:true});
-   await subCancel();
-  }
-  async function subCancel(){
-   const result=await api('subscriptions/'+subId,new URLSearchParams({cancel_at_period_end:'true',proration_behavior:'none'}));
-   if(!result.cancel_at_period_end)throw Error('CANCELLATION_NOT_CONFIRMED');sub=result;
-  }
-  if(sub.status!=='canceled')await advance(sub.items.data[0].current_period_end+4*86400);
-  sub=await api('subscriptions/'+subId);
-  if(sub.status!=='canceled')throw Error('CANCELLATION_NOT_EFFECTIVE');
-  const invoices=await api('invoices?'+new URLSearchParams({subscription:subId,limit:'100'}));
-  const totals=invoices.data.map(i=>({id:i.id,total:i.total,status:i.status,billing_reason:i.billing_reason}));
-  await save({status:'complete',cancellation_effective:true,invoice_count:totals.length,invoices:totals});
+  await save({status:session.payment_status==='paid'?'paid_pending_lifecycle_verification':'awaiting_user_sandbox_payment',checkout:session.id,paid:session.payment_status==='paid',subscription:session.subscription});
  }catch(error){await save({status:'blocked',error:String(error.message).slice(0,160)})}
 }
 export default {

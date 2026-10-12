@@ -1,4 +1,7 @@
 import test from 'node:test';
+import vm from 'node:vm';
+import {readFileSync} from 'node:fs';
+import {amounts} from '../netlify/lib/orders.mjs';
 import assert from 'node:assert/strict';
 import {makeOffer,hash,customer} from '../netlify/lib/orders.mjs';
 import {checkoutForOrder} from '../netlify/lib/order-checkout.mjs';
@@ -79,4 +82,42 @@ test('reconciliation attributes refunds through exact payment references, never 
  const sale={order_id:'order1',seller:'madrid',stripe_payment_intent_id:'pi_1',stripe_customer_id:'cus_1'};
  const rows=attributeRecords([sale,{object_id:'re_1',stripe_payment_intent_id:'pi_1'},{object_id:'re_2',stripe_customer_id:'cus_1'}]);
  assert.equal(rows[1].order_id,'order1');assert.equal(rows[1].seller,'madrid');assert.equal(rows[2].order_id,undefined);
+});
+
+// Only the in-memory VM substitutes the release constant. Production file remains false.
+async function simulatedRelease(){
+ const context=vm.createContext({URLSearchParams,Date});
+ const dep=new vm.SyntheticModule(['amounts','hash'],function(){this.setExport('amounts',amounts);this.setExport('hash',hash)},{context});
+ const source=readFileSync('netlify/lib/order-checkout.mjs','utf8');
+ assert.match(source,/LIVE_ORDER_RELEASE_AUTHORIZED=false/);
+ const mod=new vm.SourceTextModule(source.replace('LIVE_ORDER_RELEASE_AUTHORIZED=false','LIVE_ORDER_RELEASE_AUTHORIZED=true'),{context});
+ await mod.link(()=>dep);await mod.evaluate();return mod.namespace.checkoutForOrder;
+}
+const liveEnv=k=>({BRC_LIVE_CHECKOUT_ENABLED:'true',STRIPE_LIVE_SECRET_KEY:'rk_live_simulated_only',STRIPE_LIVE_TAX_RATE:'txr_1UPX5ZDwLerTaplePClmgRMy'})[k];
+async function liveFixture(){const f=await ready();f.offer=makeOffer(draft,{...input,environment:'live'});f.identity={offer:f.offer};Object.assign(f.db.rows.get('acceptance/'+orderId),{environment:'live',terms_hash:f.offer.terms_hash});return f;}
+test('future activation simulation binds verified consent and immutable order to fixed live catalog without network',async()=>{
+ const fn=await simulatedRelease(),f=await liveFixture(),calls=[];
+ const result=await fn(f.identity,f.db,liveEnv,async(url,options)=>{
+  calls.push({url,...options});
+  if(url.includes('/tax_rates/'))return Response.json({livemode:true,active:true,inclusive:false,percentage:21,country:'ES'});
+  return Response.json({id:'cs_live_simulated',livemode:true,url:'https://checkout.stripe.com/c/pay/simulated',amount_total:22748,currency:'eur'});
+ });
+ assert.equal(result.status,200);const post=calls.find(x=>x.method==='POST');
+ assert.equal(post.body.get('metadata[brc_order_id]'),orderId);assert.equal(post.body.get('metadata[brc_terms_hash]'),f.offer.terms_hash);
+ assert.equal(post.body.get('line_items[0][price]'),'price_1UPVE7DwLerTaplejCffcCrc');assert.equal(post.body.get('line_items[1][price]'),'price_1UPVEWDwLerTapleCN8WYU7L');
+ assert.equal(post.body.get('adaptive_pricing[enabled]'),'false');assert.equal(post.body.get('subscription_data[default_tax_rates][0]'),'txr_1UPX5ZDwLerTaplePClmgRMy');
+});
+for(const [name,alter] of [
+ ['missing acceptance',f=>f.db.rows.delete('acceptance/'+orderId)],
+ ['admin authority assertion only',f=>f.db.rows.get('acceptance/'+orderId).identity_method='admin_checkbox'],
+ ['missing authority declaration',f=>f.db.rows.get('acceptance/'+orderId).authority_declaration=false],
+ ['wrong order acceptance',f=>f.db.rows.get('acceptance/'+orderId).order_id='other'],
+ ['tampered proposal',f=>f.offer.scope='tampered'],
+ ['expired proposal',f=>f.offer.expires_at=1]
+])test('future activation still rejects '+name+' before provider call',async()=>{
+ const fn=await simulatedRelease(),f=await liveFixture();alter(f);
+ const r=await fn(f.identity,f.db,liveEnv,()=>{throw Error('network prohibited')});assert.equal(r.status,403);
+});
+test('future reviewed code still requires separate commercial environment flag',async()=>{
+ const fn=await simulatedRelease(),f=await liveFixture();const r=await fn(f.identity,f.db,k=>k==='BRC_LIVE_CHECKOUT_ENABLED'?'false':liveEnv(k),()=>{throw Error('network prohibited')});assert.equal(r.status,503);
 });
